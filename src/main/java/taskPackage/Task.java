@@ -11,6 +11,7 @@ public class Task {
     private String descrip;
     private Status stat;
     private Color color;
+    private Catagories cat;
     
     /**
      * Structure of subtasks where every subtask can have a subset of subtasks
@@ -27,6 +28,7 @@ public class Task {
     public Task(){
         name="empty";
         descrip="empty";
+        cat=new Catagories();
         stat=Status.NOT_STARTED;
         color = Color.RED; //default is due on same day
         
@@ -47,8 +49,9 @@ public class Task {
      * @param creator Person class that assigned this task, this is immutable so be careful
      * 
      */
-    public Task(String n, String d, LocalDate ld, Person assigned, Person creator){
+    public Task(String n, String d, Catagories c, LocalDate ld, Person assigned, Person creator){
         name = n;
+        cat=c;
         if(d.isBlank() || d.isEmpty()){
             descrip="empty";
         }
@@ -150,6 +153,7 @@ public class Task {
     public String toString(){
         return("Task: " + name +"\nDescription: " +descrip+"\n"
                 + "Status: " + stat +"\nColor: "+color.toString()
+                +"\nCatagory: "+ cat.toString()
                 + "\nDue Date: " +mainDueDate.toString() +
                 "\nCreated On: " +createdOn.toString()+
                 "\nAssigned To: "+ assignedTo.getName()+
