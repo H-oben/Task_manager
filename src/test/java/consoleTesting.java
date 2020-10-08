@@ -15,7 +15,7 @@ public class consoleTesting {
         catch (MemberManagerException a){
             T = new Manager();
         }
-        Task t = new Task("Test Task", "", LocalDate.now(),T,m);
+        Task t = new Task("Test Task", "", new Catagories("test"), LocalDate.now(),T,m);
         System.out.println(t.toString());
     }
     
