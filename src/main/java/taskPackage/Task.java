@@ -1,7 +1,8 @@
 package taskPackage;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import peoplePack.Person;
+import java.awt.Color;
 /**
  * @author Hunter Obendorfer
  */
@@ -9,14 +10,15 @@ public class Task {
     private String name;
     private String descrip;
     private Status stat;
+    private Color color;
     
     /**
      * Structure of subtasks where every subtask can have a subset of subtasks
      */
-    private Subtask subs; //TODO: make a structure for the subtasks
+    private Subtask[] subs; //TODO: make a structure for the subtasks
     
-    protected LocalDateTime mainDueDate;
-    private final LocalDateTime createdOn; // not going to change so it's final
+    protected LocalDate mainDueDate;
+    private final LocalDate createdOn; // not going to change so it's final
     
     private Person assignedTo;
     private final Person createdBy; // not going to change so it's final
@@ -26,11 +28,12 @@ public class Task {
         name="empty";
         descrip="empty";
         stat=Status.NOT_STARTED;
+        color = Color.RED; //default is due on same day
         
         subs=null;
         
-        mainDueDate=LocalDateTime.now();
-        createdOn=LocalDateTime.now();
+        mainDueDate=LocalDate.now();
+        createdOn=LocalDate.now();
         
         assignedTo=null;
         createdBy=null;
@@ -39,22 +42,45 @@ public class Task {
     /**
      * @param n String name of task, mutable
      * @param d String describing task,mutable
-     * @param ldt LocalDateTime of the due date, mutable
+     * @param ld LocalDate of the due date, mutable
      * @param assigned Person class to assign this task to, mutable
      * @param creator Person class that assigned this task, this is immutable so be careful
+     * 
      */
-    public Task(String n, String d, LocalDateTime ldt, Person assigned, Person creator){
+    public Task(String n, String d, LocalDate ld, Person assigned, Person creator){
         name = n;
-        descrip = d;
+        if(d.isBlank() || d.isEmpty()){
+            descrip="empty";
+        }
+        else{
+            descrip = d;
+        }
         stat=Status.NOT_STARTED;
         
         subs=null;
         
-        mainDueDate=ldt;
-        createdOn=LocalDateTime.now();
+        mainDueDate=ld;
+        createdOn=LocalDate.now();
+        
+        if(createdOn.compareTo(mainDueDate)<=0){ //decide color based on due date
+            color=Color.RED;
+        }
+        else if(createdOn.compareTo(mainDueDate)<=7){
+            color=Color.YELLOW;
+        }
+        else if(createdOn.compareTo(mainDueDate)>7){
+            color=Color.GREEN;
+        }
+        else{                                   //default color is blue
+            color=Color.BLUE;
+        }
         
         assignedTo = assigned;
         createdBy = creator;
+    }
+    
+    public void addSubtask(Subtask s){
+        
     }
     
     //setters
@@ -75,8 +101,8 @@ public class Task {
      * not in the past or present.
      * </p>
      */
-    public void setDueDate(LocalDateTime ldt){
-        mainDueDate = ldt;
+    public void setDueDate(LocalDate ld){
+        mainDueDate = ld;
     }
     /**
      * @param a change assignment to this person
@@ -84,7 +110,9 @@ public class Task {
     public void reassign(Person a){
         assignedTo = a;
     }
-    
+    public void setColor(Color a){
+        color = a;
+    }
     //getters
     //TODO: get method for subtasks
     public String getName(){
@@ -96,10 +124,10 @@ public class Task {
     public Status getStatus(){
         return(stat);
     }
-    public LocalDateTime getDueDate(){
+    public LocalDate getDueDate(){
         return(mainDueDate);
     }
-    public LocalDateTime createdOn(){
+    public LocalDate createdOn(){
         return(createdOn);
     }
     /**
@@ -113,5 +141,18 @@ public class Task {
      */
     public Person creator(){
         return(createdBy);
+    }
+    public Color getColor(){
+        return(color);
+    }
+    
+    @Override
+    public String toString(){
+        return("Task: " + name +"\nDescription: " +descrip+"\n"
+                + "Status: " + stat +"\nColor: "+color.toString()
+                + "\nDue Date: " +mainDueDate.toString() +
+                "\nCreated On: " +createdOn.toString()+
+                "\nAssigned To: "+ assignedTo.getName()+
+                "\nCreated By: "+createdBy.getName());
     }
 }

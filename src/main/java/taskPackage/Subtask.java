@@ -1,17 +1,19 @@
 package taskPackage;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import peoplePack.Person;
+import java.awt.Color;
 
 public class Subtask extends Task{
     private String name;
     private String descrip;
     private Status stat;
+    private Color color;
     
-    private Subtask sub; //TODO: make structure for subclasses
+    private Subtask sub[]; //TODO: make structure for subclasses
     
-    protected LocalDateTime dueDate;
-    private final LocalDateTime createdOn; // not going to change so it's final
+    protected LocalDate dueDate;
+    private final LocalDate createdOn; // not going to change so it's final
     
     private Person assignedTo;
     private final Person createdBy; // not going to change so it's final
@@ -24,7 +26,8 @@ public class Subtask extends Task{
         sub=null;
         
         dueDate=super.mainDueDate;
-        createdOn=LocalDateTime.now();
+        createdOn=LocalDate.now();
+        
         
         assignedTo=null;
         createdBy=null;
@@ -37,7 +40,7 @@ public class Subtask extends Task{
      * @param assigned Person class to assign this task to, mutable
      * @param creator Person class that made this task
      */
-    public Subtask(String n, String d, LocalDateTime due, Person assigned, Person creator){
+    public Subtask(String n, String d, LocalDate due, Person assigned, Person creator){
         name = n;
         descrip=d;
         stat=Status.NOT_STARTED;
@@ -45,7 +48,20 @@ public class Subtask extends Task{
         sub=null;
         
         dueDate=due;
-        createdOn=LocalDateTime.now();
+        createdOn=LocalDate.now();
+        
+        if(createdOn.compareTo(mainDueDate)<=0){ //decide color based on due date
+            color=Color.RED;
+        }
+        else if(createdOn.compareTo(mainDueDate)<=7){
+            color=Color.YELLOW;
+        }
+        else if(createdOn.compareTo(mainDueDate)>7){
+            color=Color.GREEN;
+        }
+        else{                                   //default color is blue
+            color=Color.BLUE;
+        }
         
         assignedTo = assigned;
         createdBy = creator;
@@ -58,15 +74,15 @@ public class Subtask extends Task{
      * </p>
      */
     @Override
-    public void setDueDate(LocalDateTime ldt){
-        dueDate=ldt;
+    public void setDueDate(LocalDate ld){
+        dueDate=ld;
     }
     
     /**
      * @return returns the subtask due date
      */
     @Override
-    public LocalDateTime getDueDate(){
+    public LocalDate getDueDate(){
         return(dueDate);
     }
 }
