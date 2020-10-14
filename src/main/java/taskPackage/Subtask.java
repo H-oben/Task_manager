@@ -10,7 +10,7 @@ public class Subtask extends Task{
     private Status stat;
     private Color color;
     
-    private Subtask sub[]; //TODO: make structure for subclasses
+    private Subtask[] sub; //TODO: make structure for subclasses
     
     protected LocalDate dueDate;
     private final LocalDate createdOn; // not going to change so it's final
@@ -68,7 +68,7 @@ public class Subtask extends Task{
     }
     
     /**
-     * @param ldt set due date to a LocalDateTime
+     * @param ld set due date to a LocalDateTime
      * <p>Best practice dictates that the new due date is in the future,
      * not in the past or present.
      * </p>
