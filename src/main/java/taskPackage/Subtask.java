@@ -40,7 +40,7 @@ public class Subtask extends Task{
      * @param assigned Person class to assign this task to, mutable
      * @param creator Person class that made this task
      */
-    public Subtask(String n, String d, LocalDate due, Person assigned, Person creator){
+    public Subtask(String n, String d, Color c, LocalDate due, Person assigned, Person creator){
         name = n;
         descrip=d;
         stat=Status.NOT_STARTED;
@@ -50,7 +50,10 @@ public class Subtask extends Task{
         dueDate=due;
         createdOn=LocalDate.now();
         
-        if(createdOn.compareTo(mainDueDate)<=0){ //decide color based on due date
+        if(c != null){
+            color=c;
+        }
+        else if(createdOn.compareTo(mainDueDate)<=0){ //decide color based on due date
             color=Color.RED;
         }
         else if(createdOn.compareTo(mainDueDate)<=7){
