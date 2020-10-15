@@ -1,0 +1,8 @@
+peoplePack\member.class
+peoplePack\Role.class
+taskPackage\Task.class
+peoplePack\MemberManagerException.class
+peoplePack\Manager.class
+peoplePack\Person.class
+taskPackage\Status.class
+taskPackage\Subtask.class
