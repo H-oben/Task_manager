@@ -7,6 +7,7 @@ package GUI;
 
 import java.awt.Color;
 import java.awt.event.WindowEvent;
+import taskPackage.Task;
 
 /**
  *
@@ -175,6 +176,7 @@ public class TaskCreation extends javax.swing.JDialog{
 
     private void CreateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CreateButtonActionPerformed
         
+        this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
     }//GEN-LAST:event_CreateButtonActionPerformed
 
     private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
@@ -222,7 +224,10 @@ public class TaskCreation extends javax.swing.JDialog{
             }
         });
     }
-
+    public Task getCreatedTask(){//TODO: check new task validity before returning
+        
+        return(new Task());
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField CataEntry;
     private javax.swing.JLabel CataLabel;
