@@ -2,8 +2,6 @@ package GUI;
 
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import peoplePack.*;
 import taskPackage.*;
 
@@ -17,8 +15,7 @@ public class mainFrame extends javax.swing.JFrame{
      * Creates new form mainFrame
      */
     public mainFrame() {
-        initComponents();
-        try{
+        try{ //admin user
             admin = new Manager("Admin","Admin","Adm1n",Role.MANAGER);
         }
         catch(MemberManagerException m){ //unreachable but required
@@ -26,6 +23,13 @@ public class mainFrame extends javax.swing.JFrame{
         }
         users.add(admin);
         
+        loginCreationMenu l = new loginCreationMenu(this, true);
+        l.setVisible(true);
+        l.requestFocus();
+        l.pack();
+        l.repaint();
+        
+        initComponents();
     }
     public ArrayList<Person> getList(){
         return users;
@@ -161,7 +165,7 @@ public class mainFrame extends javax.swing.JFrame{
     }
     private Manager admin;
     private Person user;
-    private ArrayList<Person> users;
+    private ArrayList<Person> users = new ArrayList<Person>();
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JScrollPane BubbleView;
     private javax.swing.JButton Create_Task_Button;
