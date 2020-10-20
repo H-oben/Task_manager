@@ -19,7 +19,7 @@ public class mainFrame extends javax.swing.JFrame{
     public mainFrame() {
         initComponents();
         try{
-            admin = new Manager("Admin","Admin",Role.MANAGER);
+            admin = new Manager("Admin","Admin","Adm1n",Role.MANAGER);
         }
         catch(MemberManagerException m){ //unreachable but required
             admin = new Manager();

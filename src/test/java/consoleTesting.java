@@ -11,7 +11,7 @@ public class consoleTesting {
         Manager m=new Manager();
         Manager T;
         try{
-            T = new Manager("Frank","Furt", Role.TEAMLEAD);
+            T = new Manager("Frank","Furt","password", Role.TEAMLEAD);
         }
         catch (MemberManagerException a){
             T = new Manager();
