@@ -163,7 +163,7 @@ public class loginCreationMenu extends javax.swing.JDialog {
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                loginCreationMenu dialog = new loginCreationMenu(new javax.swing.JFrame(), true);
+                loginCreationMenu dialog = new loginCreationMenu(new java.awt.Frame(), true);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {
@@ -174,7 +174,6 @@ public class loginCreationMenu extends javax.swing.JDialog {
             }
         });
     }
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton CreateButton;
     private javax.swing.JButton LoginButton;
