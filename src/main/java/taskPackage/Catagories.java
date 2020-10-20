@@ -6,7 +6,12 @@ public class Catagories {
         cata="empty";
     }
     public Catagories(String s){
-        cata=s;
+        if(s.isBlank() || s.isEmpty() || s==null){
+            cata="empty";
+        }
+        else{
+            cata=s;
+        }
     }
     @Override
     public String toString(){

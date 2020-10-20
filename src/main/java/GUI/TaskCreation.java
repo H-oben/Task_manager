@@ -7,6 +7,7 @@ package GUI;
 
 import java.awt.Color;
 import java.awt.event.WindowEvent;
+import taskPackage.Catagories;
 import taskPackage.Task;
 
 /**
@@ -42,8 +43,8 @@ public class TaskCreation extends javax.swing.JDialog{
         ColorPick = new javax.swing.JColorChooser();
         CataEntry = new javax.swing.JTextField();
         CataLabel = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
-        jLabel1 = new javax.swing.JLabel();
+        DateEntry = new javax.swing.JTextField();
+        DateLabel = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setName("Task Creation Window"); // NOI18N
@@ -95,13 +96,14 @@ public class TaskCreation extends javax.swing.JDialog{
         CataLabel.setForeground(new java.awt.Color(0, 0, 0));
         CataLabel.setText("Catagory:");
 
-        jTextField1.setBackground(new java.awt.Color(255, 255, 255));
-        jTextField1.setForeground(new java.awt.Color(0, 0, 0));
-        jTextField1.setText("MM/DD/YY");
+        DateEntry.setBackground(new java.awt.Color(255, 255, 255));
+        DateEntry.setForeground(new java.awt.Color(0, 0, 0));
+        DateEntry.setText("MM/DD/YY");
 
-        jLabel1.setBackground(new java.awt.Color(0, 0, 0));
-        jLabel1.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel1.setText("Due Date:");
+        DateLabel.setBackground(new java.awt.Color(0, 0, 0));
+        DateLabel.setForeground(new java.awt.Color(0, 0, 0));
+        DateLabel.setLabelFor(DateEntry);
+        DateLabel.setText("Due Date:");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -110,7 +112,7 @@ public class TaskCreation extends javax.swing.JDialog{
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(ColorPick, javax.swing.GroupLayout.DEFAULT_SIZE, 648, Short.MAX_VALUE)
+                    .addComponent(ColorPick, javax.swing.GroupLayout.DEFAULT_SIZE, 642, Short.MAX_VALUE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(DescLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 65, Short.MAX_VALUE)
@@ -122,10 +124,9 @@ public class TaskCreation extends javax.swing.JDialog{
                             .addComponent(CataEntry)
                             .addComponent(NameEntry, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addGap(48, 48, 48)
-                        .addComponent(jLabel1)
+                        .addComponent(DateLabel)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(DateEntry, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(CreateButton, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -141,8 +142,8 @@ public class TaskCreation extends javax.swing.JDialog{
                     .addComponent(NameEntry, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(TaskNameLabel)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(DateLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(DateEntry, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(DescEntry, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -224,8 +225,18 @@ public class TaskCreation extends javax.swing.JDialog{
             }
         });
     }
-    public Task getCreatedTask(){//TODO: check new task validity before returning
-        
+    public Task getCreatedTask(){
+        Color c = ColorPick.getColor();
+        String d = DescEntry.getText();
+        String n = NameEntry.getText();
+        Catagories cat = null;
+        String cata = CataEntry.getText();
+        if(!cata.isBlank() && !cata.isEmpty()){
+            cat = new Catagories(CataEntry.getText());
+        }
+        else{
+            cat= new Catagories();
+        }
         return(new Task());
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -233,13 +244,13 @@ public class TaskCreation extends javax.swing.JDialog{
     private javax.swing.JLabel CataLabel;
     private javax.swing.JColorChooser ColorPick;
     private javax.swing.JButton CreateButton;
+    private javax.swing.JTextField DateEntry;
+    private javax.swing.JLabel DateLabel;
     private java.awt.TextField DescEntry;
     private javax.swing.JLabel DescLabel;
     private java.awt.TextField NameEntry;
     private javax.swing.JLabel TaskNameLabel;
     private javax.swing.JButton cancelButton;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JTextField jTextField1;
     // End of variables declaration//GEN-END:variables
 }

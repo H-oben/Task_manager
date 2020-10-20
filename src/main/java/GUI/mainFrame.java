@@ -1,15 +1,15 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package GUI;
 
 import java.awt.event.WindowEvent;
+import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import peoplePack.*;
+import taskPackage.*;
 
 /**
  *
- * @author h_obe
+ * @author hunter Obendorfer 1834106
  */
 public class mainFrame extends javax.swing.JFrame{
 
@@ -18,8 +18,18 @@ public class mainFrame extends javax.swing.JFrame{
      */
     public mainFrame() {
         initComponents();
+        try{
+            admin = new Manager("Admin","Admin",Role.MANAGER);
+        }
+        catch(MemberManagerException m){ //unreachable but required
+            admin = new Manager();
+        }
+        users.add(admin);
+        
     }
-
+    public ArrayList<Person> getList(){
+        return users;
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -120,7 +130,7 @@ public class mainFrame extends javax.swing.JFrame{
      */
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+        //<editor-fold desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
          * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
          */
@@ -149,7 +159,9 @@ public class mainFrame extends javax.swing.JFrame{
             }
         });
     }
-
+    private Manager admin;
+    private Person user;
+    private ArrayList<Person> users;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JScrollPane BubbleView;
     private javax.swing.JButton Create_Task_Button;
