@@ -5,6 +5,8 @@
  */
 package GUI;
 
+import java.awt.event.WindowEvent;
+
 /**
  *
  * @author h_obe
@@ -27,31 +29,31 @@ public class mainFrame extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        buttonGroup1 = new javax.swing.ButtonGroup();
         SidePanel = new javax.swing.JPanel();
-        ToggleViewButton = new javax.swing.JToggleButton();
         Create_Task_Button = new javax.swing.JButton();
-        Task_View = new javax.swing.JScrollPane();
+        ExitButton = new javax.swing.JButton();
+        ViewsPane = new javax.swing.JTabbedPane();
+        BubbleView = new javax.swing.JScrollPane();
+        jScrollPane1 = new javax.swing.JScrollPane();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Task Manager");
 
         SidePanel.setBackground(new java.awt.Color(3, 152, 252));
 
-        ToggleViewButton.setText(" Toggle View");
-        ToggleViewButton.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        ToggleViewButton.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        ToggleViewButton.addActionListener(new java.awt.event.ActionListener() {
+        Create_Task_Button.setText("Create Task");
+        Create_Task_Button.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        Create_Task_Button.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                ToggleViewButtonActionPerformed(evt);
+                Create_Task_ButtonActionPerformed(evt);
             }
         });
 
-        Create_Task_Button.setText("Create Task");
-        Create_Task_Button.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        Create_Task_Button.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseReleased(java.awt.event.MouseEvent evt) {
-                Create_Task_ButtonMouseReleased(evt);
+        ExitButton.setText("Exit");
+        ExitButton.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        ExitButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ExitButtonActionPerformed(evt);
             }
         });
 
@@ -62,23 +64,25 @@ public class mainFrame extends javax.swing.JFrame {
             .addGroup(SidePanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(SidePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(ToggleViewButton, javax.swing.GroupLayout.DEFAULT_SIZE, 99, Short.MAX_VALUE)
-                    .addComponent(Create_Task_Button, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(Create_Task_Button, javax.swing.GroupLayout.DEFAULT_SIZE, 96, Short.MAX_VALUE)
+                    .addComponent(ExitButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         SidePanelLayout.setVerticalGroup(
             SidePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(SidePanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(ToggleViewButton)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(Create_Task_Button)
-                .addContainerGap(494, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(ExitButton)
+                .addContainerGap())
         );
 
-        Task_View.setBackground(new java.awt.Color(150, 200, 200));
-        Task_View.setForeground(new java.awt.Color(150, 200, 200));
-        Task_View.setAutoscrolls(true);
+        ViewsPane.setBackground(new java.awt.Color(150, 200, 200));
+        ViewsPane.setForeground(new java.awt.Color(0, 0, 0));
+        ViewsPane.setOpaque(true);
+        ViewsPane.addTab("Web View", BubbleView);
+        ViewsPane.addTab("Tabular View", jScrollPane1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -87,24 +91,28 @@ public class mainFrame extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addComponent(SidePanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(Task_View, javax.swing.GroupLayout.DEFAULT_SIZE, 546, Short.MAX_VALUE))
+                .addComponent(ViewsPane, javax.swing.GroupLayout.PREFERRED_SIZE, 549, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(SidePanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(Task_View)
+            .addComponent(ViewsPane, javax.swing.GroupLayout.DEFAULT_SIZE, 546, Short.MAX_VALUE)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void ToggleViewButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ToggleViewButtonActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_ToggleViewButtonActionPerformed
+    private void Create_Task_ButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Create_Task_ButtonActionPerformed
+        TaskCreation t = new TaskCreation(this, true);
+        t.setVisible(true);
+        t.requestFocus();
+        t.pack();
+        t.repaint();
+    }//GEN-LAST:event_Create_Task_ButtonActionPerformed
 
-    private void Create_Task_ButtonMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Create_Task_ButtonMouseReleased
-        // TODO add your handling code here:
-    }//GEN-LAST:event_Create_Task_ButtonMouseReleased
+    private void ExitButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ExitButtonActionPerformed
+        this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
+    }//GEN-LAST:event_ExitButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -142,10 +150,11 @@ public class mainFrame extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JScrollPane BubbleView;
     private javax.swing.JButton Create_Task_Button;
+    private javax.swing.JButton ExitButton;
     private javax.swing.JPanel SidePanel;
-    private javax.swing.JScrollPane Task_View;
-    private javax.swing.JToggleButton ToggleViewButton;
-    private javax.swing.ButtonGroup buttonGroup1;
+    private javax.swing.JTabbedPane ViewsPane;
+    private javax.swing.JScrollPane jScrollPane1;
     // End of variables declaration//GEN-END:variables
 }
