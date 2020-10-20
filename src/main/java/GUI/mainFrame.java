@@ -11,7 +11,7 @@ import java.awt.event.WindowEvent;
  *
  * @author h_obe
  */
-public class mainFrame extends javax.swing.JFrame {
+public class mainFrame extends javax.swing.JFrame{
 
     /**
      * Creates new form mainFrame
@@ -108,6 +108,7 @@ public class mainFrame extends javax.swing.JFrame {
         t.requestFocus();
         t.pack();
         t.repaint();
+        
     }//GEN-LAST:event_Create_Task_ButtonActionPerformed
 
     private void ExitButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ExitButtonActionPerformed
@@ -157,4 +158,5 @@ public class mainFrame extends javax.swing.JFrame {
     private javax.swing.JTabbedPane ViewsPane;
     private javax.swing.JScrollPane jScrollPane1;
     // End of variables declaration//GEN-END:variables
+
 }

@@ -44,15 +44,17 @@ public class Task {
     /**
      * @param n String name of task, mutable
      * @param d String describing task,mutable
+     * @param c catagory 
+     * @param co Color input
      * @param ld LocalDate of the due date, mutable
      * @param assigned Person class to assign this task to, mutable
      * @param creator Person class that assigned this task, this is immutable so be careful
      * 
      */
-    public Task(String n, String d, Catagories c, LocalDate ld, Person assigned, Person creator){
+    public Task(String n, String d, Catagories c,Color co, LocalDate ld, Person assigned, Person creator){
         name = n;
         cat=c;
-        if(d.isBlank() || d.isEmpty()){
+        if(d.isBlank() || d.isEmpty() || d==null){
             descrip="empty";
         }
         else{
@@ -64,19 +66,7 @@ public class Task {
         
         mainDueDate=ld;
         createdOn=LocalDate.now();
-        
-        if(createdOn.compareTo(mainDueDate)<=0){ //decide color based on due date
-            color=Color.RED;
-        }
-        else if(createdOn.compareTo(mainDueDate)<=7){
-            color=Color.YELLOW;
-        }
-        else if(createdOn.compareTo(mainDueDate)>7){
-            color=Color.GREEN;
-        }
-        else{                                   //default color is blue
-            color=Color.BLUE;
-        }
+        color = co;
         
         assignedTo = assigned;
         createdBy = creator;

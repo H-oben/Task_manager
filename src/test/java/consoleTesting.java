@@ -1,3 +1,4 @@
+import java.awt.Color;
 import taskPackage.*;
 import peoplePack.*;
 import java.time.LocalDate;
@@ -15,7 +16,7 @@ public class consoleTesting {
         catch (MemberManagerException a){
             T = new Manager();
         }
-        Task t = new Task("Test Task", "", new Catagories("test"), LocalDate.now(),T,m);
+        Task t = new Task("Test Task", "", new Catagories("test"), new Color(255,255,255), LocalDate.now(),T,m);
         System.out.println(t.toString());
     }
     
