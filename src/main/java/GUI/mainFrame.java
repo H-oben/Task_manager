@@ -120,6 +120,7 @@ public class mainFrame extends javax.swing.JFrame{
 
     private void ExitButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ExitButtonActionPerformed
         this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
+        this.dispose();
     }//GEN-LAST:event_ExitButtonActionPerformed
 
     /**

@@ -182,6 +182,7 @@ public class loginCreationMenu extends javax.swing.JDialog {
         if(!failed){
             System.out.println("reached");
             this.dispatchEvent(new WindowEvent(this,WindowEvent.WINDOW_CLOSING));
+            this.dispose(); // normally do not nees this but does not work without it
         }
     }//GEN-LAST:event_LoginButtonActionPerformed
 
@@ -189,6 +190,8 @@ public class loginCreationMenu extends javax.swing.JDialog {
         JFrame p = (JFrame)this.getParent();
         p.dispatchEvent(new WindowEvent(p, WindowEvent.WINDOW_CLOSING));
         this.dispatchEvent(new WindowEvent(this,WindowEvent.WINDOW_CLOSING));
+        this.dispose();
+        p.dispose();
     }//GEN-LAST:event_ExitButtonActionPerformed
 
     /**
