@@ -73,6 +73,7 @@ public class mainFrame extends javax.swing.JFrame{
         ViewsPane = new javax.swing.JTabbedPane();
         BubbleView = new javax.swing.JScrollPane();
         TabularView = new javax.swing.JScrollPane();
+        TopTask = new javax.swing.JList<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Task Manager");
@@ -136,6 +137,18 @@ public class mainFrame extends javax.swing.JFrame{
         ViewsPane.addTab("Web View", BubbleView);
 
         TabularView.setBackground(new java.awt.Color(175, 200, 200));
+
+        TopTask.setBackground(new java.awt.Color(125, 200, 200));
+        TopTask.setBorder(null);
+        TopTask.setForeground(new java.awt.Color(0, 0, 0));
+        TopTask.setModel(new javax.swing.AbstractListModel<String>() {
+            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
+            public int getSize() { return strings.length; }
+            public String getElementAt(int i) { return strings[i]; }
+        });
+        TopTask.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        TabularView.setViewportView(TopTask);
+
         ViewsPane.addTab("Tabular View", TabularView);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -208,6 +221,7 @@ public class mainFrame extends javax.swing.JFrame{
     private javax.swing.JPanel SidePanel;
     private javax.swing.JScrollPane TabularView;
     public javax.swing.JComboBox<Task> TaskSelection;
+    private javax.swing.JList<String> TopTask;
     private javax.swing.JTabbedPane ViewsPane;
     // End of variables declaration//GEN-END:variables
 }
