@@ -3,6 +3,7 @@ package taskPackage;
 import java.time.LocalDate;
 import peoplePack.Person;
 import java.awt.Color;
+import java.util.ArrayList;
 /**
  * @author Hunter Obendorfer
  */
@@ -16,7 +17,7 @@ public class Task {
     /**
      * Structure of subtasks where every subtask can have a subset of subtasks
      */
-    private Subtask[] subs; //TODO: make a structure for the subtasks
+    private ArrayList<Subtask> subs = new ArrayList<Subtask>();
     
     protected LocalDate mainDueDate;
     private final LocalDate createdOn; // not going to change so it's final
@@ -89,7 +90,7 @@ public class Task {
     }
     /**
      * 
-     * @param ldt set due date to a LocalDateTime
+     * @param ld set due date to a LocalDateTime
      * <p>Best practice dictates that the new due date is in the future,
      * not in the past or present.
      * </p>

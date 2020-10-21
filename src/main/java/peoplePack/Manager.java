@@ -32,6 +32,7 @@ public class Manager implements Person{
     /**
      * @param F String first name of new member
      * @param L String last name of new member
+     * @param P password in char[]
      * @param R Role of new manager, either manager or Team Lead
      * @throws peoplePack.MemberManagerException
      */

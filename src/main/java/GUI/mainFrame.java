@@ -1,6 +1,7 @@
 package GUI;
 
 import java.awt.event.WindowEvent;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import peoplePack.*;
 import taskPackage.*;
@@ -11,6 +12,13 @@ import taskPackage.*;
  */
 public class mainFrame extends javax.swing.JFrame{
 
+    //custom variables
+    private Manager admin;
+    public Person CurrentUser;
+    public ArrayList<Person> users = new ArrayList<Person>();
+    public ArrayList<Task> openTasks = new ArrayList<Task>();
+    public ArrayList<Task> closedTasks = new ArrayList<Task>();
+    private LocalDate today = LocalDate.now();
     /**
      * Creates new form mainFrame
      */
@@ -122,7 +130,9 @@ public class mainFrame extends javax.swing.JFrame{
         this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
         this.dispose();
     }//GEN-LAST:event_ExitButtonActionPerformed
-
+    public LocalDate getToday(){
+        return today;
+    }
     /**
      * @param args the command line arguments
      */
@@ -157,9 +167,7 @@ public class mainFrame extends javax.swing.JFrame{
             }
         });
     }
-    private Manager admin;
-    public Person CurrentUser;
-    public ArrayList<Person> users = new ArrayList<Person>();
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JScrollPane BubbleView;
     private javax.swing.JButton Create_Task_Button;

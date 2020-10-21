@@ -3,6 +3,7 @@ package taskPackage;
 import java.time.LocalDate;
 import peoplePack.Person;
 import java.awt.Color;
+import java.util.ArrayList;
 
 public class Subtask extends Task{
     private String name;
@@ -10,7 +11,7 @@ public class Subtask extends Task{
     private Status stat;
     private Color color;
     
-    private Subtask[] sub; //TODO: make structure for subclasses
+    private ArrayList<Subtask> subs = new ArrayList<Subtask>();
     
     protected LocalDate dueDate;
     private final LocalDate createdOn; // not going to change so it's final
@@ -22,8 +23,6 @@ public class Subtask extends Task{
         name="empty";
         descrip="empty";
         stat=Status.NOT_STARTED;
-        
-        sub=null;
         
         dueDate=super.mainDueDate;
         createdOn=LocalDate.now();
@@ -46,11 +45,8 @@ public class Subtask extends Task{
         descrip=d;
         stat=Status.NOT_STARTED;
         
-        sub=null;
-        
         dueDate=due;
         createdOn=LocalDate.now();
-        
         
         assignedTo = assigned;
         createdBy = creator;

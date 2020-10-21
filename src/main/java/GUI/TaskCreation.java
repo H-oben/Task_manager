@@ -7,6 +7,10 @@ package GUI;
 
 import java.awt.Color;
 import java.awt.event.WindowEvent;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import javax.swing.JComboBox;
+import peoplePack.Person;
 import taskPackage.Catagories;
 import taskPackage.Task;
 
@@ -15,13 +19,14 @@ import taskPackage.Task;
  * @author h_obe
  */
 public class TaskCreation extends javax.swing.JDialog{
-
+    private mainFrame p = (mainFrame)this.getParent();
     /**
      * Creates new form TaskCreation
      */
     public TaskCreation(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        ErrorLabel.setVisible(false);
     }
 
     /**
@@ -45,6 +50,9 @@ public class TaskCreation extends javax.swing.JDialog{
         CataLabel = new javax.swing.JLabel();
         DateEntry = new javax.swing.JTextField();
         DateLabel = new javax.swing.JLabel();
+        UserAssign = new javax.swing.JComboBox<>();
+        AssignLabel = new javax.swing.JLabel();
+        ErrorLabel = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setName("Task Creation Window"); // NOI18N
@@ -98,12 +106,20 @@ public class TaskCreation extends javax.swing.JDialog{
 
         DateEntry.setBackground(new java.awt.Color(255, 255, 255));
         DateEntry.setForeground(new java.awt.Color(0, 0, 0));
-        DateEntry.setText("MM/DD/YY");
+        DateEntry.setText("YYYY-MM-DD");
 
         DateLabel.setBackground(new java.awt.Color(0, 0, 0));
         DateLabel.setForeground(new java.awt.Color(0, 0, 0));
         DateLabel.setLabelFor(DateEntry);
         DateLabel.setText("Due Date:");
+
+        UserAssign.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
+        AssignLabel.setForeground(new java.awt.Color(0, 0, 0));
+        AssignLabel.setLabelFor(UserAssign);
+        AssignLabel.setText("Assign To:");
+
+        ErrorLabel.setForeground(new java.awt.Color(0, 0, 0));
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -124,9 +140,18 @@ public class TaskCreation extends javax.swing.JDialog{
                             .addComponent(CataEntry)
                             .addComponent(NameEntry, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addGap(48, 48, 48)
-                        .addComponent(DateLabel)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(DateEntry, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(DateLabel)
+                                    .addComponent(AssignLabel))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addComponent(DateEntry, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(0, 0, Short.MAX_VALUE))
+                                    .addComponent(UserAssign, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                            .addComponent(ErrorLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(CreateButton, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -147,11 +172,15 @@ public class TaskCreation extends javax.swing.JDialog{
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(DescEntry, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(DescLabel))
+                    .addComponent(DescLabel)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(UserAssign, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(AssignLabel)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(CataEntry, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(CataLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(CataLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(ErrorLabel))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(ColorPick, javax.swing.GroupLayout.PREFERRED_SIZE, 323, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -176,8 +205,11 @@ public class TaskCreation extends javax.swing.JDialog{
     }// </editor-fold>//GEN-END:initComponents
 
     private void CreateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CreateButtonActionPerformed
-        
-        this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
+        Task t = this.getCreatedTask();
+        if(t!=null){
+            p.openTasks.add(t);
+            this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
+        }
     }//GEN-LAST:event_CreateButtonActionPerformed
 
     private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
@@ -226,21 +258,51 @@ public class TaskCreation extends javax.swing.JDialog{
             }
         });
     }
-    public Task getCreatedTask(){
+    private Task getCreatedTask(){
+        ErrorLabel.setVisible(false);
         Color c = ColorPick.getColor();
         String d = DescEntry.getText();
         String n = NameEntry.getText();
+        String date = DateEntry.getText();
+        LocalDate due;
+        try{
+            due = LocalDate.parse(date, DateTimeFormatter.ISO_LOCAL_DATE);
+        }
+        catch(Exception e){
+            due = null;
+        }
         Catagories cat = null;
         String cata = CataEntry.getText();
+        int x = UserAssign.getSelectedIndex();
+        Person assigned = p.users.get(x);
         if(!cata.isBlank() && !cata.isEmpty()){
             cat = new Catagories(CataEntry.getText());
         }
         else{
             cat= new Catagories();
         }
-        return(new Task());
+        if(n.isBlank() || n.isEmpty()){
+            ErrorLabel.setText("Name cannot be blank");
+            ErrorLabel.setVisible(true);
+            return(null);
+        }
+        if(date.isEmpty() || date.equals("YYY-MM-DD") || date.isBlank()){
+            ErrorLabel.setText("Date cannot be blank");
+            ErrorLabel.setVisible(true);
+            return(null);
+        }
+        else if(due == null || !due.isAfter(p.getToday())){
+            ErrorLabel.setText("Date is invalid");
+            ErrorLabel.setVisible(true);
+            return(null);
+        }
+        else{
+            ErrorLabel.setVisible(false);
+            return(new Task(n,d,cat,c,due,assigned,p.CurrentUser));
+        }
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel AssignLabel;
     private javax.swing.JTextField CataEntry;
     private javax.swing.JLabel CataLabel;
     private javax.swing.JColorChooser ColorPick;
@@ -249,8 +311,10 @@ public class TaskCreation extends javax.swing.JDialog{
     private javax.swing.JLabel DateLabel;
     private java.awt.TextField DescEntry;
     private javax.swing.JLabel DescLabel;
+    private javax.swing.JLabel ErrorLabel;
     private java.awt.TextField NameEntry;
     private javax.swing.JLabel TaskNameLabel;
+    private javax.swing.JComboBox<String> UserAssign;
     private javax.swing.JButton cancelButton;
     private javax.swing.JPanel jPanel1;
     // End of variables declaration//GEN-END:variables
