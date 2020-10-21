@@ -7,21 +7,24 @@ package GUI;
 
 import java.awt.event.WindowEvent;
 import javax.swing.JFrame;
-import peoplePack.Person;
-import peoplePack.Role;
+import peoplePack.*;
 
 /**
  *
  * @author h_obe
  */
 public class loginCreationMenu extends javax.swing.JDialog {
-
+    private String LoginErr = "Login Failed";
+    private String CreationErr = "User exists, please login";
+    private String EmptyErr = "Please fill out all areas";
+    private mainFrame p = (mainFrame)this.getParent();
     /**
      * Creates new form loginCreationMenu
      */
     public loginCreationMenu(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        LoginFailedNoti.setVisible(false);
     }
 
     /**
@@ -43,6 +46,7 @@ public class loginCreationMenu extends javax.swing.JDialog {
         NameInput = new javax.swing.JTextField();
         PassInput = new javax.swing.JPasswordField();
         ExitButton = new javax.swing.JButton();
+        LoginFailedNoti = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setModal(true);
@@ -87,32 +91,35 @@ public class loginCreationMenu extends javax.swing.JDialog {
             }
         });
 
+        LoginFailedNoti.setForeground(new java.awt.Color(0, 0, 0));
+        LoginFailedNoti.setText("Login Failed");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addGroup(jPanel1Layout.createSequentialGroup()
-                            .addComponent(NameLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(NameInput))
-                        .addGroup(jPanel1Layout.createSequentialGroup()
-                            .addComponent(Passlabel)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(PassInput))
-                        .addGroup(jPanel1Layout.createSequentialGroup()
-                            .addComponent(TypeLabel)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(TypeBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(NameLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(NameInput))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(Passlabel)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(PassInput))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(TypeLabel)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(TypeBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(LoginButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(CreateButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(ExitButton)))
+                        .addComponent(ExitButton))
+                    .addComponent(LoginFailedNoti, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap(190, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -130,7 +137,9 @@ public class loginCreationMenu extends javax.swing.JDialog {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(TypeBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(TypeLabel))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 190, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(LoginFailedNoti)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 168, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(LoginButton)
                     .addComponent(CreateButton)
@@ -153,12 +162,49 @@ public class loginCreationMenu extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void CreateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CreateButtonActionPerformed
-        
+        LoginFailedNoti.setVisible(false);
+        boolean failed = false;
+        String name = NameInput.getText();
+        if(!name.isBlank() && !name.isEmpty()){
+            Object r = TypeBox.getSelectedItem();
+            r=r.toString();
+            if(r.equals("Member")){
+               r = Role.MEMBER; 
+            }
+            else if(r.equals("Manager")){
+                r = Role.MANAGER;
+            }
+            else{
+                r= Role.TEAMLEAD;
+            }
+            for(Person a : p.users){
+                if(a.getRole()==r){
+                    if(a.getName().equals(NameInput.getText())){
+                        LoginFailedNoti.setText(CreationErr);
+                        LoginFailedNoti.setVisible(true);
+                        failed = true;
+                        break;
+                    }
+                }
+            }
+            if(!failed){
+                if(r!= Role.MEMBER)
+                p.users.add(new Manager());
+                LoginFailedNoti.setVisible(false);
+                this.dispatchEvent(new WindowEvent(this,WindowEvent.WINDOW_CLOSING));
+                this.dispose();
+            }
+        }
+        else{
+            LoginFailedNoti.setText(EmptyErr);
+            LoginFailedNoti.setVisible(true);
+        }
     }//GEN-LAST:event_CreateButtonActionPerformed
 
     private void LoginButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LoginButtonActionPerformed
+        LoginFailedNoti.setVisible(false);
+        LoginFailedNoti.setText(LoginErr);
         boolean failed = true;
-        mainFrame parent = (mainFrame)this.getParent();
         Object r = TypeBox.getSelectedItem();
         r=r.toString();
         if(r.equals("Member")){
@@ -170,24 +216,26 @@ public class loginCreationMenu extends javax.swing.JDialog {
         else{
             r= Role.TEAMLEAD;
         }
-        for(Person a : parent.users){
+        for(Person a : p.users){
             if(a.getRole()==r){
                 if(a.getName().equals(NameInput.getText()) && a.testPassword(PassInput.getPassword())){
-                    parent.CurrentUser=a;
+                    p.CurrentUser=a;
                     failed = false;
                     break;
                 }
             }
         }
         if(!failed){
-            System.out.println("reached");
+            LoginFailedNoti.setVisible(false);
             this.dispatchEvent(new WindowEvent(this,WindowEvent.WINDOW_CLOSING));
             this.dispose(); // normally do not nees this but does not work without it
+        }
+        else{
+            LoginFailedNoti.setVisible(true);
         }
     }//GEN-LAST:event_LoginButtonActionPerformed
 
     private void ExitButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ExitButtonActionPerformed
-        JFrame p = (JFrame)this.getParent();
         p.dispatchEvent(new WindowEvent(p, WindowEvent.WINDOW_CLOSING));
         this.dispatchEvent(new WindowEvent(this,WindowEvent.WINDOW_CLOSING));
         this.dispose();
@@ -239,6 +287,7 @@ public class loginCreationMenu extends javax.swing.JDialog {
     private javax.swing.JButton CreateButton;
     private javax.swing.JButton ExitButton;
     private javax.swing.JButton LoginButton;
+    private javax.swing.JLabel LoginFailedNoti;
     private javax.swing.JTextField NameInput;
     private javax.swing.JLabel NameLabel;
     private javax.swing.JPasswordField PassInput;
