@@ -1,7 +1,7 @@
 package peoplePack;
 
 public interface Person {
-    public String getPassword();
+    public boolean testPassword(char[] a);
     public String getName();
     public Role getRole();
 }

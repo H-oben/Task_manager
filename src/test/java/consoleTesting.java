@@ -10,8 +10,13 @@ public class consoleTesting {
     public static void main(String[] args) {
         Manager m=new Manager();
         Manager T;
+        String x = "password";
+        char[] pass = new char[x.length()];
+        for(int y=0; y<x.length();y++){
+            pass[y] = x.charAt(y);
+        }
         try{
-            T = new Manager("Frank","Furt","password", Role.TEAMLEAD);
+            T = new Manager("Frank","Furt",pass, Role.TEAMLEAD);
         }
         catch (MemberManagerException a){
             T = new Manager();

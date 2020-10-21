@@ -16,23 +16,16 @@ public class mainFrame extends javax.swing.JFrame{
      */
     public mainFrame() {
         try{ //admin user
-            admin = new Manager("Admin","Admin","Adm1n",Role.MANAGER);
+            char[] pass = "Adm1n".toCharArray();
+            admin = new Manager("Admin","Admin",pass,Role.MANAGER);
         }
         catch(MemberManagerException m){ //unreachable but required
             admin = new Manager();
         }
         users.add(admin);
-        
+        initComponents();
         loginCreationMenu l = new loginCreationMenu(this, true);
         l.setVisible(true);
-        l.requestFocus();
-        l.pack();
-        l.repaint();
-        
-        initComponents();
-    }
-    public ArrayList<Person> getList(){
-        return users;
     }
     /**
      * This method is called from within the constructor to initialize the form.

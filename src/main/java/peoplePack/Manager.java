@@ -21,13 +21,13 @@ public class Manager implements Person{
     private String fname;
     private String lname;
     private Role role;
-    private String pass;
+    private char[] pass;
     
     public Manager(){
         fname = "empty";
         lname = "empty";
         role= Role.MANAGER;
-        pass="password";
+        pass = "password".toCharArray();
     }
     /**
      * @param F String first name of new member
@@ -35,7 +35,7 @@ public class Manager implements Person{
      * @param R Role of new manager, either manager or Team Lead
      * @throws peoplePack.MemberManagerException
      */
-    public Manager(String F, String L,String P, Role R) throws MemberManagerException{
+    public Manager(String F, String L,char[] P, Role R) throws MemberManagerException{
         fname = F;
         lname = L;
         if(R==Role.MEMBER){
@@ -43,17 +43,27 @@ public class Manager implements Person{
                     ,"A Manager/Team Lead cannot be a member"));
         }
         role = R;
-        if(!P.isBlank() && !P.isEmpty()){
-            pass=P;
+        if(P.length!=0){
+            pass = P;
         }
         else{
-            pass="password";
+            pass = "password".toCharArray();
         }
     }
     
     @Override
-    public String getPassword(){
-        return pass;
+    public boolean testPassword(char[] a){
+        if(a.length!= pass.length){
+            return(false);
+        }
+        else{
+            for(int x = 0; x< a.length;x++){
+                if(a[x]!= pass[x]){
+                    return(false);
+                }
+            }
+            return(true);
+        }
     }
     @Override
     public Role getRole(){
