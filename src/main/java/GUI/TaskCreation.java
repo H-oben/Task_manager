@@ -19,7 +19,7 @@ import taskPackage.Task;
  * @author h_obe
  */
 public class TaskCreation extends javax.swing.JDialog{
-    private mainFrame p = (mainFrame)this.getParent();
+    private final mainFrame p = (mainFrame)this.getParent();
     /**
      * Creates new form TaskCreation
      */
@@ -208,6 +208,7 @@ public class TaskCreation extends javax.swing.JDialog{
         Task t = this.getCreatedTask();
         if(t!=null){
             p.openTasks.add(t);
+            
             this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
         }
     }//GEN-LAST:event_CreateButtonActionPerformed

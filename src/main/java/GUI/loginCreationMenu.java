@@ -6,7 +6,6 @@
 package GUI;
 
 import java.awt.event.WindowEvent;
-import javax.swing.JFrame;
 import peoplePack.*;
 
 /**
@@ -14,12 +13,14 @@ import peoplePack.*;
  * @author h_obe
  */
 public class loginCreationMenu extends javax.swing.JDialog {
-    private String LoginErr = "Login Failed";
-    private String CreationErr = "User exists, please login";
-    private String EmptyErr = "Please fill out all areas";
-    private mainFrame p = (mainFrame)this.getParent();
+    private final String LoginErr = "Login Failed";
+    private final String CreationErr = "User exists, please login";
+    private final String EmptyErr = "Please fill out all areas";
+    private final mainFrame p = (mainFrame)this.getParent();
     /**
      * Creates new form loginCreationMenu
+     * @param parent mainFrame
+     * @param modal should always be true
      */
     public loginCreationMenu(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
@@ -169,16 +170,16 @@ public class loginCreationMenu extends javax.swing.JDialog {
             Object r = TypeBox.getSelectedItem();
             r=r.toString();
             if(r.equals("Member")){
-               r = Role.MEMBER; 
+                r = Role.MEMBER; 
             }
             else if(r.equals("Manager")){
                 r = Role.MANAGER;
             }
             else{
-                r= Role.TEAMLEAD;
+                r = Role.TEAMLEAD;
             }
             for(Person a : p.users){
-                if(a.getRole()==r){
+                if(a.getRole() == r){
                     if(a.getName().equals(NameInput.getText())){
                         LoginFailedNoti.setText(CreationErr);
                         LoginFailedNoti.setVisible(true);
@@ -187,12 +188,29 @@ public class loginCreationMenu extends javax.swing.JDialog {
                     }
                 }
             }
-            if(!failed){
-                if(r!= Role.MEMBER)
-                p.users.add(new Manager());
+            if(!failed){ //actual user creation
+                String[] names = name.split(" ");
+                if(r!= Role.MEMBER){
+                    Role role;
+                    if(r==Role.MANAGER){
+                        role = Role.MANAGER;
+                    }
+                    else{
+                        role = Role.TEAMLEAD;
+                    }
+                    try {
+                        p.users.add(new Manager(names[0],names[1],PassInput.getPassword(),role));
+                    } catch (MemberManagerException ex) {
+                        //unreachable
+                    }
+                    
+                }
+                else{
+                    p.users.add(new member(names[0],names[1],PassInput.getPassword()));
+                }
                 LoginFailedNoti.setVisible(false);
-                this.dispatchEvent(new WindowEvent(this,WindowEvent.WINDOW_CLOSING));
-                this.dispose();
+                    this.dispatchEvent(new WindowEvent(this,WindowEvent.WINDOW_CLOSING));
+                    this.dispose();
             }
         }
         else{
@@ -258,29 +276,23 @@ public class loginCreationMenu extends javax.swing.JDialog {
                     break;
                 }
             }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(loginCreationMenu.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(loginCreationMenu.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(loginCreationMenu.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(loginCreationMenu.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
+        
+        //</editor-fold>
 
         /* Create and display the dialog */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                loginCreationMenu dialog = new loginCreationMenu(new java.awt.Frame(), true);
-                dialog.addWindowListener(new java.awt.event.WindowAdapter() {
-                    @Override
-                    public void windowClosing(java.awt.event.WindowEvent e) {
-                        System.exit(0);
-                    }
-                });
-                dialog.setVisible(true);
-            }
+        java.awt.EventQueue.invokeLater(() -> {
+            loginCreationMenu dialog = new loginCreationMenu(new java.awt.Frame(), true);
+            dialog.addWindowListener(new java.awt.event.WindowAdapter() {
+                @Override
+                public void windowClosing(java.awt.event.WindowEvent e) {
+                    System.exit(0);
+                }
+            });
+            dialog.setVisible(true);
         });
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
