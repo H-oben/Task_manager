@@ -17,7 +17,7 @@ public class Task {
     /**
      * Structure of subtasks where every subtask can have a subset of subtasks
      */
-    private ArrayList<Subtask> subs = new ArrayList<Subtask>();
+    private ArrayList<Subtask> subs = new ArrayList<>();
     
     protected LocalDate mainDueDate;
     private final LocalDate createdOn; // not going to change so it's final
@@ -55,7 +55,7 @@ public class Task {
     public Task(String n, String d, Catagories c,Color co, LocalDate ld, Person assigned, Person creator){
         name = n;
         cat=c;
-        if(d.isBlank() || d.isEmpty() || d==null){
+        if(d.isBlank() || d.isEmpty()){
             descrip="empty";
         }
         else{
@@ -72,13 +72,12 @@ public class Task {
         assignedTo = assigned;
         createdBy = creator;
     }
-    
+    //TODO: method to add subtask
     public void addSubtask(Subtask s){
         
     }
     
     //setters
-    //TODO: method to add subtask
     public void setName(String n){
         name=n;
     }
@@ -87,6 +86,9 @@ public class Task {
     }
     public void setStatus(Status s){
         stat=s;
+    }
+    public void setCatagory(Catagories c){
+        cat=c;
     }
     /**
      * 
@@ -138,6 +140,9 @@ public class Task {
     }
     public Color getColor(){
         return(color);
+    }
+    public Catagories getCatagory(){
+        return(cat);
     }
     
     @Override

@@ -1,5 +1,7 @@
 package taskPackage;
 
+import java.util.Objects;
+
 public class Catagories extends Object{
     private String cata;
     public Catagories(){
@@ -29,5 +31,12 @@ public class Catagories extends Object{
             Catagories t = (Catagories) o;
             return (t.toString().toLowerCase().equals(this.toString().toLowerCase()));
         }
+    }
+    //generated
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        hash = 53 * hash + Objects.hashCode(this.cata);
+        return hash;
     }
 }
