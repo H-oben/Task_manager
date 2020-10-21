@@ -179,7 +179,7 @@ public class mainFrame extends javax.swing.JFrame{
     private javax.swing.JButton ExitButton;
     private javax.swing.JPanel SidePanel;
     private javax.swing.JScrollPane TabularView;
-    private javax.swing.JComboBox<String> TaskSelection;
+    private javax.swing.JComboBox<Task> TaskSelection;
     private javax.swing.JTabbedPane ViewsPane;
     // End of variables declaration//GEN-END:variables
 }
