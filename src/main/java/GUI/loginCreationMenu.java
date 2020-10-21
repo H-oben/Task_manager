@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package GUI;
 
 import java.awt.event.WindowEvent;
@@ -201,7 +196,7 @@ public class loginCreationMenu extends javax.swing.JDialog {
                     try {
                         p.users.add(new Manager(names[0],names[1],PassInput.getPassword(),role));
                     } catch (MemberManagerException ex) {
-                        //unreachable
+                        //unreachable but required
                     }
                     
                 }
@@ -224,7 +219,7 @@ public class loginCreationMenu extends javax.swing.JDialog {
         LoginFailedNoti.setText(LoginErr);
         boolean failed = true;
         Object r = TypeBox.getSelectedItem();
-        r=r.toString();
+        r=r.toString(); //role conversion
         if(r.equals("Member")){
            r = Role.MEMBER; 
         }
@@ -246,7 +241,7 @@ public class loginCreationMenu extends javax.swing.JDialog {
         if(!failed){
             LoginFailedNoti.setVisible(false);
             this.dispatchEvent(new WindowEvent(this,WindowEvent.WINDOW_CLOSING));
-            this.dispose(); // normally do not nees this but does not work without it
+            this.dispose(); 
         }
         else{
             LoginFailedNoti.setVisible(true);

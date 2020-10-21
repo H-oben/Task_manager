@@ -8,7 +8,7 @@ import taskPackage.*;
 
 /**
  *
- * @author hunter Obendorfer 1834106
+ * @author Hunter Obendorfer 1834106
  */
 public class mainFrame extends javax.swing.JFrame{
 
