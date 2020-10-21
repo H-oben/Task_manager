@@ -1,8 +1,10 @@
 package GUI;
 
+import java.awt.Color;
 import java.awt.event.WindowEvent;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import javax.swing.DefaultComboBoxModel;
 import peoplePack.*;
 import taskPackage.*;
 
@@ -15,15 +17,19 @@ public class mainFrame extends javax.swing.JFrame{
     //custom variables
     private  Manager admin;
     public Person CurrentUser;
+    
     public ArrayList<Person> users = new ArrayList<>();
     public ArrayList<Task> openTasks = new ArrayList<>();
     public ArrayList<Task> closedTasks = new ArrayList<>();
+    private String[] mode;
+    
+    
     private LocalDate today = LocalDate.now();
     /**
      * Creates new form mainFrame
      */
     public mainFrame() {
-        try{ //admin user
+        try{ //add default admin user
             char[] pass = "Adm1n".toCharArray();
             admin = new Manager("Admin","Admin",pass,Role.MANAGER);
         }
@@ -31,9 +37,24 @@ public class mainFrame extends javax.swing.JFrame{
             admin = new Manager();
         }
         users.add(admin);
+        
+        openTasks.add(new Task("Create Tasks","Create tasks for employees to work on"
+        ,new Catagories("Administrative"),new Color(100,200,200), LocalDate.MAX, admin,admin));
+        
+        //init string array for comboBox
+        mode = new String[openTasks.size()];
+        for(int x = 0; x<mode.length; x++){
+            mode[x] = openTasks.get(x).getName();
+        }
+
         initComponents();
+        DefaultComboBoxModel m = new DefaultComboBoxModel(mode);
+        TaskSelection.setModel(m);
+        //login comes up before main menu
         loginCreationMenu l = new loginCreationMenu(this, true);
         l.setVisible(true);
+        
+        
     }
     /**
      * This method is called from within the constructor to initialize the form.
@@ -48,6 +69,7 @@ public class mainFrame extends javax.swing.JFrame{
         Create_Task_Button = new javax.swing.JButton();
         ExitButton = new javax.swing.JButton();
         TaskSelection = new javax.swing.JComboBox<>();
+        OpenTaskLabel = new javax.swing.JLabel();
         ViewsPane = new javax.swing.JTabbedPane();
         BubbleView = new javax.swing.JScrollPane();
         TabularView = new javax.swing.JScrollPane();
@@ -56,7 +78,6 @@ public class mainFrame extends javax.swing.JFrame{
         setTitle("Task Manager");
         setBackground(new java.awt.Color(0, 0, 0));
         setMinimumSize(new java.awt.Dimension(700, 550));
-        setPreferredSize(new java.awt.Dimension(700, 550));
 
         SidePanel.setBackground(new java.awt.Color(100, 152, 252));
 
@@ -78,6 +99,10 @@ public class mainFrame extends javax.swing.JFrame{
 
         TaskSelection.setName("Tasks"); // NOI18N
 
+        OpenTaskLabel.setForeground(new java.awt.Color(0, 0, 0));
+        OpenTaskLabel.setLabelFor(TaskSelection);
+        OpenTaskLabel.setText("Open Tasks");
+
         javax.swing.GroupLayout SidePanelLayout = new javax.swing.GroupLayout(SidePanel);
         SidePanel.setLayout(SidePanelLayout);
         SidePanelLayout.setHorizontalGroup(
@@ -87,7 +112,8 @@ public class mainFrame extends javax.swing.JFrame{
                 .addGroup(SidePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(Create_Task_Button, javax.swing.GroupLayout.DEFAULT_SIZE, 138, Short.MAX_VALUE)
                     .addComponent(ExitButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(TaskSelection, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(TaskSelection, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(OpenTaskLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         SidePanelLayout.setVerticalGroup(
@@ -95,6 +121,8 @@ public class mainFrame extends javax.swing.JFrame{
             .addGroup(SidePanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(Create_Task_Button)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(OpenTaskLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(TaskSelection, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -134,7 +162,6 @@ public class mainFrame extends javax.swing.JFrame{
         t.requestFocus();
         t.pack();
         t.repaint();
-        
     }//GEN-LAST:event_Create_Task_ButtonActionPerformed
 
     private void ExitButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ExitButtonActionPerformed
@@ -177,6 +204,7 @@ public class mainFrame extends javax.swing.JFrame{
     private javax.swing.JScrollPane BubbleView;
     private javax.swing.JButton Create_Task_Button;
     private javax.swing.JButton ExitButton;
+    private javax.swing.JLabel OpenTaskLabel;
     private javax.swing.JPanel SidePanel;
     private javax.swing.JScrollPane TabularView;
     public javax.swing.JComboBox<Task> TaskSelection;

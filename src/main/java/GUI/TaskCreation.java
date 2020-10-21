@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.event.WindowEvent;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import javax.swing.DefaultComboBoxModel;
 import peoplePack.Person;
 import taskPackage.*;
 
@@ -13,6 +14,7 @@ import taskPackage.*;
  */
 public class TaskCreation extends javax.swing.JDialog{
     private final mainFrame p = (mainFrame)this.getParent();
+    private DefaultComboBoxModel model = new DefaultComboBoxModel(getUsers());
     /**
      * Creates new form TaskCreation
      * @param parent mainFrame
@@ -22,6 +24,7 @@ public class TaskCreation extends javax.swing.JDialog{
         super(parent, modal);
         initComponents();
         ErrorLabel.setVisible(false);
+        UserAssign.setModel(model);
     }
 
     /**
@@ -212,7 +215,14 @@ public class TaskCreation extends javax.swing.JDialog{
         this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
         this.dispose();
     }//GEN-LAST:event_cancelButtonActionPerformed
-
+    
+    private String[] getUsers(){
+        String[] users= new String[p.users.size()];
+        for(int x = 0; x< users.length; x++){
+            users[x] = p.users.get(x).getName();
+        }
+        return(users);
+    }
     /**
      * @param args the command line arguments
      */
