@@ -5,8 +5,7 @@ import java.awt.event.WindowEvent;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import peoplePack.Person;
-import taskPackage.Catagories;
-import taskPackage.Task;
+import taskPackage.*;
 
 /**
  *
