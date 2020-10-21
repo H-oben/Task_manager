@@ -5,6 +5,11 @@
  */
 package GUI;
 
+import java.awt.event.WindowEvent;
+import javax.swing.JFrame;
+import peoplePack.Person;
+import peoplePack.Role;
+
 /**
  *
  * @author h_obe
@@ -37,8 +42,9 @@ public class loginCreationMenu extends javax.swing.JDialog {
         TypeLabel = new javax.swing.JLabel();
         NameInput = new javax.swing.JTextField();
         PassInput = new javax.swing.JPasswordField();
+        ExitButton = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setModal(true);
 
         jPanel1.setBackground(new java.awt.Color(150, 200, 200));
@@ -53,6 +59,11 @@ public class loginCreationMenu extends javax.swing.JDialog {
 
         LoginButton.setText("Login");
         LoginButton.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        LoginButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                LoginButtonActionPerformed(evt);
+            }
+        });
 
         TypeBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Member", "Manager", "Team Lead" }));
 
@@ -68,29 +79,40 @@ public class loginCreationMenu extends javax.swing.JDialog {
         TypeLabel.setLabelFor(TypeBox);
         TypeLabel.setText("User Type:");
 
+        ExitButton.setText("Exit");
+        ExitButton.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        ExitButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ExitButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(NameLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(NameInput))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(Passlabel)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(PassInput))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addGroup(jPanel1Layout.createSequentialGroup()
+                            .addComponent(NameLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(NameInput))
+                        .addGroup(jPanel1Layout.createSequentialGroup()
+                            .addComponent(Passlabel)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(PassInput))
+                        .addGroup(jPanel1Layout.createSequentialGroup()
+                            .addComponent(TypeLabel)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(TypeBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(LoginButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(CreateButton))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(TypeLabel)
+                        .addComponent(CreateButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(TypeBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addComponent(ExitButton)))
                 .addContainerGap(190, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -111,7 +133,8 @@ public class loginCreationMenu extends javax.swing.JDialog {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 190, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(LoginButton)
-                    .addComponent(CreateButton))
+                    .addComponent(CreateButton)
+                    .addComponent(ExitButton))
                 .addContainerGap())
         );
 
@@ -133,12 +156,50 @@ public class loginCreationMenu extends javax.swing.JDialog {
         
     }//GEN-LAST:event_CreateButtonActionPerformed
 
+    private void LoginButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LoginButtonActionPerformed
+        boolean failed = true;
+        mainFrame parent = (mainFrame)this.getParent();
+        Object r = TypeBox.getSelectedItem();
+        r=r.toString();
+        if(r.equals("Member")){
+           r = Role.MEMBER; 
+        }
+        else if(r.equals("Manager")){
+            r = Role.MANAGER;
+        }
+        else{
+            r= Role.TEAMLEAD;
+        }
+        for(Person a : parent.users){
+            if(a.getRole()==r){
+                if(a.getName().equals(NameInput.getText()) && a.testPassword(PassInput.getPassword())){
+                    parent.CurrentUser=a;
+                    failed = false;
+                    break;
+                }
+            }
+        }
+        if(!failed){
+            System.out.println("reached");
+            this.dispatchEvent(new WindowEvent(this,WindowEvent.WINDOW_CLOSING));
+            this.dispose(); // normally do not nees this but does not work without it
+        }
+    }//GEN-LAST:event_LoginButtonActionPerformed
+
+    private void ExitButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ExitButtonActionPerformed
+        JFrame p = (JFrame)this.getParent();
+        p.dispatchEvent(new WindowEvent(p, WindowEvent.WINDOW_CLOSING));
+        this.dispatchEvent(new WindowEvent(this,WindowEvent.WINDOW_CLOSING));
+        this.dispose();
+        p.dispose();
+    }//GEN-LAST:event_ExitButtonActionPerformed
+
     /**
      * @param args the command line arguments
      */
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+        //<editor-fold desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
          * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
          */
@@ -163,7 +224,7 @@ public class loginCreationMenu extends javax.swing.JDialog {
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                loginCreationMenu dialog = new loginCreationMenu(new javax.swing.JFrame(), true);
+                loginCreationMenu dialog = new loginCreationMenu(new java.awt.Frame(), true);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {
@@ -174,9 +235,9 @@ public class loginCreationMenu extends javax.swing.JDialog {
             }
         });
     }
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton CreateButton;
+    private javax.swing.JButton ExitButton;
     private javax.swing.JButton LoginButton;
     private javax.swing.JTextField NameInput;
     private javax.swing.JLabel NameLabel;

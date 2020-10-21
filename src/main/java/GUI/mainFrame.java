@@ -16,23 +16,16 @@ public class mainFrame extends javax.swing.JFrame{
      */
     public mainFrame() {
         try{ //admin user
-            admin = new Manager("Admin","Admin","Adm1n",Role.MANAGER);
+            char[] pass = "Adm1n".toCharArray();
+            admin = new Manager("Admin","Admin",pass,Role.MANAGER);
         }
         catch(MemberManagerException m){ //unreachable but required
             admin = new Manager();
         }
         users.add(admin);
-        
+        initComponents();
         loginCreationMenu l = new loginCreationMenu(this, true);
         l.setVisible(true);
-        l.requestFocus();
-        l.pack();
-        l.repaint();
-        
-        initComponents();
-    }
-    public ArrayList<Person> getList(){
-        return users;
     }
     /**
      * This method is called from within the constructor to initialize the form.
@@ -127,6 +120,7 @@ public class mainFrame extends javax.swing.JFrame{
 
     private void ExitButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ExitButtonActionPerformed
         this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
+        this.dispose();
     }//GEN-LAST:event_ExitButtonActionPerformed
 
     /**
@@ -164,8 +158,8 @@ public class mainFrame extends javax.swing.JFrame{
         });
     }
     private Manager admin;
-    private Person user;
-    private ArrayList<Person> users = new ArrayList<Person>();
+    public Person CurrentUser;
+    public ArrayList<Person> users = new ArrayList<Person>();
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JScrollPane BubbleView;
     private javax.swing.JButton Create_Task_Button;

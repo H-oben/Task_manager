@@ -17,28 +17,36 @@ public class member implements Person{
     private String fname;
     private String lname;
     private Role role;
-    private String pass;
+    private char[] pass;
     
     public member(){
         fname = "empty";
         lname = "empty";
         role= Role.MEMBER;
-        pass="password";
+        String x = "password";
+        pass = new char[x.length()];
+        for(int y=0; y<x.length();y++){
+            pass[y] = x.charAt(y);
+        }
     }
     /**
      * @param F String first name of new member
      * @param L String last name of new member
      * @param P password input
      */
-    public member(String F, String L, String P){
+    public member(String F, String L, char[] P){
         fname = F;
         lname = L;
         role = Role.MEMBER;
-        if(!P.isBlank() && !P.isEmpty()){
+        if(P.length!=0){
             pass = P;
         }
         else{
-            pass="password";
+            String x = "password";
+            pass = new char[x.length()];
+            for(int y=0; y<x.length();y++){
+                pass[y] = x.charAt(y);
+            }
         }
     }
     
@@ -47,8 +55,18 @@ public class member implements Person{
      * @return returns enum object
      */
     @Override
-    public String getPassword(){
-        return pass;
+    public boolean testPassword(char[] a){
+        if(a.length!= pass.length){
+            return(false);
+        }
+        else{
+            for(int x = 0; x< a.length;x++){
+                if(a[x]!= pass[x]){
+                    return(false);
+                }
+            }
+            return(true);
+        }
     }
     @Override
     public Role getRole(){

@@ -182,6 +182,7 @@ public class TaskCreation extends javax.swing.JDialog{
 
     private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
         this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
+        this.dispose();
     }//GEN-LAST:event_cancelButtonActionPerformed
 
     /**
