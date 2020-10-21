@@ -47,8 +47,7 @@ public class mainFrame extends javax.swing.JFrame{
         SidePanel = new javax.swing.JPanel();
         Create_Task_Button = new javax.swing.JButton();
         ExitButton = new javax.swing.JButton();
-        TaskContainer = new javax.swing.JScrollPane();
-        TaskList = new javax.swing.JList<>();
+        TaskSelection = new javax.swing.JComboBox<>();
         ViewsPane = new javax.swing.JTabbedPane();
         BubbleView = new javax.swing.JScrollPane();
         TabularView = new javax.swing.JScrollPane();
@@ -77,10 +76,7 @@ public class mainFrame extends javax.swing.JFrame{
             }
         });
 
-        TaskList.setBackground(new java.awt.Color(150, 200, 200));
-        TaskList.setBorder(null);
-        TaskList.setForeground(new java.awt.Color(0, 0, 0));
-        TaskContainer.setViewportView(TaskList);
+        TaskSelection.setName("Tasks"); // NOI18N
 
         javax.swing.GroupLayout SidePanelLayout = new javax.swing.GroupLayout(SidePanel);
         SidePanel.setLayout(SidePanelLayout);
@@ -91,7 +87,7 @@ public class mainFrame extends javax.swing.JFrame{
                 .addGroup(SidePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(Create_Task_Button, javax.swing.GroupLayout.DEFAULT_SIZE, 138, Short.MAX_VALUE)
                     .addComponent(ExitButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(TaskContainer, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                    .addComponent(TaskSelection, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         SidePanelLayout.setVerticalGroup(
@@ -100,7 +96,7 @@ public class mainFrame extends javax.swing.JFrame{
                 .addContainerGap()
                 .addComponent(Create_Task_Button)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(TaskContainer, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(TaskSelection, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(ExitButton)
                 .addContainerGap())
@@ -183,9 +179,7 @@ public class mainFrame extends javax.swing.JFrame{
     private javax.swing.JButton ExitButton;
     private javax.swing.JPanel SidePanel;
     private javax.swing.JScrollPane TabularView;
-    private javax.swing.JScrollPane TaskContainer;
-    private javax.swing.JList<String> TaskList;
+    private javax.swing.JComboBox<String> TaskSelection;
     private javax.swing.JTabbedPane ViewsPane;
     // End of variables declaration//GEN-END:variables
-
 }
