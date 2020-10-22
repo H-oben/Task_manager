@@ -73,9 +73,8 @@ public class Task {
         assignedTo = assigned;
         createdBy = creator;
     }
-    //TODO: method to add subtask
     public void addSubtask(Subtask s){
-        
+        subs.add(s);
     }
     
     //setters
@@ -144,6 +143,9 @@ public class Task {
     }
     public Catagories getCatagory(){
         return(cat);
+    }
+    public ArrayList<Subtask> getSubtasks(){
+        return subs;
     }
     
     @Override

@@ -77,6 +77,29 @@ public class mainFrame extends javax.swing.JFrame{
         JButton CreateSub = new JButton(colomnNames[7]);
         JButton CompleteButton = new JButton(colomnNames[8]);
         JComboBox subs;
+        CreateSub.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        CompleteButton.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        String[] comboList;
+        int selected = TaskSelection.getSelectedIndex();
+        if(selected>=0){
+            if(openTasks.get(selected)!=null){
+                Task t = openTasks.get(selected);
+                taskData = new Object[9];
+                taskData[0] = t.getName();
+                taskData[1] = t.getStatus().toString();
+                taskData[2] = t.getCatagory().toString();
+                taskData[3] = t.getDueDate().toString();
+                ArrayList<Subtask> subtasks = t.getSubtasks(); //get options for subtsks
+                String[] mode;
+                mode = new String[subtasks.size()];
+                for(int x = 0; x<mode.length; x++){
+                    mode[x] = subtasks.get(x).getName();
+                }
+                subs = new JComboBox(new DefaultComboBoxModel(mode));
+                taskData[4] = subs; //TODO: finish setting the table
+            }
+        }
+        
     }
     
     //generated methods
