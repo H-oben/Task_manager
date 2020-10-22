@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import peoplePack.Person;
 import java.awt.Color;
 import java.util.ArrayList;
+import java.util.Objects;
 /**
  * @author Hunter Obendorfer
  */
@@ -154,5 +155,32 @@ public class Task {
                 "\nCreated On: " +createdOn.toString()+
                 "\nAssigned To: "+ assignedTo.getName()+
                 "\nCreated By: "+createdBy.getName());
+    }
+    @Override
+    public boolean equals(Object o){
+        if(this == o){
+            return(true);
+        }
+        if(o instanceof Task){
+            Task t = (Task) o;
+            if(t.getName().equals(this.getName())){
+                if(t.getDueDate().equals(this.getDueDate())){
+                    if(t.assignment().equals(this.assignedTo)){
+                        return(true);
+                    }
+                }
+            }
+        }
+        return(false);
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 53 * hash + Objects.hashCode(this.name);
+        hash = 53 * hash + Objects.hashCode(this.mainDueDate);
+        hash = 53 * hash + Objects.hashCode(this.assignedTo);
+        hash = 53 * hash + Objects.hashCode(this.createdBy);
+        return hash;
     }
 }
