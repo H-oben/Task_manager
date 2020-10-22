@@ -5,6 +5,8 @@ import java.awt.event.WindowEvent;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.table.DefaultTableModel;
 import peoplePack.*;
 import taskPackage.*;
@@ -69,8 +71,12 @@ public class mainFrame extends javax.swing.JFrame{
     //updates table view with open task drop down selection
     public final void setTableTop(){
         String[] colomnNames = {"Name","Status","Catagory","Due Date"
-                ,"Subtasks","Create Subtask","Mark Complete"};
+                ,"Subtasks","Assigned To","Assigned By","Create Subtask","Mark Complete"};
         Object[] taskData;
+        //instantiate and design buttons/combBox
+        JButton CreateSub = new JButton(colomnNames[7]);
+        JButton CompleteButton = new JButton(colomnNames[8]);
+        JComboBox subs;
     }
     
     //generated methods
