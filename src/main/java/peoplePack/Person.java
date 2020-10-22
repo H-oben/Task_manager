@@ -1,6 +1,6 @@
 package peoplePack;
 
-public interface Person {
+public interface Person{
 
     /**
      * @param a password to be input
@@ -9,4 +9,12 @@ public interface Person {
     public boolean testPassword(char[] a);
     public String getName();
     public Role getRole();
+
+    /**
+     *
+     * @param o object
+     * @return 
+     */
+    @Override
+    public boolean equals(Object o);
 }

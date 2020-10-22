@@ -5,6 +5,7 @@ import java.awt.event.WindowEvent;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.table.DefaultTableModel;
 import peoplePack.*;
 import taskPackage.*;
 
@@ -15,15 +16,15 @@ import taskPackage.*;
 public class mainFrame extends javax.swing.JFrame{
 
     //custom variables
-    private  Manager admin;
+    private  Manager admin; //could be final but that causes errors i'm not dealing with
     public Person CurrentUser;
     
     public ArrayList<Person> users = new ArrayList<>();
     public ArrayList<Task> openTasks = new ArrayList<>();
     public ArrayList<Task> closedTasks = new ArrayList<>();
-    private String[] mode;
-    
-    
+    private DefaultComboBoxModel m;
+    private DefaultTableModel table;
+
     private LocalDate today = LocalDate.now();
     /**
      * Creates new form mainFrame
@@ -33,29 +34,46 @@ public class mainFrame extends javax.swing.JFrame{
             char[] pass = "Adm1n".toCharArray();
             admin = new Manager("Admin","Admin",pass,Role.MANAGER);
         }
-        catch(MemberManagerException m){ //unreachable but required
+        catch(MemberManagerException exc){ //unreachable but required
             admin = new Manager();
         }
         users.add(admin);
-        
+        //default task for admin
         openTasks.add(new Task("Create Tasks","Create tasks for employees to work on"
         ,new Catagories("Administrative"),new Color(100,200,200), LocalDate.MAX, admin,admin));
         
-        //init string array for comboBox
-        mode = new String[openTasks.size()];
-        for(int x = 0; x<mode.length; x++){
-            mode[x] = openTasks.get(x).getName();
-        }
+        setTaskOptions();
 
         initComponents();
-        DefaultComboBoxModel m = new DefaultComboBoxModel(mode);
-        TaskSelection.setModel(m);
+        
         //login comes up before main menu
         loginCreationMenu l = new loginCreationMenu(this, true);
         l.setVisible(true);
         
         
     }
+    //custom methods
+    public LocalDate getToday(){
+        return today;
+    }
+    //updates open tasks drop down options
+    public final void setTaskOptions(){
+        String[] mode;
+        mode = new String[openTasks.size()];
+        for(int x = 0; x<mode.length; x++){
+            mode[x] = openTasks.get(x).getName();
+        }
+        m = new DefaultComboBoxModel(mode);
+        TaskSelection.setModel(m);
+    }
+    //updates table view with open task drop down selection
+    public final void setTableTop(){
+        String[] colomnNames = {"Name","Status","Catagory","Due Date"
+                ,"Subtasks","Create Subtask","Mark Complete"};
+        Object[] taskData;
+    }
+    
+    //generated methods
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -74,8 +92,10 @@ public class mainFrame extends javax.swing.JFrame{
         BubbleView = new javax.swing.JScrollPane();
         TabularView = new javax.swing.JScrollPane();
         jPanel1 = new javax.swing.JPanel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        TableHead = new javax.swing.JTable();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        TableTop = new javax.swing.JTable();
+        DescrScroll = new javax.swing.JScrollPane();
+        DescrArea = new javax.swing.JTextArea();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Task Manager");
@@ -128,7 +148,7 @@ public class mainFrame extends javax.swing.JFrame{
                 .addComponent(OpenTaskLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(TaskSelection, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 448, Short.MAX_VALUE)
                 .addComponent(ExitButton)
                 .addContainerGap())
         );
@@ -140,26 +160,55 @@ public class mainFrame extends javax.swing.JFrame{
 
         TabularView.setBackground(new java.awt.Color(175, 200, 200));
 
-        jScrollPane1.setViewportView(TableHead);
+        jPanel1.setBackground(new java.awt.Color(200, 200, 200));
+
+        jScrollPane2.setBackground(new java.awt.Color(200, 200, 200));
+
+        TableTop.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null},
+                {null},
+                {null},
+                {null}
+            },
+            new String [] {
+                "Title 1"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        TableTop.getTableHeader().setReorderingAllowed(false);
+        jScrollPane2.setViewportView(TableTop);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 314, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 228, Short.MAX_VALUE))
+            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 552, Short.MAX_VALUE)
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 372, Short.MAX_VALUE))
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 443, Short.MAX_VALUE))
         );
 
         TabularView.setViewportView(jPanel1);
 
         ViewsPane.addTab("Tabular View", TabularView);
+
+        DescrArea.setBackground(new java.awt.Color(200, 200, 200));
+        DescrArea.setColumns(20);
+        DescrArea.setForeground(new java.awt.Color(0, 0, 0));
+        DescrArea.setRows(5);
+        DescrArea.setText("Description");
+        DescrScroll.setViewportView(DescrArea);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -168,12 +217,17 @@ public class mainFrame extends javax.swing.JFrame{
             .addGroup(layout.createSequentialGroup()
                 .addComponent(SidePanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(ViewsPane))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(ViewsPane, javax.swing.GroupLayout.DEFAULT_SIZE, 564, Short.MAX_VALUE)
+                    .addComponent(DescrScroll)))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(SidePanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(ViewsPane, javax.swing.GroupLayout.DEFAULT_SIZE, 550, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(ViewsPane, javax.swing.GroupLayout.DEFAULT_SIZE, 458, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(DescrScroll))
         );
 
         pack();
@@ -191,9 +245,7 @@ public class mainFrame extends javax.swing.JFrame{
         this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
         this.dispose();
     }//GEN-LAST:event_ExitButtonActionPerformed
-    public LocalDate getToday(){
-        return today;
-    }
+    
     /**
      * @param args the command line arguments
      */
@@ -226,14 +278,16 @@ public class mainFrame extends javax.swing.JFrame{
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JScrollPane BubbleView;
     private javax.swing.JButton Create_Task_Button;
+    private javax.swing.JTextArea DescrArea;
+    private javax.swing.JScrollPane DescrScroll;
     private javax.swing.JButton ExitButton;
     private javax.swing.JLabel OpenTaskLabel;
     private javax.swing.JPanel SidePanel;
-    private javax.swing.JTable TableHead;
+    private javax.swing.JTable TableTop;
     private javax.swing.JScrollPane TabularView;
     public javax.swing.JComboBox<Task> TaskSelection;
     private javax.swing.JTabbedPane ViewsPane;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     // End of variables declaration//GEN-END:variables
 }

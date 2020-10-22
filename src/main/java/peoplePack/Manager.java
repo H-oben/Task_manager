@@ -1,5 +1,8 @@
 package peoplePack;
 
+import java.util.Arrays;
+import java.util.Objects;
+
 /**
  * @author h_obe
  * <p>
@@ -80,5 +83,31 @@ public class Manager implements Person{
     public void setName(String f, String l){
         fname=f;
         lname=l;
+    }
+    
+    @Override
+    public boolean equals(Object obj){
+        if(this == obj){
+            return(true);
+        }
+        if(obj instanceof Manager){
+            Manager a = (Manager) obj;
+            if(this.getRole()==a.getRole()){
+                if(this.getName().equals(a.getName())){
+                    return(true);
+                }
+            }
+        }
+        return(false);
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        hash = 41 * hash + Objects.hashCode(this.fname);
+        hash = 41 * hash + Objects.hashCode(this.lname);
+        hash = 41 * hash + Objects.hashCode(this.role);
+        hash = 41 * hash + Arrays.hashCode(this.pass);
+        return hash;
     }
 }

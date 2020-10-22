@@ -206,7 +206,7 @@ public class TaskCreation extends javax.swing.JDialog{
         Task t = this.getCreatedTask();
         if(t!=null){
             p.openTasks.add(t);
-            
+            p.setTaskOptions();
             this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
         }
     }//GEN-LAST:event_CreateButtonActionPerformed
