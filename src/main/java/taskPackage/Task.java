@@ -34,7 +34,7 @@ public class Task {
         stat=Status.NOT_STARTED;
         color = Color.RED; //default is due on same day
         
-        subs=null;
+        subs=new ArrayList<Subtask>();
         
         mainDueDate=LocalDate.now();
         createdOn=LocalDate.now();
@@ -64,7 +64,7 @@ public class Task {
         }
         stat=Status.NOT_STARTED;
         
-        subs=null;
+        subs=new ArrayList<Subtask>();
         
         mainDueDate=ld;
         createdOn=LocalDate.now();
