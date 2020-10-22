@@ -73,7 +73,9 @@ public class mainFrame extends javax.swing.JFrame{
         ViewsPane = new javax.swing.JTabbedPane();
         BubbleView = new javax.swing.JScrollPane();
         TabularView = new javax.swing.JScrollPane();
-        TopTask = new javax.swing.JList<>();
+        jPanel1 = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        TableHead = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Task Manager");
@@ -138,16 +140,24 @@ public class mainFrame extends javax.swing.JFrame{
 
         TabularView.setBackground(new java.awt.Color(175, 200, 200));
 
-        TopTask.setBackground(new java.awt.Color(125, 200, 200));
-        TopTask.setBorder(null);
-        TopTask.setForeground(new java.awt.Color(0, 0, 0));
-        TopTask.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
-        });
-        TopTask.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
-        TabularView.setViewportView(TopTask);
+        jScrollPane1.setViewportView(TableHead);
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 314, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 228, Short.MAX_VALUE))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 372, Short.MAX_VALUE))
+        );
+
+        TabularView.setViewportView(jPanel1);
 
         ViewsPane.addTab("Tabular View", TabularView);
 
@@ -158,7 +168,7 @@ public class mainFrame extends javax.swing.JFrame{
             .addGroup(layout.createSequentialGroup()
                 .addComponent(SidePanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(ViewsPane, javax.swing.GroupLayout.DEFAULT_SIZE, 544, Short.MAX_VALUE))
+                .addComponent(ViewsPane))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -219,9 +229,11 @@ public class mainFrame extends javax.swing.JFrame{
     private javax.swing.JButton ExitButton;
     private javax.swing.JLabel OpenTaskLabel;
     private javax.swing.JPanel SidePanel;
+    private javax.swing.JTable TableHead;
     private javax.swing.JScrollPane TabularView;
     public javax.swing.JComboBox<Task> TaskSelection;
-    private javax.swing.JList<String> TopTask;
     private javax.swing.JTabbedPane ViewsPane;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JScrollPane jScrollPane1;
     // End of variables declaration//GEN-END:variables
 }
