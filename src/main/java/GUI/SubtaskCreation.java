@@ -280,23 +280,27 @@ public class SubtaskCreation extends javax.swing.JDialog{
         String date = DateEntry.getText();
         LocalDate due=null;
         //error handle
-        try{
-            due = LocalDate.parse(date, DateTimeFormatter.ISO_LOCAL_DATE);
+        if(DateSame.isSelected()){
+            due = head.getDueDate();
         }
-        catch(Exception e){
-            if(date.isEmpty() || date.equals("YYY-MM-DD") || date.isBlank()){
-                ErrorLabel.setText("Date cannot be blank");
+        else{
+            try{
+                due = LocalDate.parse(date, DateTimeFormatter.ISO_LOCAL_DATE);
             }
-            else if(due == null || !due.isAfter(p.getToday())){
-                ErrorLabel.setText("Date is invalid");
+            catch(Exception e){
+                if(date.isEmpty() || date.equals("YYY-MM-DD") || date.isBlank()){
+                    ErrorLabel.setText("Date cannot be blank");
+                }
+                else if(due == null || !due.isAfter(p.getToday())){
+                    ErrorLabel.setText("Date is invalid");
+                }
+                else{
+                    ErrorLabel.setText(e.getMessage());
+                }
+                ErrorLabel.setVisible(true);
+                return(null);
             }
-            else{
-                ErrorLabel.setText(e.getMessage());
-            }
-            ErrorLabel.setVisible(true);
-            return(null);
         }
-        
         int x = UserAssign.getSelectedIndex(); 
         Person assigned = p.users.get(x);
         
@@ -317,15 +321,27 @@ public class SubtaskCreation extends javax.swing.JDialog{
         ErrorLabel.setVisible(false);
         //get subtask parent
         if(!head.hasDescendants()){
-            return(new Subtask(n,d,cat,c,due,assigned,p.CurrentUser, head));
+            System.out.println("no descendants");
+            Subtask q = new Subtask(n,d,cat,c,due,assigned,p.CurrentUser, head);
+            head.addSubtask(q);
+            return(q);
+            
         }
         else{
+            System.out.println("descendants");
             ArrayList<Integer> path = new ArrayList<>();
             for(int l = 0; l<p.TableTop.getRowCount();l++){
+                System.out.println(((JComboBox)p.TableTop.getValueAt(l+1, 4)).getSelectedIndex());
                 path.add(((JComboBox)p.TableTop.getValueAt(l, 4)).getSelectedIndex());
             }
             Subtask newSub = new Subtask(n,d,cat,c,due,assigned,p.CurrentUser, findParent(head,path));
-            
+            String[] mode=new String[newSub.getParent().getNumberOfSubTasks()];
+            for(int l = 0; l<mode.length; l++){
+                mode[l] = newSub.getParent().getSubtasks().get(l).getName();
+            } 
+            newSub.getParent().addSubtask(newSub);
+            ((JComboBox)p.TableTop.getValueAt(path.size()-1, 4)).setModel(new DefaultComboBoxModel(mode));
+            ((JComboBox)p.TableTop.getValueAt(path.size()-1, 4)).repaint();
             return(newSub);
         }
     }
@@ -367,15 +383,10 @@ public class SubtaskCreation extends javax.swing.JDialog{
      */
     private Subtask findParent(Task h, ArrayList<Integer> path){
         Subtask s = h.getTask(path.get(0));
-        for(int x=1; x<path.size()-1;x++){
+        for(int x=1; x<path.size();x++){
             s = s.getTask(path.get(x));
         }
-        String[] mode=new String[s.getNumberOfSubTasks()];
-        for(int x = 0; x<mode.length; x++){
-            mode[x] = s.getSubtasks().get(x).getName();
-        } 
-        ((JComboBox)p.TableTop.getValueAt(path.size()-1, 4)).setModel(new DefaultComboBoxModel(mode));
-        return(s.getTask(path.size()-1));
+        return(s);
     }
     
     private void CreateSubtaskActionPerformed(ActionEvent e){ //copied from mainFrame, works properly
