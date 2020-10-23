@@ -4,10 +4,14 @@ import java.awt.Color;
 import java.awt.event.WindowEvent;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import javax.swing.DefaultCellEditor;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
+import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
 import peoplePack.*;
 import taskPackage.*;
 
@@ -44,15 +48,16 @@ public class mainFrame extends javax.swing.JFrame{
         openTasks.add(new Task("Create Tasks","Create tasks for employees to work on"
         ,new Catagories("Administrative"),new Color(100,200,200), LocalDate.MAX, admin,admin));
         
-        setTaskOptions();
-
         initComponents();
+        //Reminder: all custom populization of elements must occur AFTER initComponents()
         
         //login comes up before main menu
         loginCreationMenu l = new loginCreationMenu(this, true);
         l.setVisible(true);
         
-        
+        //set the table
+        setTaskOptions();
+        setTableTop();
     }
     //custom methods
     public LocalDate getToday(){
@@ -72,23 +77,22 @@ public class mainFrame extends javax.swing.JFrame{
     public final void setTableTop(){
         String[] colomnNames = {"Name","Status","Catagory","Due Date"
                 ,"Subtasks","Assigned To","Assigned By","Create Subtask","Mark Complete"};
-        Object[] taskData;
+        Object[][] taskData = new Object[1][9];
         //instantiate and design buttons/combBox
         JButton CreateSub = new JButton(colomnNames[7]);
         JButton CompleteButton = new JButton(colomnNames[8]);
-        JComboBox subs;
+        JComboBox subs = new JComboBox();
         CreateSub.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         CompleteButton.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        String[] comboList;
         int selected = TaskSelection.getSelectedIndex();
+        Task t = openTasks.get(selected);
         if(selected>=0){
-            if(openTasks.get(selected)!=null){
-                Task t = openTasks.get(selected);
-                taskData = new Object[9];
-                taskData[0] = t.getName();
-                taskData[1] = t.getStatus().toString();
-                taskData[2] = t.getCatagory().toString();
-                taskData[3] = t.getDueDate().toString();
+            if(selected < openTasks.size() && openTasks.get(selected)!=null){
+                
+                taskData[0][0] = t.getName();
+                taskData[0][1] = t.getStatus().toString();
+                taskData[0][2] = t.getCatagory().toString();
+                taskData[0][3] = t.getDueDate().toString();
                 ArrayList<Subtask> subtasks = t.getSubtasks(); //get options for subtsks
                 String[] mode;
                 mode = new String[subtasks.size()];
@@ -96,10 +100,21 @@ public class mainFrame extends javax.swing.JFrame{
                     mode[x] = subtasks.get(x).getName();
                 }
                 subs = new JComboBox(new DefaultComboBoxModel(mode));
-                taskData[4] = subs; //TODO: finish setting the table
+                taskData[0][4] = subs; 
+                taskData[0][5] = t.assignment().getName();
+                taskData[0][6] = t.creator().getName();
+                taskData[0][7] = CreateSub;
+                taskData[0][8] = CompleteButton;
+                DescrArea.setText("Description:\n" + t.describe());
             }
         }
-        
+        table = new DefaultTableModel(taskData,colomnNames);
+        TableTop.setModel(table);
+        TableTop.getColumnModel().getColumn(4).setCellEditor(new DefaultCellEditor(subs));
+        TableTop.getColumn("Create Subtask").setCellRenderer(new JTableButtonRender());
+        TableTop.getColumn("Mark Complete").setCellRenderer(new JTableButtonRender());
+        TableTop.setBackground(t.getColor());
+        TableTop.repaint();
     }
     
     //generated methods
@@ -119,6 +134,8 @@ public class mainFrame extends javax.swing.JFrame{
         OpenTaskLabel = new javax.swing.JLabel();
         ViewsPane = new javax.swing.JTabbedPane();
         BubbleView = new javax.swing.JScrollPane();
+        jPanel2 = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
         TabularView = new javax.swing.JScrollPane();
         jPanel1 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
@@ -150,6 +167,11 @@ public class mainFrame extends javax.swing.JFrame{
         });
 
         TaskSelection.setName("Tasks"); // NOI18N
+        TaskSelection.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                TaskSelectionActionPerformed(evt);
+            }
+        });
 
         OpenTaskLabel.setForeground(new java.awt.Color(0, 0, 0));
         OpenTaskLabel.setLabelFor(TaskSelection);
@@ -185,6 +207,29 @@ public class mainFrame extends javax.swing.JFrame{
         ViewsPane.setBackground(new java.awt.Color(150, 200, 200));
         ViewsPane.setForeground(new java.awt.Color(0, 0, 0));
         ViewsPane.setOpaque(true);
+
+        jPanel2.setBackground(new java.awt.Color(200, 200, 200));
+
+        jLabel1.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel1.setText("Not Yet Implemented");
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 228, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 340, Short.MAX_VALUE))
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addComponent(jLabel1)
+                .addGap(0, 412, Short.MAX_VALUE))
+        );
+
+        BubbleView.setViewportView(jPanel2);
+
         ViewsPane.addTab("Web View", BubbleView);
 
         TabularView.setBackground(new java.awt.Color(175, 200, 200));
@@ -212,20 +257,30 @@ public class mainFrame extends javax.swing.JFrame{
                 return canEdit [columnIndex];
             }
         });
+        TableTop.setMaximumSize(new java.awt.Dimension(2147483647, 2147483647));
+        TableTop.setMinimumSize(new java.awt.Dimension(60, 850));
+        TableTop.setRowSelectionAllowed(false);
+        TableTop.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        TableTop.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        TableTop.setShowHorizontalLines(true);
+        TableTop.setShowVerticalLines(true);
         TableTop.getTableHeader().setReorderingAllowed(false);
+        TableTop.removeRowSelectionInterval(1, 3);
         jScrollPane2.setViewportView(TableTop);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 552, Short.MAX_VALUE)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 850, Short.MAX_VALUE)
+                .addGap(0, 0, 0))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 443, Short.MAX_VALUE))
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 458, Short.MAX_VALUE))
         );
 
         TabularView.setViewportView(jPanel1);
@@ -245,17 +300,17 @@ public class mainFrame extends javax.swing.JFrame{
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(SidePanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(0, 0, 0)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(ViewsPane, javax.swing.GroupLayout.DEFAULT_SIZE, 564, Short.MAX_VALUE)
+                    .addComponent(ViewsPane, javax.swing.GroupLayout.DEFAULT_SIZE, 570, Short.MAX_VALUE)
                     .addComponent(DescrScroll)))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(SidePanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(ViewsPane, javax.swing.GroupLayout.DEFAULT_SIZE, 458, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(ViewsPane, javax.swing.GroupLayout.DEFAULT_SIZE, 463, Short.MAX_VALUE)
+                .addGap(0, 0, 0)
                 .addComponent(DescrScroll))
         );
 
@@ -274,6 +329,10 @@ public class mainFrame extends javax.swing.JFrame{
         this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
         this.dispose();
     }//GEN-LAST:event_ExitButtonActionPerformed
+
+    private void TaskSelectionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TaskSelectionActionPerformed
+        setTableTop();
+    }//GEN-LAST:event_TaskSelectionActionPerformed
     
     /**
      * @param args the command line arguments
@@ -316,7 +375,9 @@ public class mainFrame extends javax.swing.JFrame{
     private javax.swing.JScrollPane TabularView;
     public javax.swing.JComboBox<Task> TaskSelection;
     private javax.swing.JTabbedPane ViewsPane;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane2;
     // End of variables declaration//GEN-END:variables
 }

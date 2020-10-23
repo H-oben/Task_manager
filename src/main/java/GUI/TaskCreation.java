@@ -207,6 +207,7 @@ public class TaskCreation extends javax.swing.JDialog{
         if(t!=null){
             p.openTasks.add(t);
             p.setTaskOptions();
+            p.setTableTop();
             this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
         }
     }//GEN-LAST:event_CreateButtonActionPerformed
