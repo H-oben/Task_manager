@@ -14,7 +14,7 @@ import taskPackage.*;
  */
 public class TaskCreation extends javax.swing.JDialog{
     private final mainFrame p = (mainFrame)this.getParent();
-    private DefaultComboBoxModel model = new DefaultComboBoxModel(getUsers());
+    private final DefaultComboBoxModel model = new DefaultComboBoxModel(getUsers());
     /**
      * Creates new form TaskCreation
      * @param parent mainFrame

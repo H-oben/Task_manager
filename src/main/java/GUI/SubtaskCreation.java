@@ -5,6 +5,8 @@ import java.awt.event.WindowEvent;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.JButton;
+import javax.swing.table.DefaultTableModel;
 import peoplePack.Person;
 import taskPackage.*;
 
@@ -15,6 +17,7 @@ import taskPackage.*;
 public class SubtaskCreation extends javax.swing.JDialog{
     private final mainFrame p = (mainFrame)this.getParent();
     private final DefaultComboBoxModel model = new DefaultComboBoxModel(getUsers());
+    private final Task head= p.TaskSelection.getItemAt(p.TaskSelection.getSelectedIndex());
     /**
      * Creates new form TaskCreation
      * @param parent mainFrame
@@ -213,7 +216,7 @@ public class SubtaskCreation extends javax.swing.JDialog{
     private void CreateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CreateButtonActionPerformed
         Subtask t = this.getCreatedSubtask();
         if(t!=null){ //fix for subtask
-            
+            ((DefaultTableModel) p.TableTop.getModel()).addRow(toRow(t));
             this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
         }
     }//GEN-LAST:event_CreateButtonActionPerformed
@@ -272,41 +275,57 @@ public class SubtaskCreation extends javax.swing.JDialog{
         String n = NameEntry.getText();
         String date = DateEntry.getText();
         LocalDate due=null;
+        //error handle
         try{
             due = LocalDate.parse(date, DateTimeFormatter.ISO_LOCAL_DATE);
         }
         catch(Exception e){
             if(date.isEmpty() || date.equals("YYY-MM-DD") || date.isBlank()){
                 ErrorLabel.setText("Date cannot be blank");
-                ErrorLabel.setVisible(true);
-                return(null);
             }
             else if(due == null || !due.isAfter(p.getToday())){
                 ErrorLabel.setText("Date is invalid");
-                ErrorLabel.setVisible(true);
-                return(null);
             }
+            else{
+                ErrorLabel.setText(e.getMessage());
+            }
+            ErrorLabel.setVisible(true);
+            return(null);
         }
-        Categories cat;
-        String cata = CataEntry.getText();
-        int x = UserAssign.getSelectedIndex();
+        
+        int x = UserAssign.getSelectedIndex(); 
         Person assigned = p.users.get(x);
+        
+        Categories cat; //set category
+        String cata = CataEntry.getText();
         if(!cata.isBlank() && !cata.isEmpty()){
             cat = new Categories(CataEntry.getText());
         }
         else{
             cat= new Categories();
         }
+        
         if(n.isBlank() || n.isEmpty()){
             ErrorLabel.setText("Name cannot be blank");
             ErrorLabel.setVisible(true);
             return(null);
         }
-        if(!DateSame.isSelected()){ //
-            int r = p.TableTop.getSelectedRow();
-        }
+        
+        
+        
         ErrorLabel.setVisible(false);
-        return(new Subtask(n,d,cat,c,due,assigned,p.CurrentUser ));
+        return(new Subtask(n,d,cat,c,due,assigned,p.CurrentUser, null )); //fix null
+    }
+    /**
+     * @param s subtask object
+     * @return object array to be used in maiFrame's JTable
+     */
+    private Object[] toRow(Subtask s){
+        JButton CreateTask = new JButton("Create Subtask");
+        JButton MarkComplete= new JButton("Mark Complete");
+        Object[] r = {s.getName(),s.getStatus().toString(), s.getCategory().toString()
+        , s.getDueDate().toString(), s.assignment().getName(), s.creator().getName(), CreateTask, MarkComplete};
+        return(r);
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel AssignLabel;

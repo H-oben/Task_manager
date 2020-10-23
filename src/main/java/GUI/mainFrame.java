@@ -108,7 +108,7 @@ public class mainFrame extends javax.swing.JFrame{
                 
                 taskData[0][0] = t.getName();
                 taskData[0][1] = t.getStatus().toString();
-                taskData[0][2] = t.getCatagory().toString();
+                taskData[0][2] = t.getCategory().toString();
                 taskData[0][3] = t.getDueDate().toString();
                 ArrayList<Subtask> subtasks = t.getSubtasks(); //get options for subtsks
                 String[] mode;

@@ -154,11 +154,22 @@ public class Task {
     public Color getColor(){
         return(color);
     }
-    public Categories getCatagory(){
+    public Categories getCategory(){
         return(cat);
     }
     public ArrayList<Subtask> getSubtasks(){
         return subs;
+    }
+    public boolean contains(Subtask s){
+        for(Subtask a : subs){
+            if(a.equals(s)){
+                return(true);
+            }
+        }
+        return(false);
+    }
+    public boolean hasDescendants(){
+        return(subs.size()>0);
     }
     
     @Override
