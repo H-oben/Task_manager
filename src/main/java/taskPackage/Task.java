@@ -34,7 +34,7 @@ public class Task {
         stat=Status.NOT_STARTED;
         color = Color.RED; //default is due on same day
         
-        subs=new ArrayList<Subtask>();
+        subs=new ArrayList<>();
         
         mainDueDate=LocalDate.now();
         createdOn=LocalDate.now();
@@ -64,7 +64,7 @@ public class Task {
         }
         stat=Status.NOT_STARTED;
         
-        subs=new ArrayList<Subtask>();
+        subs=new ArrayList<>();
         
         mainDueDate=ld;
         createdOn=LocalDate.now();
@@ -113,7 +113,6 @@ public class Task {
     /**
      * @param index integer index for array list
      * @return returns subtask object
-     * @throws AraayIndexOutOfBoundsException if index > subtask list size
      */
     public Subtask getTask(int index){
         if(subs.size()<index){

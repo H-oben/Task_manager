@@ -310,12 +310,19 @@ public class SubtaskCreation extends javax.swing.JDialog{
             ErrorLabel.setVisible(true);
             return(null);
         }
-        
-        
-        
         ErrorLabel.setVisible(false);
-        return(new Subtask(n,d,cat,c,due,assigned,p.CurrentUser, null )); //fix null
+        //get subtask parent
+        if(!head.hasDescendants()){
+            return(new Subtask(n,d,cat,c,due,assigned,p.CurrentUser, head));
+        }
+        else{
+            int r = p.TableTop.getSelectedRow();//parent is r deep in loosely linked arraylist structure
+            System.out.println(r);
+            
+            return(new Subtask(n,d,cat,c,due,assigned,p.CurrentUser, findParent(r,head,)));
+        }
     }
+    
     /**
      * @param s subtask object
      * @return object array to be used in maiFrame's JTable
@@ -326,6 +333,13 @@ public class SubtaskCreation extends javax.swing.JDialog{
         Object[] r = {s.getName(),s.getStatus().toString(), s.getCategory().toString()
         , s.getDueDate().toString(), s.assignment().getName(), s.creator().getName(), CreateTask, MarkComplete};
         return(r);
+    }
+    
+    private Subtask findParent(int depth, Task top, Subtask s){
+        if(top == null || top.getName().equals("empty")){
+            return(null);
+        }
+        
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel AssignLabel;

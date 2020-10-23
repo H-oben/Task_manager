@@ -15,6 +15,9 @@ public class Categories extends Object{
             cata=s;
         }
     }
+    public void setCategory(String s){
+        cata=s;
+    }
     @Override
     public String toString(){
         return(cata);

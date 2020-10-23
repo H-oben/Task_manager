@@ -6,7 +6,7 @@ import java.awt.Color;
 import java.util.Objects;
 
 public class Subtask extends Task{
-    private Task upper;
+    private final Task upper; //creates doubly linked list essentailly 
     public Subtask(){
         super();
         upper = null;
@@ -15,7 +15,7 @@ public class Subtask extends Task{
     /**
      * @param n String name of subtask
      * @param d String description of subtask
-     * @param cat catagory
+     * @param cat category
      * @param col Color input
      * @param due LocalDateTime of due date
      * @param assigned Person class to assign this task to, mutable
