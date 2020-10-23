@@ -15,7 +15,12 @@ import taskPackage.*;
 
 /**TODO:
  * mark as started button
+ * implement task finished button
  * sorted tasks
+ * Control logic for task assignment: 
+ *  - don't let members assign tasks to others
+ *  - Team Lead can only assign to team members they are leading or themselves
+ * update drop downs of table view when subtasks are created
  */
 
 /**
@@ -30,18 +35,17 @@ public class mainFrame extends javax.swing.JFrame{
     //custom variables
     private  Manager admin; //could be final but that causes errors I'm not dealing with
     public Person CurrentUser;
+    private LocalDate today = LocalDate.now();
     
     public ArrayList<Person> users = new ArrayList<>();
     public ArrayList<Task> openTasks = new ArrayList<>();
     public ArrayList<Task> closedTasks = new ArrayList<>();
+    
     private DefaultComboBoxModel m;
     private DefaultTableModel table;
+    
     private final JTableButtonMouseListener JTBML;
-
-    private LocalDate today = LocalDate.now();
-    /**
-     * Creates new form mainFrame
-     */
+    
     public mainFrame() {
         try{ //add default admin user
             char[] pass = "Adm1n".toCharArray();
@@ -67,6 +71,7 @@ public class mainFrame extends javax.swing.JFrame{
         setTaskOptions();
         setTableTop();
     }
+    
     //custom methods
     public LocalDate getToday(){
         return today;
@@ -359,7 +364,7 @@ public class mainFrame extends javax.swing.JFrame{
         sc.repaint();
     }
     
-    private void MarkCompleteActionPerformed(ActionEvent e){
+    private void MarkCompleteActionPerformed(ActionEvent e){ //implement
         
     }
     

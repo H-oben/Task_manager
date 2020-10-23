@@ -324,13 +324,15 @@ public class SubtaskCreation extends javax.swing.JDialog{
             for(int l = 0; l<p.TableTop.getRowCount();l++){
                 path.add(((JComboBox)p.TableTop.getValueAt(l, 4)).getSelectedIndex());
             }
-            return(new Subtask(n,d,cat,c,due,assigned,p.CurrentUser, findParent(head,path)));
+            Subtask newSub = new Subtask(n,d,cat,c,due,assigned,p.CurrentUser, findParent(head,path));
+            
+            return(newSub);
         }
     }
     
     /**
      * @param s subtask object
-     * @return object array to be used in maiFrame's JTable
+     * @return object array to be used in mainFrame's JTable
      */
     private Object[] toRow(Subtask s){
         JButton CreateSubask = new JButton("Create Subtask");
@@ -353,21 +355,27 @@ public class SubtaskCreation extends javax.swing.JDialog{
         , s.getDueDate().toString(), new JComboBox(m), s.assignment().getName(), s.creator().getName(), CreateSubask, MarkComplete};
         return(r);
     }
+    
     /**
      * @param h head task of loose list structure
      * @param path path taken to get to needed subtask, derived from TableTop
      * @return The subtask parent needed to make a new subtask of subtask
      * <p>
      * accesses parent subtask much quicker than searching for it
-     * 
+     * worst case time is d, where d is the largest depth of the structure
      * </p>
      */
     private Subtask findParent(Task h, ArrayList<Integer> path){
         Subtask s = h.getTask(path.get(0));
-        for(int x=1; x<path.size();x++){
+        for(int x=1; x<path.size()-1;x++){
             s = s.getTask(path.get(x));
         }
-        return(s);
+        String[] mode=new String[s.getNumberOfSubTasks()];
+        for(int x = 0; x<mode.length; x++){
+            mode[x] = s.getSubtasks().get(x).getName();
+        } 
+        ((JComboBox)p.TableTop.getValueAt(path.size()-1, 4)).setModel(new DefaultComboBoxModel(mode));
+        return(s.getTask(path.size()-1));
     }
     
     private void CreateSubtaskActionPerformed(ActionEvent e){ //copied from mainFrame, works properly
