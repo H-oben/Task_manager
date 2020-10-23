@@ -2,7 +2,6 @@ package GUI;
 
 import java.awt.Color;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -11,6 +10,7 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
 import peoplePack.*;
 import taskPackage.*;
 
@@ -126,12 +126,23 @@ public class mainFrame extends javax.swing.JFrame{
             }
         }
         //set table
-        table = new DefaultTableModel(taskData,columnNames);
+        table = new DefaultTableModel(taskData,columnNames){
+            @Override
+            public boolean isCellEditable(int r, int c){
+                if(c == 7 || c == 8){ //prevents error caused by editing buttons
+                    return(false);
+                }
+                else{
+                    return(true);
+                }
+            }
+        };
         TableTop.setModel(table);
         TableTop.getColumnModel().getColumn(4).setCellEditor(new DefaultCellEditor(subs));
         TableTop.getColumn("Create Subtask").setCellRenderer(new JTableButtonRender());
         TableTop.getColumn("Mark Complete").setCellRenderer(new JTableButtonRender()); //TODO: make button clicks function
         TableTop.setBackground(t.getColor());
+        
         
         //action/mouse listeners
         TableTop.removeMouseListener(JTBML);
@@ -343,7 +354,11 @@ public class mainFrame extends javax.swing.JFrame{
     }//GEN-LAST:event_Create_Task_ButtonActionPerformed
 
     private void CreateSubtaskActionPerformed(ActionEvent e){
-        
+        SubtaskCreation sc = new SubtaskCreation(this, true);
+        sc.setVisible(true);
+        sc.requestFocus();
+        sc.pack();
+        sc.repaint();
     }
     
     private void MarkCompleteActionPerformed(ActionEvent e){

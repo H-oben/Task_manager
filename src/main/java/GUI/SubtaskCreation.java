@@ -1,23 +1,25 @@
 package GUI;
 
 import java.awt.Color;
+import java.awt.event.ActionEvent;
 import java.awt.event.WindowEvent;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.table.DefaultTableModel;
 import peoplePack.Person;
 import taskPackage.*;
 
 /**
- *
  * @author h_obe
  */
 public class SubtaskCreation extends javax.swing.JDialog{
     private final mainFrame p = (mainFrame)this.getParent();
     private final DefaultComboBoxModel model = new DefaultComboBoxModel(getUsers());
-    private final Task head= p.TaskSelection.getItemAt(p.TaskSelection.getSelectedIndex());
+    private final Task head= p.openTasks.get(p.TaskSelection.getSelectedIndex());
     /**
      * Creates new form TaskCreation
      * @param parent mainFrame
@@ -110,6 +112,7 @@ public class SubtaskCreation extends javax.swing.JDialog{
         DateEntry.setBackground(new java.awt.Color(255, 255, 255));
         DateEntry.setForeground(new java.awt.Color(0, 0, 0));
         DateEntry.setText("YYYY-MM-DD");
+        DateEntry.setMinimumSize(new java.awt.Dimension(64, 89));
 
         DateLabel.setBackground(new java.awt.Color(0, 0, 0));
         DateLabel.setForeground(new java.awt.Color(0, 0, 0));
@@ -154,7 +157,7 @@ public class SubtaskCreation extends javax.swing.JDialog{
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addComponent(DateEntry, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(DateEntry, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addComponent(DateSame)
                                         .addGap(0, 0, Short.MAX_VALUE))
@@ -219,6 +222,7 @@ public class SubtaskCreation extends javax.swing.JDialog{
             ((DefaultTableModel) p.TableTop.getModel()).addRow(toRow(t));
             this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
         }
+        p.TableTop.repaint();
     }//GEN-LAST:event_CreateButtonActionPerformed
 
     private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
@@ -316,10 +320,11 @@ public class SubtaskCreation extends javax.swing.JDialog{
             return(new Subtask(n,d,cat,c,due,assigned,p.CurrentUser, head));
         }
         else{
-            int r = p.TableTop.getSelectedRow();//parent is r deep in loosely linked arraylist structure
-            System.out.println(r);
-            
-            return(new Subtask(n,d,cat,c,due,assigned,p.CurrentUser, findParent(r,head,)));
+            ArrayList<Integer> path = new ArrayList<>();
+            for(int l = 0; l<p.TableTop.getRowCount();l++){
+                path.add(((JComboBox)p.TableTop.getValueAt(l, 4)).getSelectedIndex());
+            }
+            return(new Subtask(n,d,cat,c,due,assigned,p.CurrentUser, findParent(head,path)));
         }
     }
     
@@ -328,18 +333,49 @@ public class SubtaskCreation extends javax.swing.JDialog{
      * @return object array to be used in maiFrame's JTable
      */
     private Object[] toRow(Subtask s){
-        JButton CreateTask = new JButton("Create Subtask");
+        JButton CreateSubask = new JButton("Create Subtask");
         JButton MarkComplete= new JButton("Mark Complete");
+        CreateSubask.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        MarkComplete.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        
+        CreateSubask.addActionListener((ActionEvent evt) -> {
+            CreateSubtaskActionPerformed(evt);
+        });
+        MarkComplete.addActionListener((ActionEvent evt) ->{ //ToDo: implement
+            
+        });
+        
+        String[] m = new String[s.getSubtasks().size()];
+        for(int x = 0;x<m.length; x++){
+            m[x] = s.getSubtasks().get(x).getName();
+        }
         Object[] r = {s.getName(),s.getStatus().toString(), s.getCategory().toString()
-        , s.getDueDate().toString(), s.assignment().getName(), s.creator().getName(), CreateTask, MarkComplete};
+        , s.getDueDate().toString(), new JComboBox(m), s.assignment().getName(), s.creator().getName(), CreateSubask, MarkComplete};
         return(r);
     }
-    
-    private Subtask findParent(int depth, Task top, Subtask s){
-        if(top == null || top.getName().equals("empty")){
-            return(null);
+    /**
+     * @param h head task of loose list structure
+     * @param path path taken to get to needed subtask, derived from TableTop
+     * @return The subtask parent needed to make a new subtask of subtask
+     * <p>
+     * accesses parent subtask much quicker than searching for it
+     * 
+     * </p>
+     */
+    private Subtask findParent(Task h, ArrayList<Integer> path){
+        Subtask s = h.getTask(path.get(0));
+        for(int x=1; x<path.size();x++){
+            s = s.getTask(path.get(x));
         }
-        
+        return(s);
+    }
+    
+    private void CreateSubtaskActionPerformed(ActionEvent e){ //copied from mainFrame, works properly
+        SubtaskCreation sc = new SubtaskCreation(p, true);
+        sc.setVisible(true);
+        sc.requestFocus();
+        sc.pack();
+        sc.repaint();
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel AssignLabel;
