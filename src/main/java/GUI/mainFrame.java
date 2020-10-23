@@ -7,14 +7,16 @@ import java.util.ArrayList;
 import javax.swing.DefaultCellEditor;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
-import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
-import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableColumn;
 import peoplePack.*;
 import taskPackage.*;
-
+/**TODO:
+ * functioning button clicks on table
+ * create subtask creation menu
+ * mark as started button
+ * sorted tasks
+ */
 /**
  *
  * @author Hunter Obendorfer 1834106
@@ -112,7 +114,7 @@ public class mainFrame extends javax.swing.JFrame{
         TableTop.setModel(table);
         TableTop.getColumnModel().getColumn(4).setCellEditor(new DefaultCellEditor(subs));
         TableTop.getColumn("Create Subtask").setCellRenderer(new JTableButtonRender());
-        TableTop.getColumn("Mark Complete").setCellRenderer(new JTableButtonRender());
+        TableTop.getColumn("Mark Complete").setCellRenderer(new JTableButtonRender()); //TODO: make button clicks function
         TableTop.setBackground(t.getColor());
         TableTop.repaint();
     }
