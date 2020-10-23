@@ -10,12 +10,10 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableColumn;
 import peoplePack.*;
 import taskPackage.*;
 
 /**TODO:
- * create subtask creation menu
  * mark as started button
  * sorted tasks
  */
@@ -30,7 +28,7 @@ import taskPackage.*;
 public class mainFrame extends javax.swing.JFrame{
 
     //custom variables
-    private  Manager admin; //could be final but that causes errors i'm not dealing with
+    private  Manager admin; //could be final but that causes errors I'm not dealing with
     public Person CurrentUser;
     
     public ArrayList<Person> users = new ArrayList<>();
