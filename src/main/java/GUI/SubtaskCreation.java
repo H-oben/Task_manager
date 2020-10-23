@@ -14,7 +14,7 @@ import taskPackage.*;
  */
 public class SubtaskCreation extends javax.swing.JDialog{
     private final mainFrame p = (mainFrame)this.getParent();
-    private DefaultComboBoxModel model = new DefaultComboBoxModel(getUsers());
+    private final DefaultComboBoxModel model = new DefaultComboBoxModel(getUsers());
     /**
      * Creates new form TaskCreation
      * @param parent mainFrame
@@ -51,6 +51,7 @@ public class SubtaskCreation extends javax.swing.JDialog{
         UserAssign = new javax.swing.JComboBox<>();
         AssignLabel = new javax.swing.JLabel();
         ErrorLabel = new javax.swing.JLabel();
+        DateSame = new javax.swing.JCheckBox();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setModalityType(java.awt.Dialog.ModalityType.APPLICATION_MODAL);
@@ -120,6 +121,9 @@ public class SubtaskCreation extends javax.swing.JDialog{
 
         ErrorLabel.setForeground(new java.awt.Color(0, 0, 0));
 
+        DateSame.setForeground(new java.awt.Color(0, 0, 0));
+        DateSame.setText("Same as parent");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -148,6 +152,8 @@ public class SubtaskCreation extends javax.swing.JDialog{
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(jPanel1Layout.createSequentialGroup()
                                         .addComponent(DateEntry, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(DateSame)
                                         .addGap(0, 0, Short.MAX_VALUE))
                                     .addComponent(UserAssign, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                             .addComponent(ErrorLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
@@ -167,7 +173,8 @@ public class SubtaskCreation extends javax.swing.JDialog{
                     .addComponent(TaskNameLabel)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(DateLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(DateEntry, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(DateEntry, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(DateSame)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(DescEntry, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -204,11 +211,9 @@ public class SubtaskCreation extends javax.swing.JDialog{
     }// </editor-fold>//GEN-END:initComponents
 
     private void CreateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CreateButtonActionPerformed
-        Subtask t = this.getCreatedTask();
-        if(t!=null){
-            p.openTasks.add(t);
-            p.setTaskOptions();
-            p.setTableTop();
+        Subtask t = this.getCreatedSubtask();
+        if(t!=null){ //fix for subtask
+            
             this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
         }
     }//GEN-LAST:event_CreateButtonActionPerformed
@@ -261,48 +266,47 @@ public class SubtaskCreation extends javax.swing.JDialog{
             dialog.setVisible(true);
         });
     }
-    private Subtask getCreatedTask(){
-        ErrorLabel.setVisible(false);
+    private Subtask getCreatedSubtask(){
         Color c = ColorPick.getColor();
         String d = DescEntry.getText();
         String n = NameEntry.getText();
         String date = DateEntry.getText();
-        LocalDate due;
+        LocalDate due=null;
         try{
             due = LocalDate.parse(date, DateTimeFormatter.ISO_LOCAL_DATE);
         }
         catch(Exception e){
-            due = null;
+            if(date.isEmpty() || date.equals("YYY-MM-DD") || date.isBlank()){
+                ErrorLabel.setText("Date cannot be blank");
+                ErrorLabel.setVisible(true);
+                return(null);
+            }
+            else if(due == null || !due.isAfter(p.getToday())){
+                ErrorLabel.setText("Date is invalid");
+                ErrorLabel.setVisible(true);
+                return(null);
+            }
         }
-        Catagories cat;
+        Categories cat;
         String cata = CataEntry.getText();
         int x = UserAssign.getSelectedIndex();
         Person assigned = p.users.get(x);
         if(!cata.isBlank() && !cata.isEmpty()){
-            cat = new Catagories(CataEntry.getText());
+            cat = new Categories(CataEntry.getText());
         }
         else{
-            cat= new Catagories();
+            cat= new Categories();
         }
         if(n.isBlank() || n.isEmpty()){
             ErrorLabel.setText("Name cannot be blank");
             ErrorLabel.setVisible(true);
             return(null);
         }
-        if(date.isEmpty() || date.equals("YYY-MM-DD") || date.isBlank()){
-            ErrorLabel.setText("Date cannot be blank");
-            ErrorLabel.setVisible(true);
-            return(null);
+        if(!DateSame.isSelected()){ //
+            int r = p.TableTop.getSelectedRow();
         }
-        else if(due == null || !due.isAfter(p.getToday())){
-            ErrorLabel.setText("Date is invalid");
-            ErrorLabel.setVisible(true);
-            return(null);
-        }
-        else{
-            ErrorLabel.setVisible(false);
-            return(new Subtask(n,d,cat,c,due,assigned,p.CurrentUser));
-        }
+        ErrorLabel.setVisible(false);
+        return(new Subtask(n,d,cat,c,due,assigned,p.CurrentUser ));
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel AssignLabel;
@@ -312,6 +316,7 @@ public class SubtaskCreation extends javax.swing.JDialog{
     private javax.swing.JButton CreateButton;
     private javax.swing.JTextField DateEntry;
     private javax.swing.JLabel DateLabel;
+    private javax.swing.JCheckBox DateSame;
     private java.awt.TextField DescEntry;
     private javax.swing.JLabel DescLabel;
     private javax.swing.JLabel ErrorLabel;

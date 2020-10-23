@@ -15,14 +15,16 @@ import peoplePack.*;
 import taskPackage.*;
 
 /**TODO:
- * functioning button clicks on table
  * create subtask creation menu
  * mark as started button
  * sorted tasks
  */
 
 /**
- *
+ *<p>
+ * Public variables used where it makes sense, 
+ * mainly to allow easy manipulation between frames/dialogues
+ * </p>
  * @author Hunter Obendorfer 1834106
  */
 public class mainFrame extends javax.swing.JFrame{
@@ -36,7 +38,7 @@ public class mainFrame extends javax.swing.JFrame{
     public ArrayList<Task> closedTasks = new ArrayList<>();
     private DefaultComboBoxModel m;
     private DefaultTableModel table;
-    private JTableButtonMouseListener JTBML;
+    private final JTableButtonMouseListener JTBML;
 
     private LocalDate today = LocalDate.now();
     /**
@@ -53,7 +55,7 @@ public class mainFrame extends javax.swing.JFrame{
         users.add(admin);
         //default task for admin
         openTasks.add(new Task("Create Tasks","Create tasks for employees to work on"
-        ,new Catagories("Administrative"),new Color(100,200,200), LocalDate.MAX, admin,admin));
+        ,new Categories("Administrative"),new Color(100,200,200), LocalDate.MAX, admin,admin));
         
         initComponents();
         //Reminder: all custom populization of elements must occur AFTER initComponents()
@@ -83,16 +85,16 @@ public class mainFrame extends javax.swing.JFrame{
     }
     //updates table view with open task drop down selection
     public final void setTableTop(){
-        String[] colomnNames = {"Name","Status","Catagory","Due Date"
+        String[] columnNames = {"Name","Status","Catagory","Due Date"
                 ,"Subtasks","Assigned To","Assigned By","Create Subtask","Mark Complete"};
         Object[][] taskData = new Object[1][9];
         //instantiate and design buttons/combBox
-        JButton CreateSub = new JButton(colomnNames[7]);
+        JButton CreateSub = new JButton(columnNames[7]);
         //subtask button action
         CreateSub.addActionListener((ActionEvent e) -> {
             CreateSubtaskActionPerformed(e);
         });
-        JButton CompleteButton = new JButton(colomnNames[8]);
+        JButton CompleteButton = new JButton(columnNames[8]);
         CompleteButton.addActionListener((ActionEvent e) -> {
             MarkCompleteActionPerformed(e);
         });
@@ -124,7 +126,7 @@ public class mainFrame extends javax.swing.JFrame{
             }
         }
         //set table
-        table = new DefaultTableModel(taskData,colomnNames);
+        table = new DefaultTableModel(taskData,columnNames);
         TableTop.setModel(table);
         TableTop.getColumnModel().getColumn(4).setCellEditor(new DefaultCellEditor(subs));
         TableTop.getColumn("Create Subtask").setCellRenderer(new JTableButtonRender());
@@ -340,7 +342,7 @@ public class mainFrame extends javax.swing.JFrame{
         t.repaint();
     }//GEN-LAST:event_Create_Task_ButtonActionPerformed
 
-    private void CreateSubtaskActionPerformed(ActionEvent e){//both reachable
+    private void CreateSubtaskActionPerformed(ActionEvent e){
         
     }
     
@@ -394,7 +396,7 @@ public class mainFrame extends javax.swing.JFrame{
     private javax.swing.JButton ExitButton;
     private javax.swing.JLabel OpenTaskLabel;
     private javax.swing.JPanel SidePanel;
-    private javax.swing.JTable TableTop;
+    public javax.swing.JTable TableTop;
     private javax.swing.JScrollPane TabularView;
     public javax.swing.JComboBox<Task> TaskSelection;
     private javax.swing.JTabbedPane ViewsPane;

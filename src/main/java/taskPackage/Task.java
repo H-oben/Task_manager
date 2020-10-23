@@ -13,7 +13,7 @@ public class Task {
     protected String descrip;
     protected Status stat;
     protected Color color;
-    protected Catagories cat;
+    protected Categories cat;
     
     /**
      * Structure of subtasks where every subtask can have a subset of subtasks
@@ -30,7 +30,7 @@ public class Task {
     public Task(){
         name="empty";
         descrip="empty";
-        cat=new Catagories();
+        cat=new Categories();
         stat=Status.NOT_STARTED;
         color = Color.RED; //default is due on same day
         
@@ -46,14 +46,14 @@ public class Task {
     /**
      * @param n String name of task, mutable
      * @param d String describing task,mutable
-     * @param c catagory 
+     * @param c category 
      * @param co Color input
      * @param ld LocalDate of the due date, mutable
      * @param assigned Person class to assign this task to, mutable
      * @param creator Person class that assigned this task, this is immutable so be careful
      * 
      */
-    public Task(String n, String d, Catagories c,Color co, LocalDate ld, Person assigned, Person creator){
+    public Task(String n, String d, Categories c,Color co, LocalDate ld, Person assigned, Person creator){
         name = n;
         cat=c;
         if(d.isBlank() || d.isEmpty()){
@@ -87,7 +87,7 @@ public class Task {
     public void setStatus(Status s){
         stat=s;
     }
-    public void setCatagory(Catagories c){
+    public void setCatagory(Categories c){
         cat=c;
     }
     /**
@@ -154,7 +154,7 @@ public class Task {
     public Color getColor(){
         return(color);
     }
-    public Catagories getCatagory(){
+    public Categories getCatagory(){
         return(cat);
     }
     public ArrayList<Subtask> getSubtasks(){

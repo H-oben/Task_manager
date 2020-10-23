@@ -272,15 +272,15 @@ public class TaskCreation extends javax.swing.JDialog{
         catch(Exception e){
             due = null;
         }
-        Catagories cat;
+        Categories cat;
         String cata = CataEntry.getText();
         int x = UserAssign.getSelectedIndex();
         Person assigned = p.users.get(x);
         if(!cata.isBlank() && !cata.isEmpty()){
-            cat = new Catagories(CataEntry.getText());
+            cat = new Categories(CataEntry.getText());
         }
         else{
-            cat= new Catagories();
+            cat= new Categories();
         }
         if(n.isBlank() || n.isEmpty()){
             ErrorLabel.setText("Name cannot be blank");

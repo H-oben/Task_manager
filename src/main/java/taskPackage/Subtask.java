@@ -6,9 +6,10 @@ import java.awt.Color;
 import java.util.Objects;
 
 public class Subtask extends Task{
-    
+    private Task upper;
     public Subtask(){
         super();
+        upper = null;
     }
     
     /**
@@ -19,9 +20,20 @@ public class Subtask extends Task{
      * @param due LocalDateTime of due date
      * @param assigned Person class to assign this task to, mutable
      * @param creator Person class that made this task
+     * @param t parent fo subtask
      */
-    public Subtask(String n, String d,Catagories cat, Color col, LocalDate due, Person assigned, Person creator){
+    public Subtask(String n, String d,Categories cat, Color col,
+            LocalDate due, Person assigned, Person creator, Task t){
         super(n,d,cat,col,due,assigned,creator);
+        upper = t;
+    }
+
+    /**
+     *
+     * @return returns parent task/subtask
+     */
+    public Task getParent(){
+        return(upper);
     }
  
     @Override

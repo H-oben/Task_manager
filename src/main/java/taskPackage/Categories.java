@@ -2,12 +2,12 @@ package taskPackage;
 
 import java.util.Objects;
 
-public class Catagories extends Object{
+public class Categories extends Object{
     private String cata;
-    public Catagories(){
+    public Categories(){
         cata="empty";
     }
-    public Catagories(String s){
+    public Categories(String s){
         if(s.isBlank() || s.isEmpty()){
             cata="empty";
         }
@@ -24,11 +24,11 @@ public class Catagories extends Object{
         if(o ==this){
             return(true);
         }
-        else if(!(o instanceof Catagories)){
+        else if(!(o instanceof Categories)){
             return(false);
         }
         else{
-            Catagories t = (Catagories) o;
+            Categories t = (Categories) o;
             return (t.toString().toLowerCase().equals(this.toString().toLowerCase()));
         }
     }
