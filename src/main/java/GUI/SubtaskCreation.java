@@ -319,31 +319,23 @@ public class SubtaskCreation extends javax.swing.JDialog{
             return(null);
         }
         ErrorLabel.setVisible(false);
-        //get subtask parent
-        if(!head.hasDescendants()){
-            System.out.println("no descendants");
-            Subtask q = new Subtask(n,d,cat,c,due,assigned,p.CurrentUser, head);
-            head.addSubtask(q);
-            return(q);
-            
+        //set path
+        ArrayList<Integer> path = new ArrayList<>();
+        for(int l = 0; l<p.TableTop.getRowCount();l++){
+            path.add(((JComboBox)p.TableTop.getValueAt(l, 4)).getSelectedIndex());
         }
-        else{
-            System.out.println("descendants");
-            ArrayList<Integer> path = new ArrayList<>();
-            for(int l = 0; l<p.TableTop.getRowCount();l++){
-                System.out.println(((JComboBox)p.TableTop.getValueAt(l+1, 4)).getSelectedIndex());
-                path.add(((JComboBox)p.TableTop.getValueAt(l, 4)).getSelectedIndex());
-            }
-            Subtask newSub = new Subtask(n,d,cat,c,due,assigned,p.CurrentUser, findParent(head,path));
-            String[] mode=new String[newSub.getParent().getNumberOfSubTasks()];
-            for(int l = 0; l<mode.length; l++){
-                mode[l] = newSub.getParent().getSubtasks().get(l).getName();
-            } 
-            newSub.getParent().addSubtask(newSub);
-            ((JComboBox)p.TableTop.getValueAt(path.size()-1, 4)).setModel(new DefaultComboBoxModel(mode));
-            ((JComboBox)p.TableTop.getValueAt(path.size()-1, 4)).repaint();
-            return(newSub);
-        }
+        Subtask newSub = new Subtask(n,d,cat,c,due,assigned,p.CurrentUser, findParent(head,path));
+        //set combobox
+        String[] mode=new String[newSub.getParent().getNumberOfSubTasks()];
+        for(int l = 0; l<mode.length; l++){
+            mode[l] = newSub.getParent().getSubtasks().get(l).getName();
+        } 
+        ((JComboBox)p.TableTop.getValueAt(path.size()-1, 4)).setModel(new DefaultComboBoxModel(mode));
+        ((JComboBox)p.TableTop.getValueAt(path.size()-1, 4)).repaint();
+        
+        newSub.getParent().addSubtask(newSub);
+        return(newSub);
+        
     }
     
     /**
@@ -381,7 +373,10 @@ public class SubtaskCreation extends javax.swing.JDialog{
      * worst case time is d, where d is the largest depth of the structure
      * </p>
      */
-    private Subtask findParent(Task h, ArrayList<Integer> path){
+    private Task findParent(Task h, ArrayList<Integer> path){
+        if(!h.hasDescendants() || path.size()==0){
+            return(h);
+        }
         Subtask s = h.getTask(path.get(0));
         for(int x=1; x<path.size();x++){
             s = s.getTask(path.get(x));

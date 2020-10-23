@@ -116,7 +116,7 @@ public class Task {
      */
     public Subtask getTask(int index){
         if(subs.size()<index){
-            throw(new ArrayIndexOutOfBoundsException());
+            throw(new IndexOutOfBoundsException());
         }
         return(subs.get(index));
     }
