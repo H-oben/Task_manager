@@ -9,11 +9,11 @@ import java.util.Objects;
  * @author Hunter Obendorfer
  */
 public class Task {
-    private String name;
-    private String descrip;
-    private Status stat;
-    private Color color;
-    private Catagories cat;
+    protected String name;
+    protected String descrip;
+    protected Status stat;
+    protected Color color;
+    protected Catagories cat;
     
     /**
      * Structure of subtasks where every subtask can have a subset of subtasks
@@ -21,10 +21,10 @@ public class Task {
     private ArrayList<Subtask> subs = new ArrayList<>();
     
     protected LocalDate mainDueDate;
-    private final LocalDate createdOn; // not going to change so it's final
+    protected final LocalDate createdOn; // not going to change so it's final
     
-    private Person assignedTo;
-    private final Person createdBy; // not going to change so it's final
+    protected Person assignedTo;
+    protected final Person createdBy; // not going to change so it's final
     
     //default Constr.
     public Task(){
@@ -110,7 +110,20 @@ public class Task {
         color = a;
     }
     //getters
-    //TODO: get method for subtasks
+    /**
+     * @param index integer index for array list
+     * @return returns subtask object
+     * @throws AraayIndexOutOfBoundsException if index > subtask list size
+     */
+    public Subtask getTask(int index){
+        if(subs.size()<index){
+            throw(new ArrayIndexOutOfBoundsException());
+        }
+        return(subs.get(index));
+    }
+    public int getNumberOfSubTasks(){
+        return(subs.size());
+    }
     public String getName(){
         return(name);
     }
