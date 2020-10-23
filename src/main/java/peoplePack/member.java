@@ -1,5 +1,8 @@
 package peoplePack;
 
+import java.util.Arrays;
+import java.util.Objects;
+
 /**
  * @author h_obe
  * <p>
@@ -50,7 +53,29 @@ public class member implements Person{
         }
     }
     
-    
+    @Override
+    public boolean equals(Object o){
+        if(this == o){
+            return(true);
+        }
+        if(o instanceof member){
+            member t = (member) o;
+            if(t.getName().equals(this.getName())){
+                return(true);
+            }
+        }
+        return(false);
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        hash = 13 * hash + Objects.hashCode(this.fname);
+        hash = 13 * hash + Objects.hashCode(this.lname);
+        hash = 13 * hash + Objects.hashCode(this.role);
+        hash = 13 * hash + Arrays.hashCode(this.pass);
+        return hash;
+    }
     /**
      * @return returns enum object
      */

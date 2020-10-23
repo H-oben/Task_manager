@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import peoplePack.Person;
 import java.awt.Color;
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class Subtask extends Task{
     private String name;
@@ -69,5 +70,32 @@ public class Subtask extends Task{
     @Override
     public LocalDate getDueDate(){
         return(dueDate);
+    }
+    @Override
+    public boolean equals(Object o){
+        if(this == o){
+            return(true);
+        }
+        if(o instanceof Task){
+            Subtask t = (Subtask) o;
+            if(t.getName().equals(this.getName())){
+                if(t.getDueDate().equals(this.getDueDate())){
+                    if(t.assignment().equals(this.assignedTo)){
+                        return(true);
+                    }
+                }
+            }
+        }
+        return(false);
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 37 * hash + Objects.hashCode(this.name);
+        hash = 37 * hash + Objects.hashCode(this.stat);
+        hash = 37 * hash + Objects.hashCode(this.assignedTo);
+        hash = 37 * hash + Objects.hashCode(this.createdBy);
+        return hash;
     }
 }

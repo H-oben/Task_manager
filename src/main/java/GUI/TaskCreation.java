@@ -1,32 +1,30 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package GUI;
 
 import java.awt.Color;
 import java.awt.event.WindowEvent;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import javax.swing.JComboBox;
+import javax.swing.DefaultComboBoxModel;
 import peoplePack.Person;
-import taskPackage.Catagories;
-import taskPackage.Task;
+import taskPackage.*;
 
 /**
  *
  * @author h_obe
  */
 public class TaskCreation extends javax.swing.JDialog{
-    private mainFrame p = (mainFrame)this.getParent();
+    private final mainFrame p = (mainFrame)this.getParent();
+    private DefaultComboBoxModel model = new DefaultComboBoxModel(getUsers());
     /**
      * Creates new form TaskCreation
+     * @param parent mainFrame
+     * @param modal always true
      */
     public TaskCreation(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
         ErrorLabel.setVisible(false);
+        UserAssign.setModel(model);
     }
 
     /**
@@ -208,6 +206,8 @@ public class TaskCreation extends javax.swing.JDialog{
         Task t = this.getCreatedTask();
         if(t!=null){
             p.openTasks.add(t);
+            p.setTaskOptions();
+            p.setTableTop();
             this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
         }
     }//GEN-LAST:event_CreateButtonActionPerformed
@@ -216,7 +216,14 @@ public class TaskCreation extends javax.swing.JDialog{
         this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
         this.dispose();
     }//GEN-LAST:event_cancelButtonActionPerformed
-
+    
+    private String[] getUsers(){
+        String[] users= new String[p.users.size()];
+        for(int x = 0; x< users.length; x++){
+            users[x] = p.users.get(x).getName();
+        }
+        return(users);
+    }
     /**
      * @param args the command line arguments
      */
@@ -233,29 +240,23 @@ public class TaskCreation extends javax.swing.JDialog{
                     break;
                 }
             }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(TaskCreation.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(TaskCreation.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(TaskCreation.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(TaskCreation.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
+        
+        //</editor-fold>
 
         /* Create and display the dialog */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                TaskCreation dialog = new TaskCreation(new javax.swing.JFrame(), true);
-                dialog.addWindowListener(new java.awt.event.WindowAdapter() {
-                    @Override
-                    public void windowClosing(java.awt.event.WindowEvent e) {
-                        System.exit(0);
-                    }
-                });
-                dialog.setVisible(true);
-            }
+        java.awt.EventQueue.invokeLater(() -> {
+            TaskCreation dialog = new TaskCreation(new javax.swing.JFrame(), true);
+            dialog.addWindowListener(new java.awt.event.WindowAdapter() {
+                @Override
+                public void windowClosing(java.awt.event.WindowEvent e) {
+                    System.exit(0);
+                }
+            });
+            dialog.setVisible(true);
         });
     }
     private Task getCreatedTask(){
@@ -271,7 +272,7 @@ public class TaskCreation extends javax.swing.JDialog{
         catch(Exception e){
             due = null;
         }
-        Catagories cat = null;
+        Catagories cat;
         String cata = CataEntry.getText();
         int x = UserAssign.getSelectedIndex();
         Person assigned = p.users.get(x);
