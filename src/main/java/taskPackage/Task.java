@@ -9,11 +9,11 @@ import java.util.Objects;
  * @author Hunter Obendorfer
  */
 public class Task {
-    private String name;
-    private String descrip;
-    private Status stat;
-    private Color color;
-    private Catagories cat;
+    protected String name;
+    protected String descrip;
+    protected Status stat;
+    protected Color color;
+    protected Categories cat;
     
     /**
      * Structure of subtasks where every subtask can have a subset of subtasks
@@ -21,20 +21,20 @@ public class Task {
     private ArrayList<Subtask> subs = new ArrayList<>();
     
     protected LocalDate mainDueDate;
-    private final LocalDate createdOn; // not going to change so it's final
+    protected final LocalDate createdOn; // not going to change so it's final
     
-    private Person assignedTo;
-    private final Person createdBy; // not going to change so it's final
+    protected Person assignedTo;
+    protected final Person createdBy; // not going to change so it's final
     
     //default Constr.
     public Task(){
         name="empty";
         descrip="empty";
-        cat=new Catagories();
+        cat=new Categories();
         stat=Status.NOT_STARTED;
         color = Color.RED; //default is due on same day
         
-        subs=new ArrayList<Subtask>();
+        subs=new ArrayList<>();
         
         mainDueDate=LocalDate.now();
         createdOn=LocalDate.now();
@@ -46,14 +46,14 @@ public class Task {
     /**
      * @param n String name of task, mutable
      * @param d String describing task,mutable
-     * @param c catagory 
+     * @param c category 
      * @param co Color input
      * @param ld LocalDate of the due date, mutable
      * @param assigned Person class to assign this task to, mutable
      * @param creator Person class that assigned this task, this is immutable so be careful
      * 
      */
-    public Task(String n, String d, Catagories c,Color co, LocalDate ld, Person assigned, Person creator){
+    public Task(String n, String d, Categories c,Color co, LocalDate ld, Person assigned, Person creator){
         name = n;
         cat=c;
         if(d.isBlank() || d.isEmpty()){
@@ -64,7 +64,7 @@ public class Task {
         }
         stat=Status.NOT_STARTED;
         
-        subs=new ArrayList<Subtask>();
+        subs=new ArrayList<>();
         
         mainDueDate=ld;
         createdOn=LocalDate.now();
@@ -87,7 +87,7 @@ public class Task {
     public void setStatus(Status s){
         stat=s;
     }
-    public void setCatagory(Catagories c){
+    public void setCatagory(Categories c){
         cat=c;
     }
     /**
@@ -110,7 +110,19 @@ public class Task {
         color = a;
     }
     //getters
-    //TODO: get method for subtasks
+    /**
+     * @param index integer index for array list
+     * @return returns subtask object
+     */
+    public Subtask getTask(int index){
+        if(subs.size()<index){
+            throw(new IndexOutOfBoundsException());
+        }
+        return(subs.get(index));
+    }
+    public int getNumberOfSubTasks(){
+        return(subs.size());
+    }
     public String getName(){
         return(name);
     }
@@ -141,11 +153,22 @@ public class Task {
     public Color getColor(){
         return(color);
     }
-    public Catagories getCatagory(){
+    public Categories getCategory(){
         return(cat);
     }
     public ArrayList<Subtask> getSubtasks(){
         return subs;
+    }
+    public boolean contains(Subtask s){
+        for(Subtask a : subs){
+            if(a.equals(s)){
+                return(true);
+            }
+        }
+        return(false);
+    }
+    public boolean hasDescendants(){
+        return(subs.size()>0);
     }
     
     @Override
