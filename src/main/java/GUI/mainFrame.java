@@ -15,13 +15,17 @@ import peoplePack.*;
 import taskPackage.*;
 
 /**TODO:
- * implement mark as started button
- * implement task finished button
  * sorted tasks
- * ***change table view from jtable to pseudo table layout, jtable is annoying to work with
+ * movement of complete tasks to closedTasks and out of openTasks
+ * implement web layout
+ * implement changing of data other than status
+ * ***change table view from JTable to pseudo table layout, JTable is annoying to work with
  * Control logic for task assignment: 
  *  - don't let members assign tasks to others
  *  - Team Lead can only assign to team members they are leading or themselves
+ *  - other logic once fully functional
+ * If I have time:
+ *  - fix subtasks so they can have subtasks as well
  */
 
 /**
@@ -425,9 +429,30 @@ public class mainFrame extends javax.swing.JFrame{
     }
     
     private void MarkCompleteActionPerformed(ActionEvent e){ 
-        
+        if(((JButton)e.getSource()).equals(TableTop.getValueAt(0, 8))){
+            openTasks.get(TaskSelection.getSelectedIndex()).setStatus(Status.COMPLETE);
+        }
+        else{
+            for(int x = 0; x< SubtaskTable.getRowCount(); x++){
+                if(((JButton)e.getSource()).equals(SubtaskTable.getValueAt(x, 7))){
+                    openTasks.get(TaskSelection.getSelectedIndex()).getTask(x).setStatus(Status.COMPLETE);
+                }
+            }
+        }
+        setTableTop();
     }
     private void MarkStartedActionPerformed(ActionEvent e) {
+    if(((JButton)e.getSource()).equals(TableTop.getValueAt(0, 8))){
+            openTasks.get(TaskSelection.getSelectedIndex()).setStatus(Status.IN_PROGRESS);
+        }
+        else{
+            for(int x = 0; x< SubtaskTable.getRowCount(); x++){
+                if(((JButton)e.getSource()).equals(SubtaskTable.getValueAt(x, 7))){
+                    openTasks.get(TaskSelection.getSelectedIndex()).getTask(x).setStatus(Status.IN_PROGRESS);
+                }
+            }
+        }
+        setTableTop();
     }
     
     private void ExitButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ExitButtonActionPerformed
@@ -458,8 +483,6 @@ public class mainFrame extends javax.swing.JFrame{
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(mainFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
-        //</editor-fold>
-        
         //</editor-fold>
 
         /* Create and display the form */

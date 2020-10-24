@@ -334,15 +334,42 @@ public class SubtaskCreation extends javax.swing.JDialog{
         MarkComplete.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         marSt.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         MarkComplete.addActionListener((ActionEvent evt) ->{ //ToDo: implement
-            
+            MarkCompleteActionPerformed(evt);
         });
         marSt.addActionListener((ActionEvent evt) ->{ //ToDo: implement
-            
+            MarkStartedActionPerformed(evt);
         });
         Object[] r = {s.getName(),s.getStatus().toString(), s.getCategory().toString()
         , s.getDueDate().toString(), s.assignment().getName(), s.creator().getName(),marSt , MarkComplete};
         return(r);
     }
+    private void MarkCompleteActionPerformed(ActionEvent e){ //copy
+        if(((JButton)e.getSource()).equals(p.TableTop.getValueAt(0, 8))){
+            p.openTasks.get(p.TaskSelection.getSelectedIndex()).setStatus(Status.COMPLETE);
+        }
+        else{
+            for(int x = 0; x< p.SubtaskTable.getRowCount(); x++){
+                if(((JButton)e.getSource()).equals(p.SubtaskTable.getValueAt(x, 7))){
+                    p.openTasks.get(p.TaskSelection.getSelectedIndex()).getTask(x).setStatus(Status.COMPLETE);
+                }
+            }
+        }
+        p.setTableTop();
+    }
+    private void MarkStartedActionPerformed(ActionEvent e){
+        if(((JButton)e.getSource()).equals(p.TableTop.getValueAt(0, 8))){
+            p.openTasks.get(p.TaskSelection.getSelectedIndex()).setStatus(Status.IN_PROGRESS);
+        }
+        else{
+            for(int x = 0; x< p.SubtaskTable.getRowCount(); x++){
+                if(((JButton)e.getSource()).equals(p.SubtaskTable.getValueAt(x, 7))){
+                    p.openTasks.get(p.TaskSelection.getSelectedIndex()).getTask(x).setStatus(Status.IN_PROGRESS);
+                }
+            }
+        }
+        p.setTableTop();
+    }
+    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel AssignLabel;
