@@ -6,7 +6,7 @@ import java.awt.Color;
 import java.util.Objects;
 
 public class Subtask extends Task{
-    private final Task upper; //creates doubly linked list essentailly 
+    private final Task upper; //for easy traversal 
     public Subtask(){
         super();
         upper = null;
@@ -29,7 +29,6 @@ public class Subtask extends Task{
     }
 
     /**
-     *
      * @return returns parent task/subtask
      */
     public Task getParent(){

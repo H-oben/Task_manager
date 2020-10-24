@@ -20,6 +20,7 @@ public class SubtaskCreation extends javax.swing.JDialog{
     private final mainFrame p = (mainFrame)this.getParent();
     private final DefaultComboBoxModel model = new DefaultComboBoxModel(getUsers());
     private final Task head= p.openTasks.get(p.TaskSelection.getSelectedIndex());
+    
     /**
      * Creates new form TaskCreation
      * @param parent mainFrame
@@ -218,11 +219,11 @@ public class SubtaskCreation extends javax.swing.JDialog{
 
     private void CreateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CreateButtonActionPerformed
         Subtask t = this.getCreatedSubtask();
-        if(t!=null){ //fix for subtask
-            ((DefaultTableModel) p.TableTop.getModel()).addRow(toRow(t));
-            this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
+        if(t!=null){
+            ((DefaultTableModel) p.SubtaskTable.getModel()).addRow(toRow(t)); //fix window re-opening
         }
-        p.TableTop.repaint();
+        p.SubtaskTable.repaint();
+        this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
     }//GEN-LAST:event_CreateButtonActionPerformed
 
     private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
@@ -319,22 +320,7 @@ public class SubtaskCreation extends javax.swing.JDialog{
             return(null);
         }
         ErrorLabel.setVisible(false);
-        //set path
-        ArrayList<Integer> path = new ArrayList<>();
-        for(int l = 0; l<p.TableTop.getRowCount();l++){
-            path.add(((JComboBox)p.TableTop.getValueAt(l, 4)).getSelectedIndex());
-        }
-        Subtask newSub = new Subtask(n,d,cat,c,due,assigned,p.CurrentUser, findParent(head,path));
-        //set combobox
-        String[] mode=new String[newSub.getParent().getNumberOfSubTasks()];
-        for(int l = 0; l<mode.length; l++){
-            mode[l] = newSub.getParent().getSubtasks().get(l).getName();
-        } 
-        ((JComboBox)p.TableTop.getValueAt(path.size()-1, 4)).setModel(new DefaultComboBoxModel(mode));
-        ((JComboBox)p.TableTop.getValueAt(path.size()-1, 4)).repaint();
-        
-        newSub.getParent().addSubtask(newSub);
-        return(newSub);
+        return(new Subtask(n,d,cat,c,due,assigned,p.CurrentUser,head));
         
     }
     
@@ -343,54 +329,21 @@ public class SubtaskCreation extends javax.swing.JDialog{
      * @return object array to be used in mainFrame's JTable
      */
     private Object[] toRow(Subtask s){
-        JButton CreateSubask = new JButton("Create Subtask");
         JButton MarkComplete= new JButton("Mark Complete");
-        CreateSubask.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        JButton marSt = new JButton("Mark Started");
         MarkComplete.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        
-        CreateSubask.addActionListener((ActionEvent evt) -> {
-            CreateSubtaskActionPerformed(evt);
-        });
+        marSt.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         MarkComplete.addActionListener((ActionEvent evt) ->{ //ToDo: implement
             
         });
-        
-        String[] m = new String[s.getSubtasks().size()];
-        for(int x = 0;x<m.length; x++){
-            m[x] = s.getSubtasks().get(x).getName();
-        }
+        marSt.addActionListener((ActionEvent evt) ->{ //ToDo: implement
+            
+        });
         Object[] r = {s.getName(),s.getStatus().toString(), s.getCategory().toString()
-        , s.getDueDate().toString(), new JComboBox(m), s.assignment().getName(), s.creator().getName(), CreateSubask, MarkComplete};
+        , s.getDueDate().toString(), s.assignment().getName(), s.creator().getName(),marSt , MarkComplete};
         return(r);
     }
-    
-    /**
-     * @param h head task of loose list structure
-     * @param path path taken to get to needed subtask, derived from TableTop
-     * @return The subtask parent needed to make a new subtask of subtask
-     * <p>
-     * accesses parent subtask much quicker than searching for it
-     * worst case time is d, where d is the largest depth of the structure
-     * </p>
-     */
-    private Task findParent(Task h, ArrayList<Integer> path){
-        if(!h.hasDescendants() || path.size()==0){
-            return(h);
-        }
-        Subtask s = h.getTask(path.get(0));
-        for(int x=1; x<path.size();x++){
-            s = s.getTask(path.get(x));
-        }
-        return(s);
-    }
-    
-    private void CreateSubtaskActionPerformed(ActionEvent e){ //copied from mainFrame, works properly
-        SubtaskCreation sc = new SubtaskCreation(p, true);
-        sc.setVisible(true);
-        sc.requestFocus();
-        sc.pack();
-        sc.repaint();
-    }
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel AssignLabel;
     private javax.swing.JTextField CataEntry;
