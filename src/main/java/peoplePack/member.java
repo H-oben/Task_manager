@@ -19,8 +19,9 @@ import java.util.Objects;
 public class member implements Person{
     private String fname;
     private String lname;
-    private Role role;
+    private final Role role;
     private char[] pass;
+    private Manager lead;
     
     public member(){
         fname = "empty";
@@ -107,5 +108,12 @@ public class member implements Person{
     public void setName(String f, String l){
         fname=f;
         lname=l;
+    }
+    
+    public void assignTeam(Manager a){
+        lead = a;
+    }
+    public Manager getTeam(){
+        return(lead);
     }
 }

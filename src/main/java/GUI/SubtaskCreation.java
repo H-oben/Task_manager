@@ -11,6 +11,7 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.table.DefaultTableModel;
 import peoplePack.Person;
+import peoplePack.Role;
 import taskPackage.*;
 
 /**
@@ -19,7 +20,7 @@ import taskPackage.*;
 public class SubtaskCreation extends javax.swing.JDialog{
     private final mainFrame p = (mainFrame)this.getParent();
     private final DefaultComboBoxModel model = new DefaultComboBoxModel(getUsers());
-    private final Task head= p.openTasks.get(p.TaskSelection.getSelectedIndex());
+    private final Task head = p.openTasks.get(p.TaskSelection.getSelectedIndex());
     
     /**
      * Creates new form TaskCreation
@@ -32,7 +33,7 @@ public class SubtaskCreation extends javax.swing.JDialog{
         ErrorLabel.setVisible(false);
         UserAssign.setModel(model);
     }
-
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -231,8 +232,14 @@ public class SubtaskCreation extends javax.swing.JDialog{
         this.dispose();
     }//GEN-LAST:event_cancelButtonActionPerformed
     
-    private String[] getUsers(){
-        String[] users= new String[p.users.size()];
+    private String[] getUsers(){ //members can assign tasks to themsevles, team leads to themselves and  members, managers to anyone
+        if (p.CurrentUser.getRole()== Role.MEMBER){
+            return(new String[] {p.CurrentUser.getName()});
+        }
+        else if(p.CurrentUser.getRole() == Role.TEAMLEAD){
+            
+        }    
+        String[] users = new String[p.users.size()];
         for(int x = 0; x< users.length; x++){
             users[x] = p.users.get(x).getName();
         }
