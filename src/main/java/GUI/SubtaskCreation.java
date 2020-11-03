@@ -223,8 +223,8 @@ public class SubtaskCreation extends javax.swing.JDialog{
         if(t!=null){
             ((DefaultTableModel) p.SubtaskTable.getModel()).addRow(toRow(t)); //fix window re-opening
         }
-        p.SubtaskTable.repaint();
         this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
+        p.setTableTop();
     }//GEN-LAST:event_CreateButtonActionPerformed
 
     private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed

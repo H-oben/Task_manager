@@ -185,6 +185,7 @@ public class mainFrame extends javax.swing.JFrame{
         SubtaskTable.repaint();
         
     //</editor-fold>
+    this.repaint();
     }
     private Object[] getSubArray(Subtask s){
         JButton mkSt = new JButton("Mark Started");
@@ -492,7 +493,7 @@ public class mainFrame extends javax.swing.JFrame{
     private javax.swing.JScrollPane TabularView;
     public javax.swing.JComboBox<Task> TaskSelection;
     private javax.swing.JTabbedPane ViewsPane;
-    private javax.swing.JButton addTeamMember;
+    public javax.swing.JButton addTeamMember;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
