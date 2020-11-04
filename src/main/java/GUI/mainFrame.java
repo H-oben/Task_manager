@@ -5,11 +5,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.WindowEvent;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Vector;
-import javax.swing.DefaultCellEditor;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.table.DefaultTableModel;
 import peoplePack.*;
 import taskPackage.*;
@@ -17,8 +14,8 @@ import taskPackage.*;
 /**TODO:
  * sorted tasks
  * movement of complete tasks to closedTasks and out of openTasks
- * implement web layout
  * implement changing of data other than status
+ * have description change to subtask description when selected
  * ***change table view from JTable to pseudo table layout, JTable is annoying to work with
  * Control logic for task assignment: 
  *  - don't let members assign tasks to others
@@ -26,6 +23,7 @@ import taskPackage.*;
  *  - other logic once fully functional
  * If I have time:
  *  - fix subtasks so they can have subtasks as well
+ *  - implement web layout
  */
 
 /**
@@ -49,8 +47,6 @@ public class mainFrame extends javax.swing.JFrame{
     private DefaultComboBoxModel m;
     private DefaultTableModel table;
     
-    private final JTableButtonMouseListener JTBML;
-    
     public mainFrame() {
         try{ //add default admin user
             char[] pass = "Adm1n".toCharArray();
@@ -66,8 +62,10 @@ public class mainFrame extends javax.swing.JFrame{
         openTasks.get(0).addSubtask(new Subtask("sub","",new Categories(), new Color(100,100,100), LocalDate.MAX, admin, admin,openTasks.get(0)));
         initComponents();
         //Reminder: all custom populization of elements must occur AFTER initComponents()
-        JTBML = new JTableButtonMouseListener(TableTop);
-        TableTop.addMouseListener(JTBML);
+        
+        TableTop.addMouseListener(new JTableButtonMouseListener(TableTop));
+        SubtaskTable.addMouseListener(new JTableButtonMouseListener(SubtaskTable));
+        
         //login comes up before main menu
         loginCreationMenu l = new loginCreationMenu(this, true);
         l.setVisible(true);
@@ -75,6 +73,11 @@ public class mainFrame extends javax.swing.JFrame{
         //set the table
         setTaskOptions();
         setTableTop();
+        //visibility of team lead specific button
+        if(CurrentUser.getRole()!=Role.TEAMLEAD){
+            addTeamMember.setVisible(false);
+            addTeamMember.setEnabled(false);
+        }
     }
     
     //custom methods
@@ -111,10 +114,10 @@ public class mainFrame extends javax.swing.JFrame{
             CreateSubtaskActionPerformed(e);
         });
         CompleteButton.addActionListener((ActionEvent e) -> {
-            MarkCompleteActionPerformed(e);
+            MarkSubtaskCompleteActionPerformed(e);
         });
         MarkStarted.addActionListener((ActionEvent e) ->{
-            MarkStartedActionPerformed(e);
+            MarkSubtaskStartedActionPerformed(e);
         });
         
         int selected = TaskSelection.getSelectedIndex();
@@ -155,7 +158,7 @@ public class mainFrame extends javax.swing.JFrame{
         
         
         //action/mouse listeners
-        TableTop.addMouseListener(JTBML);
+        TableTop.addMouseListener(new JTableButtonMouseListener(TableTop));
         //show table
         TableTop.repaint();
         //</editor-fold>
@@ -165,7 +168,7 @@ public class mainFrame extends javax.swing.JFrame{
                 ,"Assigned To","Assigned By","Mark Started","Mark Complete"};
         DefaultTableModel two = new DefaultTableModel(new Object[0][0],subtaskHeader){
         @Override
-            public boolean isCellEditable(int r, int c){
+            public boolean isCellEditable(int r, int c){ //fix for role specific data manipulation
                 if(c == 6 || c == 7){
                     return(false);
                 }
@@ -174,9 +177,9 @@ public class mainFrame extends javax.swing.JFrame{
                 }
             }
         };
-        for(Subtask a : openTasks.get(TaskSelection.getSelectedIndex()).getSubtasks()){
+        openTasks.get(TaskSelection.getSelectedIndex()).getSubtasks().forEach(a -> {
             two.addRow(getSubArray(a));
-        }
+        });
         SubtaskTable.setModel(two);
         SubtaskTable.setBackground(new Color(100,200,200)); //fix for other colors
         SubtaskTable.getColumn("Mark Started").setCellRenderer(new JTableButtonRender());
@@ -189,7 +192,7 @@ public class mainFrame extends javax.swing.JFrame{
     }
     private Object[] getSubArray(Subtask s){
         JButton mkSt = new JButton("Mark Started");
-        JButton mkD = new JButton("Mark Started");
+        JButton mkD = new JButton("Mark Complete");
         mkSt.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         mkD.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         mkSt.addActionListener((ActionEvent e)->{
@@ -410,34 +413,24 @@ public class mainFrame extends javax.swing.JFrame{
         SubtaskCreation sc = new SubtaskCreation(this, true);
         sc.setVisible(true);
         sc.requestFocus();
-        sc.pack();
-        sc.repaint();
+        //sc.pack();
+        //sc.repaint();
     }
     
     private void MarkCompleteActionPerformed(ActionEvent e){ 
-        if(((JButton)e.getSource()).equals(TableTop.getValueAt(0, 8))){
-            openTasks.get(TaskSelection.getSelectedIndex()).setStatus(Status.COMPLETE);
-        }
-        else{
-            for(int x = 0; x< SubtaskTable.getRowCount(); x++){
-                if(((JButton)e.getSource()).equals(SubtaskTable.getValueAt(x, 7))){
-                    openTasks.get(TaskSelection.getSelectedIndex()).getTask(x).setStatus(Status.COMPLETE);
-                }
+        for(int x = 0; x< TableTop.getRowCount(); x++){
+            if(((JButton)e.getSource()).equals(TableTop.getValueAt(x, 8))){
+                openTasks.get(TaskSelection.getSelectedIndex()).setStatus(Status.COMPLETE);
             }
-        }
+        }        
         setTableTop();
     }
     private void MarkStartedActionPerformed(ActionEvent e) {
-    if(((JButton)e.getSource()).equals(TableTop.getValueAt(0, 8))){
-            openTasks.get(TaskSelection.getSelectedIndex()).setStatus(Status.IN_PROGRESS);
-        }
-        else{
-            for(int x = 0; x< SubtaskTable.getRowCount(); x++){
-                if(((JButton)e.getSource()).equals(SubtaskTable.getValueAt(x, 7))){
-                    openTasks.get(TaskSelection.getSelectedIndex()).getTask(x).setStatus(Status.IN_PROGRESS);
-                }
+        for(int x = 0; x< TableTop.getRowCount(); x++){
+            if(((JButton)e.getSource()).equals(TableTop.getValueAt(x, 7))){
+                openTasks.get(TaskSelection.getSelectedIndex()).setStatus(Status.IN_PROGRESS);
             }
-        }
+        }        
         setTableTop();
     }
     
@@ -498,4 +491,12 @@ public class mainFrame extends javax.swing.JFrame{
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     // End of variables declaration//GEN-END:variables
+
+    private void MarkSubtaskCompleteActionPerformed(ActionEvent e) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    private void MarkSubtaskStartedActionPerformed(ActionEvent e) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 }

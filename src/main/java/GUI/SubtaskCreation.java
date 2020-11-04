@@ -5,10 +5,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.WindowEvent;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.table.DefaultTableModel;
 import peoplePack.Person;
 import peoplePack.Role;
@@ -221,7 +219,8 @@ public class SubtaskCreation extends javax.swing.JDialog{
     private void CreateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CreateButtonActionPerformed
         Subtask t = this.getCreatedSubtask();
         if(t!=null){
-            ((DefaultTableModel) p.SubtaskTable.getModel()).addRow(toRow(t)); //fix window re-opening
+            //((DefaultTableModel) p.SubtaskTable.getModel()).addRow(toRow(t)); //fix window re-opening
+            p.openTasks.get(p.TaskSelection.getSelectedIndex()).addSubtask(t);
         }
         this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
         p.setTableTop();
@@ -229,7 +228,7 @@ public class SubtaskCreation extends javax.swing.JDialog{
 
     private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
         this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
-        this.dispose();
+        //this.dispose();
     }//GEN-LAST:event_cancelButtonActionPerformed
     
     private String[] getUsers(){ //members can assign tasks to themsevles, team leads to themselves and  members, managers to anyone
@@ -340,40 +339,30 @@ public class SubtaskCreation extends javax.swing.JDialog{
         JButton marSt = new JButton("Mark Started");
         MarkComplete.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         marSt.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        MarkComplete.addActionListener((ActionEvent evt) ->{ //ToDo: implement
+        MarkComplete.addActionListener((ActionEvent evt) ->{
             MarkCompleteActionPerformed(evt);
         });
-        marSt.addActionListener((ActionEvent evt) ->{ //ToDo: implement
+        marSt.addActionListener((ActionEvent evt) ->{
             MarkStartedActionPerformed(evt);
         });
         Object[] r = {s.getName(),s.getStatus().toString(), s.getCategory().toString()
         , s.getDueDate().toString(), s.assignment().getName(), s.creator().getName(),marSt , MarkComplete};
         return(r);
     }
-    private void MarkCompleteActionPerformed(ActionEvent e){ //copy
-        if(((JButton)e.getSource()).equals(p.TableTop.getValueAt(0, 8))){
-            p.openTasks.get(p.TaskSelection.getSelectedIndex()).setStatus(Status.COMPLETE);
-        }
-        else{
-            for(int x = 0; x< p.SubtaskTable.getRowCount(); x++){
-                if(((JButton)e.getSource()).equals(p.SubtaskTable.getValueAt(x, 7))){
-                    p.openTasks.get(p.TaskSelection.getSelectedIndex()).getTask(x).setStatus(Status.COMPLETE);
-                }
+    private void MarkCompleteActionPerformed(ActionEvent e){
+        for(int x = 0; x < p.SubtaskTable.getRowCount(); x++){
+            if(((JButton)e.getSource()).equals(p.SubtaskTable.getValueAt(x, 7))){
+                p.openTasks.get(p.TaskSelection.getSelectedIndex()).getTask(x).setStatus(Status.COMPLETE);
             }
-        }
+        }        
         p.setTableTop();
     }
     private void MarkStartedActionPerformed(ActionEvent e){
-        if(((JButton)e.getSource()).equals(p.TableTop.getValueAt(0, 8))){
-            p.openTasks.get(p.TaskSelection.getSelectedIndex()).setStatus(Status.IN_PROGRESS);
-        }
-        else{
-            for(int x = 0; x< p.SubtaskTable.getRowCount(); x++){
-                if(((JButton)e.getSource()).equals(p.SubtaskTable.getValueAt(x, 7))){
-                    p.openTasks.get(p.TaskSelection.getSelectedIndex()).getTask(x).setStatus(Status.IN_PROGRESS);
-                }
+        for(int x = 0; x < p.SubtaskTable.getRowCount(); x++){
+            if(((JButton)e.getSource()).equals(p.SubtaskTable.getValueAt(x, 6))){
+                p.openTasks.get(p.TaskSelection.getSelectedIndex()).getTask(x).setStatus(Status.IN_PROGRESS);
             }
-        }
+        }        
         p.setTableTop();
     }
     
