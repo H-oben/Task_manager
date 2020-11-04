@@ -433,6 +433,22 @@ public class mainFrame extends javax.swing.JFrame{
         }        
         setTableTop();
     }
+    private void MarkSubtaskCompleteActionPerformed(ActionEvent e) {
+        for(int x = 0; x< SubtaskTable.getRowCount(); x++){
+            if(((JButton)e.getSource()).equals(SubtaskTable.getValueAt(x, 7))){
+                openTasks.get(TaskSelection.getSelectedIndex()).getTask(x).setStatus(Status.COMPLETE);
+            }
+        }        
+        setTableTop();
+    }
+    private void MarkSubtaskStartedActionPerformed(ActionEvent e) {
+        for(int x = 0; x< SubtaskTable.getRowCount(); x++){
+            if(((JButton)e.getSource()).equals(SubtaskTable.getValueAt(x, 6))){
+                openTasks.get(TaskSelection.getSelectedIndex()).getTask(x).setStatus(Status.IN_PROGRESS);
+            }
+        }        
+        setTableTop();
+    }
     
     private void ExitButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ExitButtonActionPerformed
         this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
@@ -492,11 +508,5 @@ public class mainFrame extends javax.swing.JFrame{
     private javax.swing.JScrollPane jScrollPane2;
     // End of variables declaration//GEN-END:variables
 
-    private void MarkSubtaskCompleteActionPerformed(ActionEvent e) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
 
-    private void MarkSubtaskStartedActionPerformed(ActionEvent e) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
 }
