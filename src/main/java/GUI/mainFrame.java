@@ -12,7 +12,7 @@ import peoplePack.*;
 import taskPackage.*;
 
 /**TODO:
- * sorted tasks
+ * add color column to implement different colors in subtask table
  * movement of complete tasks to closedTasks and out of openTasks
  * implement changing of data other than status
  * have description change to subtask description when selected
@@ -24,6 +24,7 @@ import taskPackage.*;
  * If I have time:
  *  - fix subtasks so they can have subtasks as well
  *  - implement web layout
+ *  - sorted tasks
  */
 
 /**
@@ -114,10 +115,10 @@ public class mainFrame extends javax.swing.JFrame{
             CreateSubtaskActionPerformed(e);
         });
         CompleteButton.addActionListener((ActionEvent e) -> {
-            MarkSubtaskCompleteActionPerformed(e);
+            MarkCompleteActionPerformed(e);
         });
         MarkStarted.addActionListener((ActionEvent e) ->{
-            MarkSubtaskStartedActionPerformed(e);
+            MarkStartedActionPerformed(e);
         });
         
         int selected = TaskSelection.getSelectedIndex();
@@ -155,7 +156,7 @@ public class mainFrame extends javax.swing.JFrame{
         TableTop.getColumn("Mark Complete").setCellRenderer(new JTableButtonRender());
         
         TableTop.setBackground(t.getColor());
-        
+
         
         //action/mouse listeners
         TableTop.addMouseListener(new JTableButtonMouseListener(TableTop));
@@ -196,13 +197,13 @@ public class mainFrame extends javax.swing.JFrame{
         mkSt.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         mkD.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         mkSt.addActionListener((ActionEvent e)->{
-            MarkStartedActionPerformed(e);
+            MarkSubtaskStartedActionPerformed(e);
         });
         mkD.addActionListener((ActionEvent e)->{
-            MarkCompleteActionPerformed(e);
+            MarkSubtaskCompleteActionPerformed(e);
         });
         Object[] a = {s.getName(),s.getStatus().toString(), s.getCategory().toString(), s.getDueDate().toString(),
-            s.assignment().toString(), s.creator().getName(),mkSt,mkD}; 
+            s.assignment().getName(), s.creator().getName(),mkSt,mkD}; 
         return(a);
     }
     @SuppressWarnings("unchecked")
