@@ -144,9 +144,33 @@ public class mainFrame extends javax.swing.JFrame{
                 if(c == 6 || c == 7 || c == 8){ //prevents error caused by editing buttons
                     return(false);
                 }
-                else{
-                    return(true);
+                //<editor-fold desc="data editing control">
+                if(!openTasks.get(selected).creator().equals(CurrentUser)){ 
+                    return(false);
                 }
+                if(CurrentUser.equals(openTasks.get(selected).assignment())){
+                    if(CurrentUser.getRole()==Role.MEMBER){
+                        return(false);
+                    }
+                    else if(CurrentUser.getRole()==Role.TEAMLEAD){
+                        if(c == 2){
+                            return(true);
+                        }
+                        else{
+                            return(false);
+                        }
+                    }
+                    else{
+                        if(c == 2 || c == 3){
+                            return(true);
+                        }
+                        else{
+                            return(false);
+                        }
+                    }
+                }
+                //</editor-fold>
+                return(false);
             }
         };
         TableTop.setModel(table);
