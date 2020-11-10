@@ -149,6 +149,11 @@ public class mainFrame extends javax.swing.JFrame{
                     return(false);
                 }
                 if(CurrentUser.equals(openTasks.get(selected).assignment())){
+                    if(c!=1 && c<=3){
+                        return(true);
+                    }
+                }
+                else{
                     if(CurrentUser.getRole()==Role.MEMBER){
                         return(false);
                     }
@@ -197,9 +202,38 @@ public class mainFrame extends javax.swing.JFrame{
                 if(c == 6 || c == 7){
                     return(false);
                 }
-                else{
-                    return(true);
+                //<editor-fold desc="data editing control">
+                if(!openTasks.get(selected).creator().equals(CurrentUser)){ 
+                    return(false);
                 }
+                if(CurrentUser.equals(openTasks.get(selected).assignment())){
+                    if(c<=3 && c!=1){
+                        return(true);
+                    }
+                }
+                else{
+                    if(CurrentUser.getRole()==Role.MEMBER){
+                        return(false);
+                    }
+                    else if(CurrentUser.getRole()==Role.TEAMLEAD){
+                        if(c == 2){
+                            return(true);
+                        }
+                        else{
+                            return(false);
+                        }
+                    }
+                    else{
+                        if(c <= 3 && c != 1){
+                            return(true);
+                        }
+                        else{
+                            return(false);
+                        }
+                    }
+                }
+                //</editor-fold>
+                return(false);
             }
         };
         openTasks.get(TaskSelection.getSelectedIndex()).getSubtasks().forEach(a -> {
