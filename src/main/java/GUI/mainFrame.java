@@ -11,7 +11,7 @@ import javax.swing.table.DefaultTableModel;
 import peoplePack.*;
 import taskPackage.*;
 
-/**<p>
+/**
  * TODO:
  * add color column to implement different colors in subtask table
  * movement of complete tasks to closedTasks and out of openTasks
@@ -26,7 +26,6 @@ import taskPackage.*;
  *  - fix subtasks so they can have subtasks as well
  *  - implement web layout
  *  - sorted tasks
- * </p>
  */
 
 /**

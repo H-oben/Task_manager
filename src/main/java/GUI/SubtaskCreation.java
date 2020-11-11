@@ -7,7 +7,6 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
-import javax.swing.table.DefaultTableModel;
 import peoplePack.Person;
 import peoplePack.Role;
 import taskPackage.*;
@@ -18,7 +17,7 @@ import taskPackage.*;
 public class SubtaskCreation extends javax.swing.JDialog{
     private final mainFrame p = (mainFrame)this.getParent();
     private final DefaultComboBoxModel model = new DefaultComboBoxModel(getUsers());
-    private final Task head = p.openTasks.get(p.TaskSelection.getSelectedIndex());
+    private final Task head = p.visibleTasks.get(p.TaskSelection.getSelectedIndex());
     
     /**
      * Creates new form TaskCreation
@@ -219,7 +218,7 @@ public class SubtaskCreation extends javax.swing.JDialog{
     private void CreateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CreateButtonActionPerformed
         Subtask t = this.getCreatedSubtask();
         if(t!=null){
-            p.openTasks.get(p.TaskSelection.getSelectedIndex()).addSubtask(t);
+            p.visibleTasks.get(p.TaskSelection.getSelectedIndex()).addSubtask(t);
         }
         this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
         p.setTableTop();
@@ -263,10 +262,6 @@ public class SubtaskCreation extends javax.swing.JDialog{
             java.util.logging.Logger.getLogger(SubtaskCreation.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
-        //</editor-fold>
-        
-        //</editor-fold>
-
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(() -> {
             SubtaskCreation dialog = new SubtaskCreation(new javax.swing.JFrame(), true);
@@ -279,6 +274,7 @@ public class SubtaskCreation extends javax.swing.JDialog{
             dialog.setVisible(true);
         });
     }
+    
     private Subtask getCreatedSubtask(){
         Color c = ColorPick.getColor();
         String d = DescEntry.getText();
