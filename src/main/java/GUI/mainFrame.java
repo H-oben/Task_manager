@@ -45,7 +45,9 @@ public class mainFrame extends javax.swing.JFrame{
     public ArrayList<Person> users = new ArrayList<>();
     public ArrayList<Task> openTasks = new ArrayList<>();
     public ArrayList<Task> closedTasks = new ArrayList<>();
+    
     public ArrayList<Task> visibleTasks = new ArrayList<>();
+    public ArrayList<Person> assignablePeople = new ArrayList<>();
     
     private DefaultComboBoxModel m;
     private DefaultTableModel table;
@@ -72,6 +74,17 @@ public class mainFrame extends javax.swing.JFrame{
         //login comes up before main menu
         loginCreationMenu l = new loginCreationMenu(this, true);
         l.setVisible(true);
+        
+        //set assignablePeople
+        if(CurrentUser.getRole()==Role.MANAGER){
+            assignablePeople=users;
+        }
+        else if(CurrentUser.getRole()==Role.TEAMLEAD){
+            assignablePeople =((Manager)CurrentUser).getTeamMembers();
+        }
+        else{
+            assignablePeople.add(CurrentUser);
+        }
         
         //set the table
         setTaskOptions();

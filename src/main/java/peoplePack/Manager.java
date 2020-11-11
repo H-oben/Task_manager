@@ -26,7 +26,7 @@ public class Manager implements Person{
     private String lname;
     private Role role;
     private char[] pass;
-    private ArrayList<member> members;
+    private ArrayList<Person> members;
     
     public Manager(){
         fname = "empty";
@@ -59,11 +59,11 @@ public class Manager implements Person{
         members = new ArrayList<>();
     }
     
-    public ArrayList<member> getTeamMembers(){
+    public ArrayList<Person> getTeamMembers(){
         return (members);
     }
     public boolean addTeamMember(member a){
-        if(members.contains(a)){
+        if(members.contains(a)|| a.getRole()!=Role.MEMBER){
             return(false);
         }
         else{
@@ -72,7 +72,7 @@ public class Manager implements Person{
         }
     }
     public boolean findTeamMember(Person a){
-        for(member x:members){
+        for(Person x:members){
             if(x.equals(a)){
                 return(true);
             }
