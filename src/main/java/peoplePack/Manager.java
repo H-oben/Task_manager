@@ -71,6 +71,14 @@ public class Manager implements Person{
             return(true);
         }
     }
+    public boolean findTeamMember(Person a){
+        for(member x:members){
+            if(x.equals(a)){
+                return(true);
+            }
+        }
+        return(false);
+    }
     @Override
     public boolean testPassword(char[] a){
         if(a.length!= pass.length){

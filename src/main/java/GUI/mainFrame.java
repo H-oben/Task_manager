@@ -44,6 +44,7 @@ public class mainFrame extends javax.swing.JFrame{
     public ArrayList<Person> users = new ArrayList<>();
     public ArrayList<Task> openTasks = new ArrayList<>();
     public ArrayList<Task> closedTasks = new ArrayList<>();
+    public ArrayList<Task> visibleTasks = new ArrayList<>();
     
     private DefaultComboBoxModel m;
     private DefaultTableModel table;
@@ -86,14 +87,37 @@ public class mainFrame extends javax.swing.JFrame{
         return today;
     }
     //updates open tasks drop down options
-    public final void setTaskOptions(){
+    public final ArrayList<Task> setTaskOptions(){
         String[] mode;
         mode = new String[openTasks.size()];
-        for(int x = 0; x<mode.length; x++){
-            mode[x] = openTasks.get(x).getName();
+        if(CurrentUser!=null){
+            if(CurrentUser.getRole()==Role.MANAGER){ //manager can see all tasks
+                for(int x = 0; x<mode.length; x++){
+                    mode[x] = openTasks.get(x).getName();
+                }
+                visibleTasks=openTasks; //other functions will operate on visibletasks
+            }
+            else if(CurrentUser.getRole()==Role.TEAMLEAD){ //teamlead can see their tasks and tasks of their team
+                for(int x = 0; x<mode.length; x++){
+                    if(openTasks.get(x).assignment().equals(CurrentUser) ||
+                            ((Manager)CurrentUser).findTeamMember(openTasks.get(x).assignment()))
+                        mode[x] = openTasks.get(x).getName();
+                        visibleTasks.add(openTasks.get(x));
+                }
+            }
+            else{
+                
+                for(int x = 0; x<mode.length; x++){
+                    if(openTasks.get(x).assignment().equals(CurrentUser)){
+                        mode[x] = openTasks.get(x).getName();
+                        visibleTasks.add(openTasks.get(x));
+                    }
+                }
+            }
         }
         m = new DefaultComboBoxModel(mode);
         TaskSelection.setModel(m);
+        return(visibleTasks);
     }
     //updates table view with open task drop down selection
     public final void setTableTop(){
@@ -249,6 +273,7 @@ public class mainFrame extends javax.swing.JFrame{
     //</editor-fold>
     this.repaint();
     }
+    
     private Object[] getSubArray(Subtask s){
         JButton mkSt = new JButton("Mark Started");
         JButton mkD = new JButton("Mark Complete");
@@ -264,6 +289,7 @@ public class mainFrame extends javax.swing.JFrame{
             s.assignment().getName(), s.creator().getName(),mkSt,mkD}; 
         return(a);
     }
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
