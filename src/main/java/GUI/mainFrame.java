@@ -11,7 +11,8 @@ import javax.swing.table.DefaultTableModel;
 import peoplePack.*;
 import taskPackage.*;
 
-/**TODO:
+/**<p>
+ * TODO:
  * add color column to implement different colors in subtask table
  * movement of complete tasks to closedTasks and out of openTasks
  * implement changing of data other than status
@@ -25,6 +26,7 @@ import taskPackage.*;
  *  - fix subtasks so they can have subtasks as well
  *  - implement web layout
  *  - sorted tasks
+ * </p>
  */
 
 /**
@@ -146,9 +148,9 @@ public class mainFrame extends javax.swing.JFrame{
         });
         
         int selected = TaskSelection.getSelectedIndex();
-        Task t = openTasks.get(selected);
+        Task t = visibleTasks.get(selected);
         if(selected>=0){
-            if(selected < openTasks.size() && openTasks.get(selected)!=null){ //create table model
+            if(selected < visibleTasks.size() && visibleTasks.get(selected)!=null){ //create table model
                 taskData[0][0] = t.getName();
                 taskData[0][1] = t.getStatus().toString();
                 taskData[0][2] = t.getCategory().toString();
@@ -169,10 +171,10 @@ public class mainFrame extends javax.swing.JFrame{
                     return(false);
                 }
                 //<editor-fold desc="data editing control">
-                if(!openTasks.get(selected).creator().equals(CurrentUser)){ 
+                if(!visibleTasks.get(selected).creator().equals(CurrentUser)){ 
                     return(false);
                 }
-                if(CurrentUser.equals(openTasks.get(selected).assignment())){
+                if(visibleTasks.equals(openTasks.get(selected).assignment())){
                     if(c!=1 && c<=3){
                         return(true);
                     }
@@ -227,10 +229,10 @@ public class mainFrame extends javax.swing.JFrame{
                     return(false);
                 }
                 //<editor-fold desc="data editing control">
-                if(!openTasks.get(selected).creator().equals(CurrentUser)){ 
+                if(!visibleTasks.get(selected).creator().equals(CurrentUser)){ 
                     return(false);
                 }
-                if(CurrentUser.equals(openTasks.get(selected).assignment())){
+                if(CurrentUser.equals(visibleTasks.get(selected).assignment())){
                     if(c<=3 && c!=1){
                         return(true);
                     }
@@ -260,7 +262,7 @@ public class mainFrame extends javax.swing.JFrame{
                 return(false);
             }
         };
-        openTasks.get(TaskSelection.getSelectedIndex()).getSubtasks().forEach(a -> {
+        visibleTasks.get(TaskSelection.getSelectedIndex()).getSubtasks().forEach(a -> {
             two.addRow(getSubArray(a));
         });
         SubtaskTable.setModel(two);
@@ -505,7 +507,7 @@ public class mainFrame extends javax.swing.JFrame{
     private void MarkCompleteActionPerformed(ActionEvent e){ 
         for(int x = 0; x< TableTop.getRowCount(); x++){
             if(((JButton)e.getSource()).equals(TableTop.getValueAt(x, 8))){
-                openTasks.get(TaskSelection.getSelectedIndex()).setStatus(Status.COMPLETE);
+                visibleTasks.get(TaskSelection.getSelectedIndex()).setStatus(Status.COMPLETE);
             }
         }        
         setTableTop();
@@ -513,7 +515,7 @@ public class mainFrame extends javax.swing.JFrame{
     private void MarkStartedActionPerformed(ActionEvent e) {
         for(int x = 0; x< TableTop.getRowCount(); x++){
             if(((JButton)e.getSource()).equals(TableTop.getValueAt(x, 7))){
-                openTasks.get(TaskSelection.getSelectedIndex()).setStatus(Status.IN_PROGRESS);
+                visibleTasks.get(TaskSelection.getSelectedIndex()).setStatus(Status.IN_PROGRESS);
             }
         }        
         setTableTop();
@@ -521,7 +523,7 @@ public class mainFrame extends javax.swing.JFrame{
     private void MarkSubtaskCompleteActionPerformed(ActionEvent e) {
         for(int x = 0; x< SubtaskTable.getRowCount(); x++){
             if(((JButton)e.getSource()).equals(SubtaskTable.getValueAt(x, 7))){
-                openTasks.get(TaskSelection.getSelectedIndex()).getTask(x).setStatus(Status.COMPLETE);
+                visibleTasks.get(TaskSelection.getSelectedIndex()).getTask(x).setStatus(Status.COMPLETE);
             }
         }        
         setTableTop();
@@ -529,7 +531,7 @@ public class mainFrame extends javax.swing.JFrame{
     private void MarkSubtaskStartedActionPerformed(ActionEvent e) {
         for(int x = 0; x< SubtaskTable.getRowCount(); x++){
             if(((JButton)e.getSource()).equals(SubtaskTable.getValueAt(x, 6))){
-                openTasks.get(TaskSelection.getSelectedIndex()).getTask(x).setStatus(Status.IN_PROGRESS);
+                visibleTasks.get(TaskSelection.getSelectedIndex()).getTask(x).setStatus(Status.IN_PROGRESS);
             }
         }        
         setTableTop();
