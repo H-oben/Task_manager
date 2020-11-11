@@ -17,6 +17,7 @@ import taskPackage.*;
  * movement of complete tasks to closedTasks and out of openTasks
  * implement changing of data other than status
  * have description change to subtask description when selected
+ * use more efficient data structures
  * ***change table view from JTable to pseudo table layout, JTable is annoying to work with
  * Control logic for task assignment: 
  *  - don't let members assign tasks to others
