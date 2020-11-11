@@ -7,6 +7,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
+import peoplePack.Manager;
 import peoplePack.Person;
 import peoplePack.Role;
 import taskPackage.*;
@@ -235,7 +236,12 @@ public class SubtaskCreation extends javax.swing.JDialog{
             return(new String[] {p.CurrentUser.getName()});
         }
         else if(p.CurrentUser.getRole() == Role.TEAMLEAD){
-            
+            String[] team = new String[((Manager)p.CurrentUser).getTeamMembers().size()+1];
+            team[0] = p.CurrentUser.getName();
+            for(int x = 0 ; x < ((Manager)p.CurrentUser).getTeamMembers().size(); x++){
+                team[x+1] = ((Manager)p.CurrentUser).getTeamMembers().get(x).getName();
+            }
+            return(team);
         }    
         String[] users = new String[p.users.size()];
         for(int x = 0; x< users.length; x++){

@@ -218,13 +218,14 @@ public class TaskCreation extends javax.swing.JDialog{
         this.dispose();
     }//GEN-LAST:event_cancelButtonActionPerformed
     
-    private String[] getUsers(){
+    private String[] getUsers(){ // add user assignment logic
         String[] users= new String[p.users.size()];
         for(int x = 0; x< users.length; x++){
             users[x] = p.users.get(x).getName();
         }
         return(users);
     }
+    
     /**
      * @param args the command line arguments
      */
@@ -260,6 +261,8 @@ public class TaskCreation extends javax.swing.JDialog{
             dialog.setVisible(true);
         });
     }
+    
+//task creation logic
     private Task getCreatedTask(){
         ErrorLabel.setVisible(false);
         Color c = ColorPick.getColor();
@@ -303,6 +306,7 @@ public class TaskCreation extends javax.swing.JDialog{
             return(new Task(n,d,cat,c,due,assigned,p.CurrentUser));
         }
     }
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel AssignLabel;
     private javax.swing.JTextField CataEntry;

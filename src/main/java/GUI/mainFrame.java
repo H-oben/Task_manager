@@ -103,32 +103,28 @@ public class mainFrame extends javax.swing.JFrame{
     }
     //updates open tasks drop down options
     public final ArrayList<Task> setTaskOptions(){
-        String[] mode;
-        mode = new String[openTasks.size()];
         if(CurrentUser!=null){
             if(CurrentUser.getRole()==Role.MANAGER){ //manager can see all tasks
-                for(int x = 0; x<mode.length; x++){
-                    mode[x] = openTasks.get(x).getName();
-                }
                 visibleTasks=openTasks; //other functions will operate on visibletasks
             }
             else if(CurrentUser.getRole()==Role.TEAMLEAD){ //teamlead can see their tasks and tasks of their team
-                for(int x = 0; x<mode.length; x++){
+                for(int x = 0; x<openTasks.size(); x++){
                     if(openTasks.get(x).assignment().equals(CurrentUser) ||
                             ((Manager)CurrentUser).findTeamMember(openTasks.get(x).assignment()))
-                        mode[x] = openTasks.get(x).getName();
                         visibleTasks.add(openTasks.get(x));
                 }
             }
             else{
-                
-                for(int x = 0; x<mode.length; x++){
+                for(int x = 0; x<openTasks.size(); x++){
                     if(openTasks.get(x).assignment().equals(CurrentUser)){
-                        mode[x] = openTasks.get(x).getName();
                         visibleTasks.add(openTasks.get(x));
                     }
                 }
             }
+        }
+        String[] mode = new String[visibleTasks.size()];
+        for(int x = 0; x < visibleTasks.size(); x++){
+            mode[x] = visibleTasks.get(x).getName();
         }
         m = new DefaultComboBoxModel(mode);
         TaskSelection.setModel(m);
