@@ -5,12 +5,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.WindowEvent;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.table.DefaultTableModel;
+import peoplePack.Manager;
 import peoplePack.Person;
+import peoplePack.Role;
 import taskPackage.*;
 
 /**
@@ -19,7 +18,7 @@ import taskPackage.*;
 public class SubtaskCreation extends javax.swing.JDialog{
     private final mainFrame p = (mainFrame)this.getParent();
     private final DefaultComboBoxModel model = new DefaultComboBoxModel(getUsers());
-    private final Task head= p.openTasks.get(p.TaskSelection.getSelectedIndex());
+    private final Task head = p.visibleTasks.get(p.TaskSelection.getSelectedIndex());
     
     /**
      * Creates new form TaskCreation
@@ -32,7 +31,7 @@ public class SubtaskCreation extends javax.swing.JDialog{
         ErrorLabel.setVisible(false);
         UserAssign.setModel(model);
     }
-
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -220,19 +219,31 @@ public class SubtaskCreation extends javax.swing.JDialog{
     private void CreateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CreateButtonActionPerformed
         Subtask t = this.getCreatedSubtask();
         if(t!=null){
-            ((DefaultTableModel) p.SubtaskTable.getModel()).addRow(toRow(t)); //fix window re-opening
+            p.visibleTasks.get(p.TaskSelection.getSelectedIndex()).addSubtask(t);
         }
-        p.SubtaskTable.repaint();
         this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
+        p.setTableTop();
+        p.setTaskOptions();
     }//GEN-LAST:event_CreateButtonActionPerformed
 
     private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
         this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
-        this.dispose();
+        //this.dispose();
     }//GEN-LAST:event_cancelButtonActionPerformed
     
-    private String[] getUsers(){
-        String[] users= new String[p.users.size()];
+    private String[] getUsers(){ //members can assign tasks to themsevles, team leads to themselves and  members, managers to anyone
+        if (p.CurrentUser.getRole()== Role.MEMBER){
+            return(new String[] {p.CurrentUser.getName()});
+        }
+        else if(p.CurrentUser.getRole() == Role.TEAMLEAD){
+            String[] team = new String[((Manager)p.CurrentUser).getTeamMembers().size()+1];
+            team[0] = p.CurrentUser.getName();
+            for(int x = 0 ; x < ((Manager)p.CurrentUser).getTeamMembers().size(); x++){
+                team[x+1] = ((Manager)p.CurrentUser).getTeamMembers().get(x).getName();
+            }
+            return(team);
+        }    
+        String[] users = new String[p.users.size()];
         for(int x = 0; x< users.length; x++){
             users[x] = p.users.get(x).getName();
         }
@@ -258,10 +269,6 @@ public class SubtaskCreation extends javax.swing.JDialog{
             java.util.logging.Logger.getLogger(SubtaskCreation.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
-        //</editor-fold>
-        
-        //</editor-fold>
-
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(() -> {
             SubtaskCreation dialog = new SubtaskCreation(new javax.swing.JFrame(), true);
@@ -274,6 +281,7 @@ public class SubtaskCreation extends javax.swing.JDialog{
             dialog.setVisible(true);
         });
     }
+    
     private Subtask getCreatedSubtask(){
         Color c = ColorPick.getColor();
         String d = DescEntry.getText();
@@ -333,40 +341,30 @@ public class SubtaskCreation extends javax.swing.JDialog{
         JButton marSt = new JButton("Mark Started");
         MarkComplete.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         marSt.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        MarkComplete.addActionListener((ActionEvent evt) ->{ //ToDo: implement
+        MarkComplete.addActionListener((ActionEvent evt) ->{
             MarkCompleteActionPerformed(evt);
         });
-        marSt.addActionListener((ActionEvent evt) ->{ //ToDo: implement
+        marSt.addActionListener((ActionEvent evt) ->{
             MarkStartedActionPerformed(evt);
         });
         Object[] r = {s.getName(),s.getStatus().toString(), s.getCategory().toString()
         , s.getDueDate().toString(), s.assignment().getName(), s.creator().getName(),marSt , MarkComplete};
         return(r);
     }
-    private void MarkCompleteActionPerformed(ActionEvent e){ //copy
-        if(((JButton)e.getSource()).equals(p.TableTop.getValueAt(0, 8))){
-            p.openTasks.get(p.TaskSelection.getSelectedIndex()).setStatus(Status.COMPLETE);
-        }
-        else{
-            for(int x = 0; x< p.SubtaskTable.getRowCount(); x++){
-                if(((JButton)e.getSource()).equals(p.SubtaskTable.getValueAt(x, 7))){
-                    p.openTasks.get(p.TaskSelection.getSelectedIndex()).getTask(x).setStatus(Status.COMPLETE);
-                }
+    private void MarkCompleteActionPerformed(ActionEvent e){
+        for(int x = 0; x < p.SubtaskTable.getRowCount(); x++){
+            if(((JButton)e.getSource()).equals(p.SubtaskTable.getValueAt(x, 7))){
+                p.openTasks.get(p.TaskSelection.getSelectedIndex()).getTask(x).setStatus(Status.COMPLETE);
             }
-        }
+        }        
         p.setTableTop();
     }
     private void MarkStartedActionPerformed(ActionEvent e){
-        if(((JButton)e.getSource()).equals(p.TableTop.getValueAt(0, 8))){
-            p.openTasks.get(p.TaskSelection.getSelectedIndex()).setStatus(Status.IN_PROGRESS);
-        }
-        else{
-            for(int x = 0; x< p.SubtaskTable.getRowCount(); x++){
-                if(((JButton)e.getSource()).equals(p.SubtaskTable.getValueAt(x, 7))){
-                    p.openTasks.get(p.TaskSelection.getSelectedIndex()).getTask(x).setStatus(Status.IN_PROGRESS);
-                }
+        for(int x = 0; x < p.SubtaskTable.getRowCount(); x++){
+            if(((JButton)e.getSource()).equals(p.SubtaskTable.getValueAt(x, 6))){
+                p.openTasks.get(p.TaskSelection.getSelectedIndex()).getTask(x).setStatus(Status.IN_PROGRESS);
             }
-        }
+        }        
         p.setTableTop();
     }
     

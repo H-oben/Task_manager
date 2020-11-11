@@ -1,5 +1,6 @@
 package peoplePack;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Objects;
 
@@ -25,12 +26,14 @@ public class Manager implements Person{
     private String lname;
     private Role role;
     private char[] pass;
+    private ArrayList<Person> members;
     
     public Manager(){
         fname = "empty";
         lname = "empty";
         role= Role.MANAGER;
         pass = "password".toCharArray();
+        members=new ArrayList<>();
     }
     /**
      * @param F String first name of new member
@@ -53,8 +56,29 @@ public class Manager implements Person{
         else{
             pass = "password".toCharArray();
         }
+        members = new ArrayList<>();
     }
     
+    public ArrayList<Person> getTeamMembers(){
+        return (members);
+    }
+    public boolean addTeamMember(member a){
+        if(members.contains(a)|| a.getRole()!=Role.MEMBER){
+            return(false);
+        }
+        else{
+            members.add(a);
+            return(true);
+        }
+    }
+    public boolean findTeamMember(Person a){
+        for(Person x:members){
+            if(x.equals(a)){
+                return(true);
+            }
+        }
+        return(false);
+    }
     @Override
     public boolean testPassword(char[] a){
         if(a.length!= pass.length){

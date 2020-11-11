@@ -5,20 +5,19 @@ import java.awt.event.ActionEvent;
 import java.awt.event.WindowEvent;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Vector;
-import javax.swing.DefaultCellEditor;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.table.DefaultTableModel;
 import peoplePack.*;
 import taskPackage.*;
 
-/**TODO:
- * sorted tasks
+/**
+ * TODO:
+ * add color column to implement different colors in subtask table
  * movement of complete tasks to closedTasks and out of openTasks
- * implement web layout
  * implement changing of data other than status
+ * have description change to subtask description when selected
+ * use more efficient data structures
  * ***change table view from JTable to pseudo table layout, JTable is annoying to work with
  * Control logic for task assignment: 
  *  - don't let members assign tasks to others
@@ -26,6 +25,8 @@ import taskPackage.*;
  *  - other logic once fully functional
  * If I have time:
  *  - fix subtasks so they can have subtasks as well
+ *  - implement web layout
+ *  - sorted tasks
  */
 
 /**
@@ -46,10 +47,11 @@ public class mainFrame extends javax.swing.JFrame{
     public ArrayList<Task> openTasks = new ArrayList<>();
     public ArrayList<Task> closedTasks = new ArrayList<>();
     
+    public ArrayList<Task> visibleTasks = new ArrayList<>();
+    public ArrayList<Person> assignablePeople = new ArrayList<>();
+    
     private DefaultComboBoxModel m;
     private DefaultTableModel table;
-    
-    private final JTableButtonMouseListener JTBML;
     
     public mainFrame() {
         try{ //add default admin user
@@ -66,15 +68,33 @@ public class mainFrame extends javax.swing.JFrame{
         openTasks.get(0).addSubtask(new Subtask("sub","",new Categories(), new Color(100,100,100), LocalDate.MAX, admin, admin,openTasks.get(0)));
         initComponents();
         //Reminder: all custom populization of elements must occur AFTER initComponents()
-        JTBML = new JTableButtonMouseListener(TableTop);
-        TableTop.addMouseListener(JTBML);
+        
+        TableTop.addMouseListener(new JTableButtonMouseListener(TableTop));
+        SubtaskTable.addMouseListener(new JTableButtonMouseListener(SubtaskTable));
+        
         //login comes up before main menu
         loginCreationMenu l = new loginCreationMenu(this, true);
         l.setVisible(true);
         
+        //set assignablePeople
+        if(CurrentUser.getRole()==Role.MANAGER){
+            assignablePeople=users;
+        }
+        else if(CurrentUser.getRole()==Role.TEAMLEAD){
+            assignablePeople =((Manager)CurrentUser).getTeamMembers();
+        }
+        else{
+            assignablePeople.add(CurrentUser);
+        }
+        
         //set the table
         setTaskOptions();
         setTableTop();
+        //visibility of team lead specific button
+        if(CurrentUser.getRole()!=Role.TEAMLEAD){
+            addTeamMember.setVisible(false);
+            addTeamMember.setEnabled(false);
+        }
     }
     
     //custom methods
@@ -82,17 +102,41 @@ public class mainFrame extends javax.swing.JFrame{
         return today;
     }
     //updates open tasks drop down options
-    public final void setTaskOptions(){
-        String[] mode;
-        mode = new String[openTasks.size()];
-        for(int x = 0; x<mode.length; x++){
-            mode[x] = openTasks.get(x).getName();
+    public final ArrayList<Task> setTaskOptions(){
+        if(CurrentUser!=null){
+            if(CurrentUser.getRole()==Role.MANAGER){ //manager can see all tasks
+                visibleTasks=openTasks; //other functions will operate on visibletasks
+            }
+            else if(CurrentUser.getRole()==Role.TEAMLEAD){ //teamlead can see their tasks and tasks of their team
+                for(int x = 0; x<openTasks.size(); x++){
+                    if(openTasks.get(x).assignment().equals(CurrentUser) ||
+                            ((Manager)CurrentUser).findTeamMember(openTasks.get(x).assignment()))
+                        visibleTasks.add(openTasks.get(x));
+                }
+            }
+            else{
+                for(int x = 0; x<openTasks.size(); x++){
+                    if(openTasks.get(x).assignment().equals(CurrentUser)){
+                        visibleTasks.add(openTasks.get(x));
+                    }
+                }
+            }
+        }
+        String[] mode = new String[visibleTasks.size()];
+        for(int x = 0; x < visibleTasks.size(); x++){
+            mode[x] = visibleTasks.get(x).getName();
         }
         m = new DefaultComboBoxModel(mode);
         TaskSelection.setModel(m);
+        return(visibleTasks);
     }
     //updates table view with open task drop down selection
-    public final void setTableTop(){
+    public final boolean setTableTop(){
+        int selected = TaskSelection.getSelectedIndex();
+        if(selected<0){// skip everything if user has no tasks
+            return(false);
+        }
+        Task t = visibleTasks.get(selected);
         //<editor-fold defaultstate="collasped" desc="Set First Table">
         String[] columnNames = {"Name","Status","Catagory","Due Date"
                 ,"Assigned To","Assigned By","Create Subtask","Mark Started","Mark Complete"};
@@ -117,10 +161,9 @@ public class mainFrame extends javax.swing.JFrame{
             MarkStartedActionPerformed(e);
         });
         
-        int selected = TaskSelection.getSelectedIndex();
-        Task t = openTasks.get(selected);
+        
         if(selected>=0){
-            if(selected < openTasks.size() && openTasks.get(selected)!=null){ //create table model
+            if(selected < visibleTasks.size() && visibleTasks.get(selected)!=null){ //create table model
                 taskData[0][0] = t.getName();
                 taskData[0][1] = t.getStatus().toString();
                 taskData[0][2] = t.getCategory().toString();
@@ -140,9 +183,38 @@ public class mainFrame extends javax.swing.JFrame{
                 if(c == 6 || c == 7 || c == 8){ //prevents error caused by editing buttons
                     return(false);
                 }
-                else{
-                    return(true);
+                //<editor-fold desc="data editing control">
+                if(!visibleTasks.get(selected).creator().equals(CurrentUser)){ 
+                    return(false);
                 }
+                if(visibleTasks.equals(openTasks.get(selected).assignment())){
+                    if(c!=1 && c<=3){
+                        return(true);
+                    }
+                }
+                else{
+                    if(CurrentUser.getRole()==Role.MEMBER){
+                        return(false);
+                    }
+                    else if(CurrentUser.getRole()==Role.TEAMLEAD){
+                        if(c == 2){
+                            return(true);
+                        }
+                        else{
+                            return(false);
+                        }
+                    }
+                    else{
+                        if(c == 2 || c == 3){
+                            return(true);
+                        }
+                        else{
+                            return(false);
+                        }
+                    }
+                }
+                //</editor-fold>
+                return(false);
             }
         };
         TableTop.setModel(table);
@@ -152,10 +224,10 @@ public class mainFrame extends javax.swing.JFrame{
         TableTop.getColumn("Mark Complete").setCellRenderer(new JTableButtonRender());
         
         TableTop.setBackground(t.getColor());
-        
+
         
         //action/mouse listeners
-        TableTop.addMouseListener(JTBML);
+        TableTop.addMouseListener(new JTableButtonMouseListener(TableTop));
         //show table
         TableTop.repaint();
         //</editor-fold>
@@ -164,19 +236,48 @@ public class mainFrame extends javax.swing.JFrame{
         Object[] subtaskHeader = {"Name","Status","Catagory","Due Date"
                 ,"Assigned To","Assigned By","Mark Started","Mark Complete"};
         DefaultTableModel two = new DefaultTableModel(new Object[0][0],subtaskHeader){
-          @Override
-          public boolean isCellEditable(int r, int c){
-              if(c == 6 || c == 7){
-                  return(false);
-              }
-              else{
-                  return(true);
-              }
-          }
+        @Override
+            public boolean isCellEditable(int r, int c){ //fix for role specific data manipulation
+                if(c == 6 || c == 7){
+                    return(false);
+                }
+                //<editor-fold desc="data editing control">
+                if(!visibleTasks.get(selected).creator().equals(CurrentUser)){ 
+                    return(false);
+                }
+                if(CurrentUser.equals(visibleTasks.get(selected).assignment())){
+                    if(c<=3 && c!=1){
+                        return(true);
+                    }
+                }
+                else{
+                    if(CurrentUser.getRole()==Role.MEMBER){
+                        return(false);
+                    }
+                    else if(CurrentUser.getRole()==Role.TEAMLEAD){
+                        if(c == 2){
+                            return(true);
+                        }
+                        else{
+                            return(false);
+                        }
+                    }
+                    else{
+                        if(c <= 3 && c != 1){
+                            return(true);
+                        }
+                        else{
+                            return(false);
+                        }
+                    }
+                }
+                //</editor-fold>
+                return(false);
+            }
         };
-        for(Subtask a : openTasks.get(TaskSelection.getSelectedIndex()).getSubtasks()){
+        visibleTasks.get(TaskSelection.getSelectedIndex()).getSubtasks().forEach(a -> {
             two.addRow(getSubArray(a));
-        }
+        });
         SubtaskTable.setModel(two);
         SubtaskTable.setBackground(new Color(100,200,200)); //fix for other colors
         SubtaskTable.getColumn("Mark Started").setCellRenderer(new JTableButtonRender());
@@ -185,22 +286,26 @@ public class mainFrame extends javax.swing.JFrame{
         SubtaskTable.repaint();
         
     //</editor-fold>
+    this.repaint();
+    return(true);
     }
+    
     private Object[] getSubArray(Subtask s){
         JButton mkSt = new JButton("Mark Started");
-        JButton mkD = new JButton("Mark Started");
+        JButton mkD = new JButton("Mark Complete");
         mkSt.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         mkD.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         mkSt.addActionListener((ActionEvent e)->{
-            MarkStartedActionPerformed(e);
+            MarkSubtaskStartedActionPerformed(e);
         });
         mkD.addActionListener((ActionEvent e)->{
-            MarkCompleteActionPerformed(e);
+            MarkSubtaskCompleteActionPerformed(e);
         });
         Object[] a = {s.getName(),s.getStatus().toString(), s.getCategory().toString(), s.getDueDate().toString(),
-            s.assignment().toString(), s.creator().getName(),mkSt,mkD}; 
+            s.assignment().getName(), s.creator().getName(),mkSt,mkD}; 
         return(a);
     }
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -210,10 +315,8 @@ public class mainFrame extends javax.swing.JFrame{
         ExitButton = new javax.swing.JButton();
         TaskSelection = new javax.swing.JComboBox<>();
         OpenTaskLabel = new javax.swing.JLabel();
+        addTeamMember = new javax.swing.JButton();
         ViewsPane = new javax.swing.JTabbedPane();
-        BubbleView = new javax.swing.JScrollPane();
-        jPanel2 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
         TabularView = new javax.swing.JScrollPane();
         jPanel1 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
@@ -257,6 +360,14 @@ public class mainFrame extends javax.swing.JFrame{
         OpenTaskLabel.setLabelFor(TaskSelection);
         OpenTaskLabel.setText("Open Tasks");
 
+        addTeamMember.setText("Add Team Member");
+        addTeamMember.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        addTeamMember.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addTeamMemberActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout SidePanelLayout = new javax.swing.GroupLayout(SidePanel);
         SidePanel.setLayout(SidePanelLayout);
         SidePanelLayout.setHorizontalGroup(
@@ -267,7 +378,8 @@ public class mainFrame extends javax.swing.JFrame{
                     .addComponent(Create_Task_Button, javax.swing.GroupLayout.DEFAULT_SIZE, 138, Short.MAX_VALUE)
                     .addComponent(ExitButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(TaskSelection, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(OpenTaskLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(OpenTaskLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(addTeamMember, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         SidePanelLayout.setVerticalGroup(
@@ -279,7 +391,9 @@ public class mainFrame extends javax.swing.JFrame{
                 .addComponent(OpenTaskLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(TaskSelection, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 448, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(addTeamMember)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 422, Short.MAX_VALUE)
                 .addComponent(ExitButton)
                 .addContainerGap())
         );
@@ -287,30 +401,6 @@ public class mainFrame extends javax.swing.JFrame{
         ViewsPane.setBackground(new java.awt.Color(150, 200, 200));
         ViewsPane.setForeground(new java.awt.Color(0, 0, 0));
         ViewsPane.setOpaque(true);
-
-        jPanel2.setBackground(new java.awt.Color(200, 200, 200));
-
-        jLabel1.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel1.setText("Not Yet Implemented");
-
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 228, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 340, Short.MAX_VALUE))
-        );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addComponent(jLabel1)
-                .addGap(0, 412, Short.MAX_VALUE))
-        );
-
-        BubbleView.setViewportView(jPanel2);
-
-        ViewsPane.addTab("Web View", BubbleView);
 
         TabularView.setBackground(new java.awt.Color(175, 200, 200));
 
@@ -424,34 +514,40 @@ public class mainFrame extends javax.swing.JFrame{
         SubtaskCreation sc = new SubtaskCreation(this, true);
         sc.setVisible(true);
         sc.requestFocus();
-        sc.pack();
-        sc.repaint();
+        //sc.pack();
+        //sc.repaint();
     }
     
     private void MarkCompleteActionPerformed(ActionEvent e){ 
-        if(((JButton)e.getSource()).equals(TableTop.getValueAt(0, 8))){
-            openTasks.get(TaskSelection.getSelectedIndex()).setStatus(Status.COMPLETE);
-        }
-        else{
-            for(int x = 0; x< SubtaskTable.getRowCount(); x++){
-                if(((JButton)e.getSource()).equals(SubtaskTable.getValueAt(x, 7))){
-                    openTasks.get(TaskSelection.getSelectedIndex()).getTask(x).setStatus(Status.COMPLETE);
-                }
+        for(int x = 0; x< TableTop.getRowCount(); x++){
+            if(((JButton)e.getSource()).equals(TableTop.getValueAt(x, 8))){
+                visibleTasks.get(TaskSelection.getSelectedIndex()).setStatus(Status.COMPLETE);
             }
-        }
+        }        
         setTableTop();
     }
     private void MarkStartedActionPerformed(ActionEvent e) {
-    if(((JButton)e.getSource()).equals(TableTop.getValueAt(0, 8))){
-            openTasks.get(TaskSelection.getSelectedIndex()).setStatus(Status.IN_PROGRESS);
-        }
-        else{
-            for(int x = 0; x< SubtaskTable.getRowCount(); x++){
-                if(((JButton)e.getSource()).equals(SubtaskTable.getValueAt(x, 7))){
-                    openTasks.get(TaskSelection.getSelectedIndex()).getTask(x).setStatus(Status.IN_PROGRESS);
-                }
+        for(int x = 0; x< TableTop.getRowCount(); x++){
+            if(((JButton)e.getSource()).equals(TableTop.getValueAt(x, 7))){
+                visibleTasks.get(TaskSelection.getSelectedIndex()).setStatus(Status.IN_PROGRESS);
             }
-        }
+        }        
+        setTableTop();
+    }
+    private void MarkSubtaskCompleteActionPerformed(ActionEvent e) {
+        for(int x = 0; x< SubtaskTable.getRowCount(); x++){
+            if(((JButton)e.getSource()).equals(SubtaskTable.getValueAt(x, 7))){
+                visibleTasks.get(TaskSelection.getSelectedIndex()).getTask(x).setStatus(Status.COMPLETE);
+            }
+        }        
+        setTableTop();
+    }
+    private void MarkSubtaskStartedActionPerformed(ActionEvent e) {
+        for(int x = 0; x< SubtaskTable.getRowCount(); x++){
+            if(((JButton)e.getSource()).equals(SubtaskTable.getValueAt(x, 6))){
+                visibleTasks.get(TaskSelection.getSelectedIndex()).getTask(x).setStatus(Status.IN_PROGRESS);
+            }
+        }        
         setTableTop();
     }
     
@@ -463,6 +559,10 @@ public class mainFrame extends javax.swing.JFrame{
     private void TaskSelectionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TaskSelectionActionPerformed
         setTableTop();
     }//GEN-LAST:event_TaskSelectionActionPerformed
+
+    private void addTeamMemberActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addTeamMemberActionPerformed
+        
+    }//GEN-LAST:event_addTeamMemberActionPerformed
     
     /**
      * @param args the command line arguments
@@ -492,7 +592,6 @@ public class mainFrame extends javax.swing.JFrame{
     }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JScrollPane BubbleView;
     private javax.swing.JButton Create_Task_Button;
     private javax.swing.JTextArea DescrArea;
     private javax.swing.JScrollPane DescrScroll;
@@ -504,10 +603,11 @@ public class mainFrame extends javax.swing.JFrame{
     private javax.swing.JScrollPane TabularView;
     public javax.swing.JComboBox<Task> TaskSelection;
     private javax.swing.JTabbedPane ViewsPane;
-    private javax.swing.JLabel jLabel1;
+    public javax.swing.JButton addTeamMember;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     // End of variables declaration//GEN-END:variables
+
+
 }

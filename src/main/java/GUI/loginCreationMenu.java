@@ -194,18 +194,32 @@ public class loginCreationMenu extends javax.swing.JDialog {
                         role = Role.TEAMLEAD;
                     }
                     try {
-                        p.users.add(new Manager(names[0],names[1],PassInput.getPassword(),role));
+                        Manager x = new Manager(names[0],names[1],PassInput.getPassword(),role);
+                        p.users.add(x);
+                        p.CurrentUser=x;
                     } catch (MemberManagerException ex) {
                         //unreachable but required
                     }
                     
                 }
                 else{
-                    p.users.add(new member(names[0],names[1],PassInput.getPassword()));
+                    member x = new member(names[0],names[1],PassInput.getPassword());
+                    p.users.add(x);
+                    p.CurrentUser=x;
                 }
                 LoginFailedNoti.setVisible(false);
-                    this.dispatchEvent(new WindowEvent(this,WindowEvent.WINDOW_CLOSING));
-                    this.dispose();
+                if(p.CurrentUser.getRole()!=Role.TEAMLEAD){ //sets visibility of add team member button
+                    p.addTeamMember.setVisible(false);
+                    p.addTeamMember.setEnabled(false);
+                    p.repaint();
+                }
+                else{
+                    p.addTeamMember.setVisible(true);
+                    p.addTeamMember.setEnabled(true);
+                    p.repaint();
+                }
+                this.dispatchEvent(new WindowEvent(this,WindowEvent.WINDOW_CLOSING));
+                this.dispose();
             }
         }
         else{
