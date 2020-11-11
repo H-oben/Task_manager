@@ -135,7 +135,12 @@ public class mainFrame extends javax.swing.JFrame{
         return(visibleTasks);
     }
     //updates table view with open task drop down selection
-    public final void setTableTop(){
+    public final boolean setTableTop(){
+        int selected = TaskSelection.getSelectedIndex();
+        if(selected<0){// skip everything if user has no tasks
+            return(false);
+        }
+        Task t = visibleTasks.get(selected);
         //<editor-fold defaultstate="collasped" desc="Set First Table">
         String[] columnNames = {"Name","Status","Catagory","Due Date"
                 ,"Assigned To","Assigned By","Create Subtask","Mark Started","Mark Complete"};
@@ -160,8 +165,7 @@ public class mainFrame extends javax.swing.JFrame{
             MarkStartedActionPerformed(e);
         });
         
-        int selected = TaskSelection.getSelectedIndex();
-        Task t = visibleTasks.get(selected);
+        
         if(selected>=0){
             if(selected < visibleTasks.size() && visibleTasks.get(selected)!=null){ //create table model
                 taskData[0][0] = t.getName();
@@ -287,6 +291,7 @@ public class mainFrame extends javax.swing.JFrame{
         
     //</editor-fold>
     this.repaint();
+    return(true);
     }
     
     private Object[] getSubArray(Subtask s){

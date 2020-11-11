@@ -222,6 +222,7 @@ public class SubtaskCreation extends javax.swing.JDialog{
         }
         this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
         p.setTableTop();
+        p.setTaskOptions();
     }//GEN-LAST:event_CreateButtonActionPerformed
 
     private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
