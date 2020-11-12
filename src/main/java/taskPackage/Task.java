@@ -109,6 +109,7 @@ public class Task {
     public void setColor(Color a){
         color = a;
     }
+    
     //getters
     /**
      * @param index integer index for array list
