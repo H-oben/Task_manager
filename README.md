@@ -1,5 +1,5 @@
 # Task_manager
-Final Project for COSC 4353 fall 2020
+Final Project for COSC 4353 fall 2020\n
 Written by Hunter Obendorfer
 
 Default Admin login for testing:
