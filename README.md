@@ -6,3 +6,4 @@ Default Admin login for testing:
 name: Admin Admin
 password: Adm1n
 ```
+Task management software written in Java using swing and Apache NetBeans GUI editor
