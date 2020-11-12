@@ -67,6 +67,20 @@ public class mainFrame extends javax.swing.JFrame{
         ,new Categories("Administrative"),new Color(100,200,200), LocalDate.MAX, admin,admin));
         openTasks.get(0).addSubtask(new Subtask("sub","",new Categories(), new Color(100,100,100), LocalDate.MAX, admin, admin,openTasks.get(0)));
         //</editor-fold>
+        //<editor-fold desc="team lead testing">
+        char[] p = {'a','s','d','f','g'};
+        member hunter = new member("Hunter", "Obendorfer", p);
+        users.add(hunter);
+        Manager lead;
+        try{
+            lead= new Manager("team","lead",p,Role.TEAMLEAD);
+        }
+        catch(Exception e){
+            lead = new Manager();
+        }
+        users.add(lead);
+        lead.addTeamMember(hunter);
+        //</editor-fold>
         initComponents();
         //Reminder: all custom populization of elements must occur AFTER initComponents()
         
@@ -83,6 +97,7 @@ public class mainFrame extends javax.swing.JFrame{
         }
         else if(CurrentUser.getRole()==Role.TEAMLEAD){
             assignablePeople =((Manager)CurrentUser).getTeamMembers();
+            assignablePeople.add(0, CurrentUser);
         }
         else{
             assignablePeople.add(CurrentUser);
