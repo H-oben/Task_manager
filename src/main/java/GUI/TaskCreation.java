@@ -1,5 +1,6 @@
 package GUI;
 
+
 import java.awt.Color;
 import java.awt.event.WindowEvent;
 import java.time.LocalDate;
@@ -15,6 +16,7 @@ import taskPackage.*;
 public class TaskCreation extends javax.swing.JDialog{
     private final mainFrame p = (mainFrame)this.getParent();
     private final DefaultComboBoxModel model = new DefaultComboBoxModel(getUsers());
+    
     /**
      * Creates new form TaskCreation
      * @param parent mainFrame
@@ -210,7 +212,7 @@ public class TaskCreation extends javax.swing.JDialog{
             p.setTableTop();
             this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
         }
-        p.setTaskOptions();
+        
     }//GEN-LAST:event_CreateButtonActionPerformed
 
     private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
@@ -218,10 +220,10 @@ public class TaskCreation extends javax.swing.JDialog{
         this.dispose();
     }//GEN-LAST:event_cancelButtonActionPerformed
     
-    private String[] getUsers(){ // add user assignment logic
-        String[] users= new String[p.users.size()];
-        for(int x = 0; x< users.length; x++){
-            users[x] = p.users.get(x).getName();
+    private String[] getUsers(){
+        String[] users = new String[p.assignablePeople.size()];
+        for(int x = 0; x<users.length;x++){
+            users[x]=p.assignablePeople.get(x).getName();
         }
         return(users);
     }
@@ -262,7 +264,7 @@ public class TaskCreation extends javax.swing.JDialog{
         });
     }
     
-//task creation logic
+    //task creation logic
     private Task getCreatedTask(){
         ErrorLabel.setVisible(false);
         Color c = ColorPick.getColor();
@@ -279,7 +281,7 @@ public class TaskCreation extends javax.swing.JDialog{
         Categories cat;
         String cata = CataEntry.getText();
         int x = UserAssign.getSelectedIndex();
-        Person assigned = p.users.get(x);
+        Person assigned = p.assignablePeople.get(x);
         if(!cata.isBlank() && !cata.isEmpty()){
             cat = new Categories(CataEntry.getText());
         }
@@ -307,6 +309,7 @@ public class TaskCreation extends javax.swing.JDialog{
         }
     }
     
+    //<editor-fold desc="Generated Variables" defaultstate="collapsed">
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel AssignLabel;
     private javax.swing.JTextField CataEntry;
@@ -324,4 +327,5 @@ public class TaskCreation extends javax.swing.JDialog{
     private javax.swing.JButton cancelButton;
     private javax.swing.JPanel jPanel1;
     // End of variables declaration//GEN-END:variables
+    //</editor-fold>
 }

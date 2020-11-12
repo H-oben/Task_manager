@@ -68,6 +68,7 @@ public class Manager implements Person{
         }
         else{
             members.add(a);
+            a.assignTeam(this);
             return(true);
         }
     }

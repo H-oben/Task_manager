@@ -116,4 +116,7 @@ public class member implements Person{
     public Manager getTeam(){
         return(lead);
     }
+    public boolean inTeam(){
+        return(lead!=null);
+    }
 }
