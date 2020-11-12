@@ -210,7 +210,7 @@ public class TaskCreation extends javax.swing.JDialog{
             p.setTableTop();
             this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
         }
-        p.setTaskOptions();
+        
     }//GEN-LAST:event_CreateButtonActionPerformed
 
     private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
@@ -218,10 +218,10 @@ public class TaskCreation extends javax.swing.JDialog{
         this.dispose();
     }//GEN-LAST:event_cancelButtonActionPerformed
     
-    private String[] getUsers(){ // add user assignment logic
-        String[] users= new String[p.users.size()];
-        for(int x = 0; x< users.length; x++){
-            users[x] = p.users.get(x).getName();
+    private String[] getUsers(){
+        String[] users = new String[p.assignablePeople.size()];
+        for(int x = 0; x<users.length;x++){
+            users[x]=p.assignablePeople.get(x).getName();
         }
         return(users);
     }
@@ -279,7 +279,7 @@ public class TaskCreation extends javax.swing.JDialog{
         Categories cat;
         String cata = CataEntry.getText();
         int x = UserAssign.getSelectedIndex();
-        Person assigned = p.users.get(x);
+        Person assigned = p.assignablePeople.get(x);
         if(!cata.isBlank() && !cata.isEmpty()){
             cat = new Categories(CataEntry.getText());
         }

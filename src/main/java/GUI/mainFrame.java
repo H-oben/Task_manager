@@ -20,7 +20,6 @@ import taskPackage.*;
  * use more efficient data structures
  * ***change table view from JTable to pseudo table layout, JTable is annoying to work with
  * Control logic for task assignment: 
- *  - don't let members assign tasks to others
  *  - Team Lead can only assign to team members they are leading or themselves
  *  - other logic once fully functional
  * If I have time:
@@ -54,6 +53,7 @@ public class mainFrame extends javax.swing.JFrame{
     private DefaultTableModel table;
     
     public mainFrame() {
+        //<editor-fold desc="admin addition">
         try{ //add default admin user
             char[] pass = "Adm1n".toCharArray();
             admin = new Manager("Admin","Admin",pass,Role.MANAGER);
@@ -66,6 +66,7 @@ public class mainFrame extends javax.swing.JFrame{
         openTasks.add(new Task("Create Tasks","Create tasks for employees to work on"
         ,new Categories("Administrative"),new Color(100,200,200), LocalDate.MAX, admin,admin));
         openTasks.get(0).addSubtask(new Subtask("sub","",new Categories(), new Color(100,100,100), LocalDate.MAX, admin, admin,openTasks.get(0)));
+        //</editor-fold>
         initComponents();
         //Reminder: all custom populization of elements must occur AFTER initComponents()
         

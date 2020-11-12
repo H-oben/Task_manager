@@ -232,20 +232,9 @@ public class SubtaskCreation extends javax.swing.JDialog{
     }//GEN-LAST:event_cancelButtonActionPerformed
     
     private String[] getUsers(){ //members can assign tasks to themsevles, team leads to themselves and  members, managers to anyone
-        if (p.CurrentUser.getRole()== Role.MEMBER){
-            return(new String[] {p.CurrentUser.getName()});
-        }
-        else if(p.CurrentUser.getRole() == Role.TEAMLEAD){
-            String[] team = new String[((Manager)p.CurrentUser).getTeamMembers().size()+1];
-            team[0] = p.CurrentUser.getName();
-            for(int x = 0 ; x < ((Manager)p.CurrentUser).getTeamMembers().size(); x++){
-                team[x+1] = ((Manager)p.CurrentUser).getTeamMembers().get(x).getName();
-            }
-            return(team);
-        }    
-        String[] users = new String[p.users.size()];
-        for(int x = 0; x< users.length; x++){
-            users[x] = p.users.get(x).getName();
+        String[] users = new String[p.assignablePeople.size()];
+        for(int x = 0; x<users.length;x++){
+            users[x]=p.assignablePeople.get(x).getName();
         }
         return(users);
     }
@@ -311,7 +300,7 @@ public class SubtaskCreation extends javax.swing.JDialog{
             }
         }
         int x = UserAssign.getSelectedIndex(); 
-        Person assigned = p.users.get(x);
+        Person assigned = p.assignablePeople.get(x);
         
         Categories cat; //set category
         String cata = CataEntry.getText();
