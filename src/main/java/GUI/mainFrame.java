@@ -71,7 +71,9 @@ public class mainFrame extends javax.swing.JFrame{
         //<editor-fold desc="team lead testing" defaultstate="collapsed">
         char[] p = {'a','s','d','f','g'};
         member hunter = new member("Hunter", "Obendorfer", p);
+        member mem = new member();
         users.add(hunter);
+        users.add(mem);
         Manager lead;
         try{
             lead= new Manager("team","lead",p,Role.TEAMLEAD);
@@ -80,8 +82,8 @@ public class mainFrame extends javax.swing.JFrame{
             lead = new Manager();
         }
         users.add(lead);
-        lead.addTeamMember(hunter);
         //</editor-fold>
+        
         initComponents();
         //Reminder: all custom populization of elements must occur AFTER initComponents()
         
@@ -543,8 +545,6 @@ public class mainFrame extends javax.swing.JFrame{
         SubtaskCreation sc = new SubtaskCreation(this, true);
         sc.setVisible(true);
         sc.requestFocus();
-        //sc.pack();
-        //sc.repaint();
     }
     
     private void MarkCompleteActionPerformed(ActionEvent e){ 
@@ -590,7 +590,9 @@ public class mainFrame extends javax.swing.JFrame{
     }//GEN-LAST:event_TaskSelectionActionPerformed
 
     private void addTeamMemberActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addTeamMemberActionPerformed
-        
+        addTeamMember atm = new addTeamMember(this,true);
+        atm.setVisible(true);
+        atm.requestFocus();
     }//GEN-LAST:event_addTeamMemberActionPerformed
 
     private void CommitButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CommitButtonActionPerformed
