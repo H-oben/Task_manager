@@ -15,6 +15,7 @@ import taskPackage.*;
 public class TaskCreation extends javax.swing.JDialog{
     private final mainFrame p = (mainFrame)this.getParent();
     private final DefaultComboBoxModel model = new DefaultComboBoxModel(getUsers());
+    
     /**
      * Creates new form TaskCreation
      * @param parent mainFrame
@@ -262,7 +263,7 @@ public class TaskCreation extends javax.swing.JDialog{
         });
     }
     
-//task creation logic
+    //task creation logic
     private Task getCreatedTask(){
         ErrorLabel.setVisible(false);
         Color c = ColorPick.getColor();
@@ -307,6 +308,7 @@ public class TaskCreation extends javax.swing.JDialog{
         }
     }
     
+    //<editor-fold desc="Generated Variables" defaultstate="collapsed">
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel AssignLabel;
     private javax.swing.JTextField CataEntry;
@@ -324,4 +326,5 @@ public class TaskCreation extends javax.swing.JDialog{
     private javax.swing.JButton cancelButton;
     private javax.swing.JPanel jPanel1;
     // End of variables declaration//GEN-END:variables
+    //</editor-fold>
 }

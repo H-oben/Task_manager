@@ -11,8 +11,8 @@ import javax.swing.table.DefaultTableModel;
 import peoplePack.*;
 import taskPackage.*;
 
+//<editor-fold desc="ToDo">
 /**
- * TODO:
  * add color column to implement different colors in subtask table
  * movement of complete tasks to closedTasks and out of openTasks
  * implement changing of data other than status
@@ -27,7 +27,7 @@ import taskPackage.*;
  *  - implement web layout
  *  - sorted tasks
  */
-
+//</editor-fold>
 /**
  *<p>
  * Public variables used where it makes sense, 
@@ -37,7 +37,7 @@ import taskPackage.*;
  */
 public class mainFrame extends javax.swing.JFrame{
 
-    //custom variables
+    //<editor-fold desc="custom variables" defaultstate="collapsed">
     private  Manager admin; //could be final but that causes errors I'm not dealing with
     public Person CurrentUser;
     private LocalDate today = LocalDate.now();
@@ -51,9 +51,10 @@ public class mainFrame extends javax.swing.JFrame{
     
     private DefaultComboBoxModel m;
     private DefaultTableModel table;
+    //</editor-fold>
     
     public mainFrame() {
-        //<editor-fold desc="admin addition">
+        //<editor-fold desc="admin addition" defaultstate="collapsed">
         try{ //add default admin user
             char[] pass = "Adm1n".toCharArray();
             admin = new Manager("Admin","Admin",pass,Role.MANAGER);
@@ -67,7 +68,7 @@ public class mainFrame extends javax.swing.JFrame{
         ,new Categories("Administrative"),new Color(100,200,200), LocalDate.MAX, admin,admin));
         openTasks.get(0).addSubtask(new Subtask("sub","",new Categories(), new Color(100,100,100), LocalDate.MAX, admin, admin,openTasks.get(0)));
         //</editor-fold>
-        //<editor-fold desc="team lead testing">
+        //<editor-fold desc="team lead testing" defaultstate="collapsed">
         char[] p = {'a','s','d','f','g'};
         member hunter = new member("Hunter", "Obendorfer", p);
         users.add(hunter);
@@ -199,7 +200,7 @@ public class mainFrame extends javax.swing.JFrame{
                 if(c == 6 || c == 7 || c == 8){ //prevents error caused by editing buttons
                     return(false);
                 }
-                //<editor-fold desc="data editing control">
+                //<editor-fold desc="data editing control" defaultstate="collapsed">
                 if(!visibleTasks.get(selected).creator().equals(CurrentUser)){ 
                     return(false);
                 }
@@ -257,7 +258,7 @@ public class mainFrame extends javax.swing.JFrame{
                 if(c == 6 || c == 7){
                     return(false);
                 }
-                //<editor-fold desc="data editing control">
+                //<editor-fold desc="data editing control" defaultstate="collapsed">
                 if(!visibleTasks.get(selected).creator().equals(CurrentUser)){ 
                     return(false);
                 }
@@ -332,6 +333,7 @@ public class mainFrame extends javax.swing.JFrame{
         TaskSelection = new javax.swing.JComboBox<>();
         OpenTaskLabel = new javax.swing.JLabel();
         addTeamMember = new javax.swing.JButton();
+        CommitButton = new javax.swing.JButton();
         ViewsPane = new javax.swing.JTabbedPane();
         TabularView = new javax.swing.JScrollPane();
         jPanel1 = new javax.swing.JPanel();
@@ -384,6 +386,14 @@ public class mainFrame extends javax.swing.JFrame{
             }
         });
 
+        CommitButton.setText("Commit Changes");
+        CommitButton.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        CommitButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                CommitButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout SidePanelLayout = new javax.swing.GroupLayout(SidePanel);
         SidePanel.setLayout(SidePanelLayout);
         SidePanelLayout.setHorizontalGroup(
@@ -395,7 +405,8 @@ public class mainFrame extends javax.swing.JFrame{
                     .addComponent(ExitButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(TaskSelection, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(OpenTaskLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(addTeamMember, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(addTeamMember, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(CommitButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         SidePanelLayout.setVerticalGroup(
@@ -409,7 +420,9 @@ public class mainFrame extends javax.swing.JFrame{
                 .addComponent(TaskSelection, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(addTeamMember)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 422, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(CommitButton)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 396, Short.MAX_VALUE)
                 .addComponent(ExitButton)
                 .addContainerGap())
         );
@@ -579,13 +592,17 @@ public class mainFrame extends javax.swing.JFrame{
     private void addTeamMemberActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addTeamMemberActionPerformed
         
     }//GEN-LAST:event_addTeamMemberActionPerformed
+
+    private void CommitButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CommitButtonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_CommitButtonActionPerformed
     
     /**
      * @param args the command line arguments
      */
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
-        //<editor-fold desc=" Look and feel setting code (optional) ">
+        //<editor-fold desc=" Look and feel setting code (optional) " defaultstate="collapsed">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
          * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
          */
@@ -606,8 +623,9 @@ public class mainFrame extends javax.swing.JFrame{
             new mainFrame().setVisible(true);
         });
     }
-    
+    //<editor-fold desc="generated variables" defaultstate="collapsed">
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton CommitButton;
     private javax.swing.JButton Create_Task_Button;
     private javax.swing.JTextArea DescrArea;
     private javax.swing.JScrollPane DescrScroll;
@@ -624,6 +642,5 @@ public class mainFrame extends javax.swing.JFrame{
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     // End of variables declaration//GEN-END:variables
-
-
+    //</editor-fold>
 }
