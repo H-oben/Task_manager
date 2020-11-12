@@ -141,6 +141,9 @@ public class mainFrame extends javax.swing.JFrame{
                 }
             }
         }
+        else{
+            return(visibleTasks);
+        }
         String[] mode = new String[visibleTasks.size()];
         for(int x = 0; x < visibleTasks.size(); x++){
             mode[x] = visibleTasks.get(x).getName();
