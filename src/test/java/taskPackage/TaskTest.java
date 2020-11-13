@@ -12,6 +12,7 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.junit.jupiter.api.Disabled;
 import peoplePack.Person;
 
 /**
@@ -365,6 +366,7 @@ public class TaskTest {
     /**
      * Test of hashCode method, of class Task.
      */
+    @Disabled("not necccesary")
     @Test
     public void testHashCode() {
         System.out.println("hashCode");

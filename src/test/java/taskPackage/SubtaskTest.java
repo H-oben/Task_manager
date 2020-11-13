@@ -57,8 +57,11 @@ public class SubtaskTest {
         boolean expResult = true;
         boolean result = instance.equals(x);
         assertEquals(expResult, result);
-        Subtask y = new Subtask();
-        assertEquals(x.equals(y), false);
+        Subtask y = new Subtask("test","",new Categories()
+                ,new Color(0,0,0), LocalDate.now()
+                ,new member(), new member(),x);
+        result = y.equals(x);
+        assertEquals(result, false);
     }
 
     /**
