@@ -12,7 +12,7 @@ import javax.swing.table.DefaultTableModel;
 import peoplePack.*;
 import taskPackage.*;
 
-//note: this code is a lot easer to read if you collapse all editor folds in netbeans
+//note: this code is a lot easier to read if you collapse all editor folds in netbeans
 
 //<editor-fold desc="ToDo">
 /**
@@ -724,7 +724,7 @@ public class mainFrame extends javax.swing.JFrame{
         atm.requestFocus();
     }//GEN-LAST:event_addTeamMemberActionPerformed
     
-    //fix index out of bounds error (non-fatal)
+    //fix index out of bounds error (non-fatal) & description editing/logic control
     private void CommitButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CommitButtonActionPerformed
         Task t = visibleTasks.get(TaskSelection.getSelectedIndex());
         String n = (String)TableTop.getValueAt(0, 0);
