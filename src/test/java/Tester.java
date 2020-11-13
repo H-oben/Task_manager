@@ -11,6 +11,7 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import javax.swing.JTextArea;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
@@ -41,7 +42,10 @@ public class Tester {
     // TODO add test methods here.
     // The methods must be annotated with annotation @Test. For example:
     @Test
-    public void testMain(){
-        
+    public void testMainAndLogin(){
+        String expected = "Description:\nCreate tasks for employees to work on";
+        mainFrame m = new mainFrame();
+        m.setVisible(true);
+        JTextArea inp = (JTextArea) TestUtils.getChildNamed(m,"DescrArea");
     }
 }

@@ -22,7 +22,15 @@ public class loginCreationMenu extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         LoginFailedNoti.setVisible(false);
+        //<editor-fold desc="naming for testing" defaultstate="collapsed">
         LoginFailedNoti.setName("LoginFail");
+        NameInput.setName("NameInput");
+        PassInput.setName("PassInput");
+        TypeBox.setName("TypeBox");
+        CreateButton.setName("CreateButton");
+        ExitButton.setName("ExitButton");
+        LoginButton.setName("LoginButton");
+        //</editor-fold>
     }
 
     @SuppressWarnings("unchecked")
