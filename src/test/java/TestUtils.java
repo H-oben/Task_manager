@@ -19,6 +19,7 @@ public class TestUtils {
         }
         return(null);
     }
+    
     public static Component getChildIndexed(Component parent, String name, int Index){
         counter=0;
         if(parent instanceof Window){
