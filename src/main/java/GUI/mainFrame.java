@@ -19,6 +19,7 @@ import taskPackage.*;
  * add color column to implement different colors in subtask table
  * have description change to subtask description when selected
  * use more efficient data structures
+ * add logic for task dates and status
  * ***change table view from JTable to pseudo table layout, JTable is annoying to work with
  * If I have time:
  *  - fix subtasks so they can have subtasks as well
