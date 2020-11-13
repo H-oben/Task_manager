@@ -12,7 +12,7 @@ import javax.swing.table.DefaultTableModel;
 import peoplePack.*;
 import taskPackage.*;
 
-//note: this code is a lot easier to read if you collapse all editor folds in netbeans
+//note: this code is a lot easier to read if you collapse all editor folds in netbeans, CTRL+SHIFT+_
 
 //<editor-fold desc="ToDo">
 /**
