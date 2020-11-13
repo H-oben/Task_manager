@@ -1,3 +1,5 @@
+package GUI;
+
 import java.awt.*;
 
 //testing class to retrieve objects on screen to manipulate

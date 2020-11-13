@@ -1,9 +1,6 @@
+package GUI;
+
 import GUI.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import static java.lang.Thread.sleep;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.*;
 import peoplePack.*;
 import taskPackage.*;
@@ -15,10 +12,12 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
- *
  * @author h_obe
  */
+
 public class Tester {
+    
+    private mainFrame m;
     
     public Tester() {
     }
@@ -46,8 +45,9 @@ public class Tester {
     //tests login failure
     @Test
     public void testLoginFailure(){
+        System.out.println("Test Login Failure");
         String expected = "LoginFailed";
-        mainFrame m = new mainFrame();
+        m = new mainFrame();
         m.setVisible(true);
         
         loginCreationMenu inp = (loginCreationMenu) TestUtils.getChildNamed(m,"loginMenu");
@@ -77,8 +77,9 @@ public class Tester {
     //tests login exisiting logic
     @Test
     public void testLoginExists(){ 
+        System.out.println("Test Login Exists");
         String expected = "User exists, please login";
-        mainFrame m = new mainFrame();
+        m = new mainFrame();
         m.setVisible(true);
         
         loginCreationMenu inp = (loginCreationMenu) TestUtils.getChildNamed(m,"loginMenu");
@@ -108,8 +109,9 @@ public class Tester {
     //tests empty input logic
     @Test 
     public void testLoginEmpty(){
+        System.out.println("Test Login Empty");
         String expected = "Please fill out all areas";
-        mainFrame m = new mainFrame();
+        m = new mainFrame();
         m.setVisible(true);
         
         loginCreationMenu inp = (loginCreationMenu) TestUtils.getChildNamed(m,"loginMenu");
@@ -136,7 +138,37 @@ public class Tester {
         
         assertEquals(loginFail.getText(),expected);
     }
-    //tests 
+    //tests login success
+    @Test
+    public void testLoginSuccess(){
+        System.out.println("Test Login Success");
+        m = new mainFrame();
+        m.setVisible(true);
+        
+        loginCreationMenu inp = (loginCreationMenu) TestUtils.getChildNamed(m,"loginMenu");
+        assertNotNull(inp);
+        
+        JTextField username = (JTextField)TestUtils.getChildNamed(inp, "NameInput");
+        assertNotNull(username);
+        username.setText("Admin Admin");
+        
+        JPasswordField pass = (JPasswordField) TestUtils.getChildNamed(inp, "PassInput");
+        assertNotNull(pass);
+        pass.setText("Adm1n");
+        
+        JComboBox role = (JComboBox) TestUtils.getChildNamed(inp, "TypeBox");
+        assertNotNull(role);
+        role.setSelectedIndex(1); //0=member, 1=Manager, 2=Team lead
+        
+        JLabel loginFail = (JLabel) TestUtils.getChildNamed(inp, "LoginFail");
+        assertNotNull(loginFail);
+        
+        JButton login = (JButton) TestUtils.getChildNamed(inp, "LoginButton");
+        assertNotNull(login);
+        login.doClick();
+        
+        assertFalse(loginFail.isVisible());
+    }
     //</editor-fold>
     
 }
