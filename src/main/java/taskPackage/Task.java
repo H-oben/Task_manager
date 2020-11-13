@@ -192,7 +192,18 @@ public class Task {
             if(t.getName().equals(this.getName())){
                 if(t.getDueDate().equals(this.getDueDate())){
                     if(t.assignment().equals(this.assignedTo)){
-                        return(true);
+                        if(this.creator().equals(t.creator())){
+                            if(t.getNumberOfSubTasks()==this.getNumberOfSubTasks() && this.describe().equals(t.describe())){
+                                if(t.getStatus()==this.getStatus() && t.getColor()==this.getColor()){
+                                    for(int x = 0; x<t.getNumberOfSubTasks();x++){
+                                        if(!t.getTask(x).equals(t.getTask(x))){
+                                            return(false);
+                                        }
+                                    }
+                                    return(true);
+                                }
+                            }
+                        }
                     }
                 }
             }

@@ -12,23 +12,21 @@ import javax.swing.table.DefaultTableModel;
 import peoplePack.*;
 import taskPackage.*;
 
+//note: this code is a lot easer to read if you collapse all editor folds in netbeans
+
 //<editor-fold desc="ToDo">
 /**
  * add color column to implement different colors in subtask table
- * movement of complete tasks to closedTasks and out of openTasks
- * implement changing of data other than status
  * have description change to subtask description when selected
  * use more efficient data structures
  * ***change table view from JTable to pseudo table layout, JTable is annoying to work with
- * Control logic for task assignment: 
- *  - Team Lead can only assign to team members they are leading or themselves
- *  - other logic once fully functional
  * If I have time:
  *  - fix subtasks so they can have subtasks as well
  *  - implement web layout
  *  - sorted tasks
  */
 //</editor-fold>
+
 /**
  *<p>
  * Public variables used where it makes sense, 
@@ -36,6 +34,7 @@ import taskPackage.*;
  * </p>
  * @author Hunter Obendorfer 1834106
  */
+
 public class mainFrame extends javax.swing.JFrame{
 
     //<editor-fold desc="custom variables" defaultstate="collapsed">
@@ -157,6 +156,106 @@ public class mainFrame extends javax.swing.JFrame{
     public final boolean setTableTop(){
         int selected = TaskSelection.getSelectedIndex();
         if(selected<0){// skip everything if user has no tasks
+            
+            //<editor-fold desc="resets table if no selection available" defaultstate="collapsed">
+            String[] columnNames = {"Name","Status","Catagory","Due Date"
+                ,"Assigned To","Assigned By","Create Subtask","Mark Started","Mark Complete"};
+            Object[][] taskData = new Object[1][9];
+            table = new DefaultTableModel(taskData,columnNames){
+            @Override
+            public boolean isCellEditable(int r, int c){
+                if(r<0){
+                    return(false); //for empty table
+                }
+                if(c == 6 || c == 7 || c == 8){ //prevents error caused by editing buttons
+                    return(false);
+                }
+                //<editor-fold desc="data editing control" defaultstate="collapsed">
+                if(!visibleTasks.get(selected).creator().equals(CurrentUser)){ 
+                    return(false);
+                }
+                if(visibleTasks.equals(openTasks.get(selected).assignment())){
+                    if(c!=1 && c<=3){
+                        return(true);
+                    }
+                }
+                else{
+                    if(CurrentUser.getRole()==Role.MEMBER){
+                        return(false);
+                    }
+                    else if(CurrentUser.getRole()==Role.TEAMLEAD){
+                        if(c == 2){
+                            return(true);
+                        }
+                        else{
+                            return(false);
+                        }
+                    }
+                    else{
+                        if(c == 2 || c == 3){
+                            return(true);
+                        }
+                        else{
+                            return(false);
+                        }
+                    }
+                }
+                //</editor-fold>
+                return(false);
+            }
+        };
+            TableTop.setModel(table);
+            TableTop.repaint();
+            Object[] subtaskHeader = {"Name","Status","Catagory","Due Date"
+                ,"Assigned To","Assigned By","Mark Started","Mark Complete"};
+            DefaultTableModel two = new DefaultTableModel(new Object[0][0],subtaskHeader){
+        @Override
+            public boolean isCellEditable(int r, int c){ //fix for role specific data manipulation
+                if(r<0){
+                    return(false); //for empty table
+                }
+                if(c == 6 || c == 7){
+                    return(false);
+                }
+                //<editor-fold desc="data editing control" defaultstate="collapsed">
+                if(!visibleTasks.get(selected).creator().equals(CurrentUser)){ 
+                    return(false);
+                }
+                if(CurrentUser.equals(visibleTasks.get(selected).assignment())){
+                    if(c<=3 && c!=1){
+                        return(true);
+                    }
+                }
+                else{
+                    if(CurrentUser.getRole()==Role.MEMBER){
+                        return(false);
+                    }
+                    else if(CurrentUser.getRole()==Role.TEAMLEAD){
+                        if(c == 2){
+                            return(true);
+                        }
+                        else{
+                            return(false);
+                        }
+                    }
+                    else{
+                        if(c <= 3 && c != 1){
+                            return(true);
+                        }
+                        else{
+                            return(false);
+                        }
+                    }
+                }
+                //</editor-fold>
+                return(false);
+            }
+        };
+            SubtaskTable.setModel(two);
+            SubtaskTable.repaint();
+            DescrArea.setText("");
+            //</editor-fold>
+            
             return(false);
         }
         Task t = visibleTasks.get(selected);
@@ -203,6 +302,9 @@ public class mainFrame extends javax.swing.JFrame{
         table = new DefaultTableModel(taskData,columnNames){
             @Override
             public boolean isCellEditable(int r, int c){
+                if(r<0){
+                    return(false); //for empty table
+                }
                 if(c == 6 || c == 7 || c == 8){ //prevents error caused by editing buttons
                     return(false);
                 }
@@ -261,6 +363,9 @@ public class mainFrame extends javax.swing.JFrame{
         DefaultTableModel two = new DefaultTableModel(new Object[0][0],subtaskHeader){
         @Override
             public boolean isCellEditable(int r, int c){ //fix for role specific data manipulation
+                if(r<0){
+                    return(false); //for empty table
+                }
                 if(c == 6 || c == 7){
                     return(false);
                 }
@@ -309,8 +414,8 @@ public class mainFrame extends javax.swing.JFrame{
         SubtaskTable.repaint();
         
     //</editor-fold>
-    this.repaint();
-    return(true);
+        this.repaint();
+        return(true);
     }
     
     private Object[] getSubArray(Subtask s){
@@ -569,6 +674,7 @@ public class mainFrame extends javax.swing.JFrame{
         sc.requestFocus();
     }
     
+    //<editor-fold desc="tableButton action listeners" defaultstate="collapsed">
     private void MarkCompleteActionPerformed(ActionEvent e){ 
         for(int x = 0; x< TableTop.getRowCount(); x++){
             if(((JButton)e.getSource()).equals(TableTop.getValueAt(x, 8))){
@@ -601,6 +707,7 @@ public class mainFrame extends javax.swing.JFrame{
         }        
         setTableTop();
     }
+    //</editor-fold>
     
     private void ExitButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ExitButtonActionPerformed
         this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
@@ -616,11 +723,12 @@ public class mainFrame extends javax.swing.JFrame{
         atm.setVisible(true);
         atm.requestFocus();
     }//GEN-LAST:event_addTeamMemberActionPerformed
-
+    
+    //fix index out of bounds error (non-fatal)
     private void CommitButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CommitButtonActionPerformed
-        Task old = visibleTasks.get(TaskSelection.getSelectedIndex());
         Task t = visibleTasks.get(TaskSelection.getSelectedIndex());
         String n = (String)TableTop.getValueAt(0, 0);
+        
         if(!t.getName().equals(n)){
             t.setName(n);
         }
@@ -660,7 +768,7 @@ public class mainFrame extends javax.swing.JFrame{
                 try{
                     LocalDate due = LocalDate.parse((String)SubtaskTable.getValueAt(x, 3),DateTimeFormatter.ISO_LOCAL_DATE);
                     if(!t.getTask(x).getDueDate().equals(due)){
-                    t.getTask(x).setDueDate(due);
+                        t.getTask(x).setDueDate(due);
                     }
                 }
                 catch(Exception e){
@@ -670,18 +778,23 @@ public class mainFrame extends javax.swing.JFrame{
                 if(!t.getTask(x).assignment().getName().equals(assigned)){
                     for(int y = 0; y<assignablePeople.size();y++){
                         if(assignablePeople.get(y).getName().equals(assigned)){ //assuming no two people have the same name
-                        t.getTask(x).reassign(assignablePeople.get(y));
-                        break;
+                            t.getTask(x).reassign(assignablePeople.get(y));
+                            break;
                         }
                     }
                 }
             }
         }
-        int l = openTasks.indexOf(old); //fix
+        //put changed task in proper place
+        int l = openTasks.indexOf(t);
         visibleTasks.set(TaskSelection.getSelectedIndex(),t);
         if(t.getStatus()==Status.COMPLETE){
-            
+            closedTasks.add(openTasks.remove(l)); //takes out completed task and puts in proper spot
+            visibleTasks.remove(t);
         }
+        setTaskOptions();
+        setTableTop();
+        InvalidDate.setVisible(false);
     }//GEN-LAST:event_CommitButtonActionPerformed
     /**
      * @param args the command line arguments
