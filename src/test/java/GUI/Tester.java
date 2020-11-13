@@ -1,6 +1,7 @@
 package GUI;
 
 import GUI.*;
+import java.awt.event.WindowEvent;
 import javax.swing.*;
 import peoplePack.*;
 import taskPackage.*;
@@ -36,6 +37,7 @@ public class Tester {
     
     @AfterEach
     public void tearDown() {
+        m.dispatchEvent(new WindowEvent(m, WindowEvent.WINDOW_CLOSING));
     }
 
     // TODO add test methods here.

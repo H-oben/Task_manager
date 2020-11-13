@@ -52,6 +52,8 @@ public class mainFrame extends javax.swing.JFrame{
     
     private DefaultComboBoxModel m;
     private DefaultTableModel table;
+    
+    private loginCreationMenu l;
     //</editor-fold>
     
     public mainFrame() {
@@ -91,7 +93,7 @@ public class mainFrame extends javax.swing.JFrame{
         SubtaskTable.addMouseListener(new JTableButtonMouseListener(SubtaskTable));
         
         //login comes up before main menu
-        loginCreationMenu l = new loginCreationMenu(this, true);
+        l = new loginCreationMenu(this, true);
         l.setName("login menu");
         l.setVisible(true);
         
