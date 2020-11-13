@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.WindowEvent;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
@@ -11,23 +12,22 @@ import javax.swing.table.DefaultTableModel;
 import peoplePack.*;
 import taskPackage.*;
 
+//note: this code is a lot easier to read if you collapse all editor folds in netbeans, CTRL+SHIFT+_
+
 //<editor-fold desc="ToDo">
 /**
  * add color column to implement different colors in subtask table
- * movement of complete tasks to closedTasks and out of openTasks
- * implement changing of data other than status
  * have description change to subtask description when selected
  * use more efficient data structures
+ * add logic for task dates and status
  * ***change table view from JTable to pseudo table layout, JTable is annoying to work with
- * Control logic for task assignment: 
- *  - Team Lead can only assign to team members they are leading or themselves
- *  - other logic once fully functional
  * If I have time:
  *  - fix subtasks so they can have subtasks as well
  *  - implement web layout
  *  - sorted tasks
  */
 //</editor-fold>
+
 /**
  *<p>
  * Public variables used where it makes sense, 
@@ -35,6 +35,7 @@ import taskPackage.*;
  * </p>
  * @author Hunter Obendorfer 1834106
  */
+
 public class mainFrame extends javax.swing.JFrame{
 
     //<editor-fold desc="custom variables" defaultstate="collapsed">
@@ -51,6 +52,8 @@ public class mainFrame extends javax.swing.JFrame{
     
     private DefaultComboBoxModel m;
     private DefaultTableModel table;
+    
+    private loginCreationMenu l;
     //</editor-fold>
     
     public mainFrame() {
@@ -86,12 +89,12 @@ public class mainFrame extends javax.swing.JFrame{
         
         initComponents();
         //Reminder: all custom populization of elements must occur AFTER initComponents()
-        
         TableTop.addMouseListener(new JTableButtonMouseListener(TableTop));
         SubtaskTable.addMouseListener(new JTableButtonMouseListener(SubtaskTable));
         
         //login comes up before main menu
-        loginCreationMenu l = new loginCreationMenu(this, true);
+        l = new loginCreationMenu(this, true);
+        l.setName("login menu");
         l.setVisible(true);
         
         //set assignablePeople
@@ -114,6 +117,13 @@ public class mainFrame extends javax.swing.JFrame{
             addTeamMember.setVisible(false);
             addTeamMember.setEnabled(false);
         }
+        InvalidDate.setVisible(false);
+        //<editor-fold desc="naming for testing" defaultstate="collapsed">
+        CommitButton.setName("CommitButton");
+        Create_Task_Button.setName("CreateTaskButton");
+        DescrArea.setName("DescrArea");
+        addTeamMember.setName("addTeamMember");
+        //</editor-fold>
     }
     
     //custom methods
@@ -141,6 +151,9 @@ public class mainFrame extends javax.swing.JFrame{
                 }
             }
         }
+        else{
+            return(visibleTasks);
+        }
         String[] mode = new String[visibleTasks.size()];
         for(int x = 0; x < visibleTasks.size(); x++){
             mode[x] = visibleTasks.get(x).getName();
@@ -153,6 +166,106 @@ public class mainFrame extends javax.swing.JFrame{
     public final boolean setTableTop(){
         int selected = TaskSelection.getSelectedIndex();
         if(selected<0){// skip everything if user has no tasks
+            
+            //<editor-fold desc="resets table if no selection available" defaultstate="collapsed">
+            String[] columnNames = {"Name","Status","Catagory","Due Date"
+                ,"Assigned To","Assigned By","Create Subtask","Mark Started","Mark Complete"};
+            Object[][] taskData = new Object[1][9];
+            table = new DefaultTableModel(taskData,columnNames){
+            @Override
+            public boolean isCellEditable(int r, int c){
+                if(r<0){
+                    return(false); //for empty table
+                }
+                if(c == 6 || c == 7 || c == 8){ //prevents error caused by editing buttons
+                    return(false);
+                }
+                //<editor-fold desc="data editing control" defaultstate="collapsed">
+                if(!visibleTasks.get(selected).creator().equals(CurrentUser)){ 
+                    return(false);
+                }
+                if(visibleTasks.equals(openTasks.get(selected).assignment())){
+                    if(c!=1 && c<=3){
+                        return(true);
+                    }
+                }
+                else{
+                    if(CurrentUser.getRole()==Role.MEMBER){
+                        return(false);
+                    }
+                    else if(CurrentUser.getRole()==Role.TEAMLEAD){
+                        if(c == 2){
+                            return(true);
+                        }
+                        else{
+                            return(false);
+                        }
+                    }
+                    else{
+                        if(c == 2 || c == 3){
+                            return(true);
+                        }
+                        else{
+                            return(false);
+                        }
+                    }
+                }
+                //</editor-fold>
+                return(false);
+            }
+        };
+            TableTop.setModel(table);
+            TableTop.repaint();
+            Object[] subtaskHeader = {"Name","Status","Catagory","Due Date"
+                ,"Assigned To","Assigned By","Mark Started","Mark Complete"};
+            DefaultTableModel two = new DefaultTableModel(new Object[0][0],subtaskHeader){
+        @Override
+            public boolean isCellEditable(int r, int c){ //fix for role specific data manipulation
+                if(r<0){
+                    return(false); //for empty table
+                }
+                if(c == 6 || c == 7){
+                    return(false);
+                }
+                //<editor-fold desc="data editing control" defaultstate="collapsed">
+                if(!visibleTasks.get(selected).creator().equals(CurrentUser)){ 
+                    return(false);
+                }
+                if(CurrentUser.equals(visibleTasks.get(selected).assignment())){
+                    if(c<=3 && c!=1){
+                        return(true);
+                    }
+                }
+                else{
+                    if(CurrentUser.getRole()==Role.MEMBER){
+                        return(false);
+                    }
+                    else if(CurrentUser.getRole()==Role.TEAMLEAD){
+                        if(c == 2){
+                            return(true);
+                        }
+                        else{
+                            return(false);
+                        }
+                    }
+                    else{
+                        if(c <= 3 && c != 1){
+                            return(true);
+                        }
+                        else{
+                            return(false);
+                        }
+                    }
+                }
+                //</editor-fold>
+                return(false);
+            }
+        };
+            SubtaskTable.setModel(two);
+            SubtaskTable.repaint();
+            DescrArea.setText("");
+            //</editor-fold>
+            
             return(false);
         }
         Task t = visibleTasks.get(selected);
@@ -199,6 +312,9 @@ public class mainFrame extends javax.swing.JFrame{
         table = new DefaultTableModel(taskData,columnNames){
             @Override
             public boolean isCellEditable(int r, int c){
+                if(r<0){
+                    return(false); //for empty table
+                }
                 if(c == 6 || c == 7 || c == 8){ //prevents error caused by editing buttons
                     return(false);
                 }
@@ -257,6 +373,9 @@ public class mainFrame extends javax.swing.JFrame{
         DefaultTableModel two = new DefaultTableModel(new Object[0][0],subtaskHeader){
         @Override
             public boolean isCellEditable(int r, int c){ //fix for role specific data manipulation
+                if(r<0){
+                    return(false); //for empty table
+                }
                 if(c == 6 || c == 7){
                     return(false);
                 }
@@ -305,8 +424,8 @@ public class mainFrame extends javax.swing.JFrame{
         SubtaskTable.repaint();
         
     //</editor-fold>
-    this.repaint();
-    return(true);
+        this.repaint();
+        return(true);
     }
     
     private Object[] getSubArray(Subtask s){
@@ -336,6 +455,8 @@ public class mainFrame extends javax.swing.JFrame{
         OpenTaskLabel = new javax.swing.JLabel();
         addTeamMember = new javax.swing.JButton();
         CommitButton = new javax.swing.JButton();
+        DescrLabel = new javax.swing.JLabel();
+        InvalidDate = new javax.swing.JLabel();
         ViewsPane = new javax.swing.JTabbedPane();
         TabularView = new javax.swing.JScrollPane();
         jPanel1 = new javax.swing.JPanel();
@@ -396,6 +517,15 @@ public class mainFrame extends javax.swing.JFrame{
             }
         });
 
+        DescrLabel.setForeground(new java.awt.Color(0, 0, 0));
+        DescrLabel.setLabelFor(DescrArea);
+        DescrLabel.setText("Description");
+        DescrLabel.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+
+        InvalidDate.setForeground(new java.awt.Color(0, 0, 0));
+        InvalidDate.setText("Invalid date format use YYYY-MM-DD");
+        InvalidDate.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+
         javax.swing.GroupLayout SidePanelLayout = new javax.swing.GroupLayout(SidePanel);
         SidePanel.setLayout(SidePanelLayout);
         SidePanelLayout.setHorizontalGroup(
@@ -403,12 +533,16 @@ public class mainFrame extends javax.swing.JFrame{
             .addGroup(SidePanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(SidePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(Create_Task_Button, javax.swing.GroupLayout.DEFAULT_SIZE, 138, Short.MAX_VALUE)
+                    .addComponent(Create_Task_Button, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(ExitButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(TaskSelection, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(OpenTaskLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(addTeamMember, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(CommitButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(CommitButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, SidePanelLayout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(DescrLabel))
+                    .addComponent(InvalidDate, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         SidePanelLayout.setVerticalGroup(
@@ -424,7 +558,11 @@ public class mainFrame extends javax.swing.JFrame{
                 .addComponent(addTeamMember)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(CommitButton)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 396, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(InvalidDate)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 302, Short.MAX_VALUE)
+                .addComponent(DescrLabel)
+                .addGap(56, 56, 56)
                 .addComponent(ExitButton)
                 .addContainerGap())
         );
@@ -507,7 +645,6 @@ public class mainFrame extends javax.swing.JFrame{
         DescrArea.setColumns(20);
         DescrArea.setForeground(new java.awt.Color(0, 0, 0));
         DescrArea.setRows(5);
-        DescrArea.setText("Description");
         DescrScroll.setViewportView(DescrArea);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -518,7 +655,7 @@ public class mainFrame extends javax.swing.JFrame{
                 .addComponent(SidePanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, 0)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(ViewsPane, javax.swing.GroupLayout.DEFAULT_SIZE, 570, Short.MAX_VALUE)
+                    .addComponent(ViewsPane, javax.swing.GroupLayout.DEFAULT_SIZE, 509, Short.MAX_VALUE)
                     .addComponent(DescrScroll)))
         );
         layout.setVerticalGroup(
@@ -547,6 +684,7 @@ public class mainFrame extends javax.swing.JFrame{
         sc.requestFocus();
     }
     
+    //<editor-fold desc="tableButton action listeners" defaultstate="collapsed">
     private void MarkCompleteActionPerformed(ActionEvent e){ 
         for(int x = 0; x< TableTop.getRowCount(); x++){
             if(((JButton)e.getSource()).equals(TableTop.getValueAt(x, 8))){
@@ -579,6 +717,7 @@ public class mainFrame extends javax.swing.JFrame{
         }        
         setTableTop();
     }
+    //</editor-fold>
     
     private void ExitButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ExitButtonActionPerformed
         this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
@@ -594,11 +733,79 @@ public class mainFrame extends javax.swing.JFrame{
         atm.setVisible(true);
         atm.requestFocus();
     }//GEN-LAST:event_addTeamMemberActionPerformed
-
-    private void CommitButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CommitButtonActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_CommitButtonActionPerformed
     
+    //fix index out of bounds error (non-fatal) & description editing/logic control
+    private void CommitButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CommitButtonActionPerformed
+        Task t = visibleTasks.get(TaskSelection.getSelectedIndex());
+        String n = (String)TableTop.getValueAt(0, 0);
+        
+        if(!t.getName().equals(n)){
+            t.setName(n);
+        }
+        String cat = (String)TableTop.getValueAt(0, 2);
+        if(!t.getCategory().toString().equals(cat)){
+            t.setCatagory(new Categories(cat));
+        }
+        try{
+            LocalDate due = LocalDate.parse((String)TableTop.getValueAt(0, 3),DateTimeFormatter.ISO_LOCAL_DATE);
+            if(!t.getDueDate().equals(due)){
+                t.setDueDate(due);
+            }
+        }
+        catch(Exception e){
+            InvalidDate.setVisible(true);
+        }
+        String assigned = (String) TableTop.getValueAt(0, 4);
+        if(!t.assignment().getName().equals(assigned)){
+            for(int x = 0; x<assignablePeople.size();x++){
+                if(assignablePeople.get(x).getName().equals(assigned)){ //assuming no two people have the same name
+                    t.reassign(assignablePeople.get(x));
+                    break;
+                }
+            }
+        }
+        //set subtasks
+        if(t.getNumberOfSubTasks()>=0){
+            for(int x = 0; x < t.getSubtasks().size(); x++){ //loop through subs
+                n = (String)SubtaskTable.getValueAt(x, 0);
+                if(!t.getTask(x).getName().equals(n)){
+                    t.getTask(x).setName(n);
+                }
+                cat = (String)SubtaskTable.getValueAt(x, 2);
+                if(!t.getTask(x).getCategory().toString().equals(cat)){
+                    t.getTask(x).setCatagory(new Categories(cat));
+                }
+                try{
+                    LocalDate due = LocalDate.parse((String)SubtaskTable.getValueAt(x, 3),DateTimeFormatter.ISO_LOCAL_DATE);
+                    if(!t.getTask(x).getDueDate().equals(due)){
+                        t.getTask(x).setDueDate(due);
+                    }
+                }
+                catch(Exception e){
+                    InvalidDate.setVisible(true);
+                }
+                assigned = (String) SubtaskTable.getValueAt(x, 4);
+                if(!t.getTask(x).assignment().getName().equals(assigned)){
+                    for(int y = 0; y<assignablePeople.size();y++){
+                        if(assignablePeople.get(y).getName().equals(assigned)){ //assuming no two people have the same name
+                            t.getTask(x).reassign(assignablePeople.get(y));
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+        //put changed task in proper place
+        int l = openTasks.indexOf(t);
+        visibleTasks.set(TaskSelection.getSelectedIndex(),t);
+        if(t.getStatus()==Status.COMPLETE){
+            closedTasks.add(openTasks.remove(l)); //takes out completed task and puts in proper spot
+            visibleTasks.remove(t);
+        }
+        setTaskOptions();
+        setTableTop();
+        InvalidDate.setVisible(false);
+    }//GEN-LAST:event_CommitButtonActionPerformed
     /**
      * @param args the command line arguments
      */
@@ -630,8 +837,10 @@ public class mainFrame extends javax.swing.JFrame{
     private javax.swing.JButton CommitButton;
     private javax.swing.JButton Create_Task_Button;
     private javax.swing.JTextArea DescrArea;
+    private javax.swing.JLabel DescrLabel;
     private javax.swing.JScrollPane DescrScroll;
     private javax.swing.JButton ExitButton;
+    private javax.swing.JLabel InvalidDate;
     private javax.swing.JLabel OpenTaskLabel;
     private javax.swing.JPanel SidePanel;
     public javax.swing.JTable SubtaskTable;

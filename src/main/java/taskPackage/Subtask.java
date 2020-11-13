@@ -40,12 +40,14 @@ public class Subtask extends Task{
         if(this == o){
             return(true);
         }
-        if(o instanceof Task){
+        if(o instanceof Subtask){
             Subtask t = (Subtask) o;
-            if(t.getName().equals(this.getName())){
-                if(t.getDueDate().equals(this.getDueDate())){
-                    if(t.assignment().equals(this.assignedTo)){
-                        return(true);
+            if(t.getName().equals(this.getName()) && t.getCategory().equals(this.getCategory())){
+                if(t.getDueDate().equals(this.getDueDate()) && t.getStatus()==this.getStatus()){
+                    if(t.assignment().equals(this.assignedTo) && this.getParent()==t.getParent()){
+                        if(t.getColor().equals(this.getColor()) && this.describe().equals(t.describe())){
+                            return(true);
+                        }
                     }
                 }
             }
