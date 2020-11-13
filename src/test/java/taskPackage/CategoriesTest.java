@@ -9,6 +9,7 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.junit.jupiter.api.Disabled;
 
 /**
  *
@@ -57,27 +58,27 @@ public class CategoriesTest {
     @org.junit.Test
     public void testEquals() {
         System.out.println("equals");
-        Object o = null;
         Categories instance = new Categories();
-        boolean expResult = false;
-        boolean result = instance.equals(o);
+        Categories x = instance;
+        boolean expResult = true;
+        boolean result = instance.equals(x);
         assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        x = new Categories("different");
+        assertEquals(x.equals(instance), false);
     }
 
     /**
      * Test of hashCode method, of class Categories.
      */
+    @Disabled("not needed")
     @org.junit.Test
     public void testHashCode() {
         System.out.println("hashCode");
         Categories instance = new Categories();
-        int expResult = 0;
+        int expResult = instance.hashCode();
         int result = instance.hashCode();
         assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        
     }
     
 }

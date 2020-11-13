@@ -5,10 +5,14 @@
  */
 package taskPackage;
 
+import java.awt.Color;
+import java.time.LocalDate;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.junit.jupiter.api.Disabled;
+import peoplePack.member;
 
 /**
  *
@@ -33,12 +37,13 @@ public class SubtaskTest {
     @Test
     public void testGetParent() {
         System.out.println("getParent");
-        Subtask instance = new Subtask();
-        Task expResult = null;
+        Task x = new Task();
+        Subtask instance = new Subtask("test","",new Categories()
+                ,new Color(0,0,0), LocalDate.now()
+                ,new member(), new member(),x);
+        x.addSubtask(instance);
         Task result = instance.getParent();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        assertEquals(x, result);
     }
 
     /**
@@ -47,27 +52,26 @@ public class SubtaskTest {
     @Test
     public void testEquals() {
         System.out.println("equals");
-        Object o = null;
         Subtask instance = new Subtask();
-        boolean expResult = false;
-        boolean result = instance.equals(o);
+        Subtask x = instance;
+        boolean expResult = true;
+        boolean result = instance.equals(x);
         assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        Subtask y = new Subtask();
+        assertEquals(x.equals(y), false);
     }
 
     /**
      * Test of hashCode method, of class Subtask.
      */
+    @Disabled("not neccesary")
     @Test
     public void testHashCode() {
         System.out.println("hashCode");
         Subtask instance = new Subtask();
-        int expResult = 0;
+        int expResult = instance.hashCode();
         int result = instance.hashCode();
         assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
     
 }

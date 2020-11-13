@@ -33,11 +33,13 @@ public class StatusTest {
     @Test
     public void testValues() {
         System.out.println("values");
-        Status[] expResult = null;
+        Status[] expResult = {Status.NOT_STARTED,
+            Status.IN_PROGRESS,
+            Status.COMPLETE,
+            Status.OVERDUE,
+            Status.DUE_SOON};
         Status[] result = Status.values();
         assertArrayEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
 
     /**
@@ -46,12 +48,10 @@ public class StatusTest {
     @Test
     public void testValueOf() {
         System.out.println("valueOf");
-        String string = "";
-        Status expResult = null;
+        String string = "NOT_STARTED";
+        Status expResult = Status.NOT_STARTED;
         Status result = Status.valueOf(string);
         assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
     
 }
