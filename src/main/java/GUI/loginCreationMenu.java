@@ -22,6 +22,7 @@ public class loginCreationMenu extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         LoginFailedNoti.setVisible(false);
+        LoginFailedNoti.setName("LoginFail");
     }
 
     @SuppressWarnings("unchecked")

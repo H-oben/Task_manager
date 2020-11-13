@@ -92,6 +92,7 @@ public class mainFrame extends javax.swing.JFrame{
         
         //login comes up before main menu
         loginCreationMenu l = new loginCreationMenu(this, true);
+        l.setName("login menu");
         l.setVisible(true);
         
         //set assignablePeople
@@ -115,6 +116,12 @@ public class mainFrame extends javax.swing.JFrame{
             addTeamMember.setEnabled(false);
         }
         InvalidDate.setVisible(false);
+        //<editor-fold desc="naming for testing" defaultstate="collapsed">
+        CommitButton.setName("CommitButton");
+        Create_Task_Button.setName("CreateTaskButton");
+        DescrArea.setName("DescrArea");
+        addTeamMember.setName("addTeamMember");
+        //</editor-fold>
     }
     
     //custom methods
