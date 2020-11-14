@@ -1,14 +1,10 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package peoplePack;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.junit.jupiter.api.Disabled;
 
 /**
  *
@@ -38,22 +34,21 @@ public class memberTest {
         boolean expResult = false;
         boolean result = instance.equals(o);
         assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        member x = instance;
+        assertEquals(x.equals(instance),true);
     }
 
     /**
      * Test of hashCode method, of class member.
      */
+    @Disabled("unused")
     @Test
     public void testHashCode() {
         System.out.println("hashCode");
         member instance = new member();
-        int expResult = 0;
+        int expResult = instance.hashCode();
         int result = instance.hashCode();
         assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
 
     /**
@@ -62,13 +57,12 @@ public class memberTest {
     @Test
     public void testTestPassword() {
         System.out.println("testPassword");
-        char[] a = null;
+        char[] a = "Password".toCharArray();
         member instance = new member();
         boolean expResult = false;
         boolean result = instance.testPassword(a);
         assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        assertEquals(instance.testPassword("password".toCharArray()),true);
     }
 
     /**
@@ -78,11 +72,9 @@ public class memberTest {
     public void testGetRole() {
         System.out.println("getRole");
         member instance = new member();
-        Role expResult = null;
+        Role expResult = Role.MEMBER;
         Role result = instance.getRole();
         assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
 
     /**
@@ -92,11 +84,9 @@ public class memberTest {
     public void testGetName() {
         System.out.println("getName");
         member instance = new member();
-        String expResult = "";
+        String expResult = "empty empty";
         String result = instance.getName();
         assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
 
     /**
@@ -105,12 +95,11 @@ public class memberTest {
     @Test
     public void testSetName() {
         System.out.println("setName");
-        String f = "";
-        String l = "";
+        String f = "not";
+        String l = "empty";
         member instance = new member();
         instance.setName(f, l);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        assertEquals(instance.getName().equals(f+" "+l),true);
     }
 
     /**
@@ -119,11 +108,10 @@ public class memberTest {
     @Test
     public void testAssignTeam() {
         System.out.println("assignTeam");
-        Manager a = null;
+        Manager a = new Manager();
         member instance = new member();
-        instance.assignTeam(a);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        instance.assignTeam(a);;
+        assertEquals(instance.getTeam().equals(a),true);
     }
 
     /**
@@ -136,8 +124,6 @@ public class memberTest {
         Manager expResult = null;
         Manager result = instance.getTeam();
         assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
 
     /**
@@ -150,8 +136,6 @@ public class memberTest {
         boolean expResult = false;
         boolean result = instance.inTeam();
         assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
     
 }

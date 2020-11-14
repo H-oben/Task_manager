@@ -33,12 +33,10 @@ public class MemberManagerExceptionTest {
     @Test
     public void testGetCode() {
         System.out.println("getCode");
-        MemberManagerException instance = null;
-        String expResult = "";
+MemberManagerException instance = new MemberManagerException("first","second");
+        String expResult = "first";
         String result = instance.getCode();
         assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
 
     /**
@@ -47,11 +45,12 @@ public class MemberManagerExceptionTest {
     @Test
     public void testSetCode() {
         System.out.println("setCode");
-        String c = "";
-        MemberManagerException instance = null;
+        String c = "third";
+        MemberManagerException instance = new MemberManagerException("first","second");
+        String expResult = "third";  
+        assertNotEquals(expResult,instance.getCode());
         instance.setCode(c);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        assertEquals(expResult,instance.getCode());
     }
     
 }

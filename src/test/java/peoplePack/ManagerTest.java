@@ -37,9 +37,7 @@ public class ManagerTest {
         Manager instance = new Manager();
         ArrayList<Person> expResult = null;
         ArrayList<Person> result = instance.getTeamMembers();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        assertNotEquals(expResult, result);
     }
 
     /**
@@ -48,13 +46,12 @@ public class ManagerTest {
     @Test
     public void testAddTeamMember() {
         System.out.println("addTeamMember");
-        member a = null;
+        member a = new member();
         Manager instance = new Manager();
-        boolean expResult = false;
-        boolean result = instance.addTeamMember(a);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        int x = 0;
+        assertEquals(instance.getTeamMembers().size(),x);
+        instance.addTeamMember(a);
+        assertEquals(instance.getTeamMembers().size(),++x);
     }
 
     /**
@@ -68,8 +65,11 @@ public class ManagerTest {
         boolean expResult = false;
         boolean result = instance.findTeamMember(a);
         assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        a = new member();
+        instance.addTeamMember((member)a);
+        expResult=true;
+        result = instance.findTeamMember(a);
+        assertEquals(expResult, result);
     }
 
     /**
@@ -78,13 +78,13 @@ public class ManagerTest {
     @Test
     public void testTestPassword() {
         System.out.println("testPassword");
-        char[] a = null;
+        char[] a = "Password".toCharArray();
         Manager instance = new Manager();
         boolean expResult = false;
         boolean result = instance.testPassword(a);
         assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        a = "password".toCharArray();
+        assertEquals(instance.testPassword(a),true);
     }
 
     /**
@@ -94,11 +94,9 @@ public class ManagerTest {
     public void testGetRole() {
         System.out.println("getRole");
         Manager instance = new Manager();
-        Role expResult = null;
+        Role expResult = Role.MANAGER;
         Role result = instance.getRole();
         assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
 
     /**
@@ -108,11 +106,9 @@ public class ManagerTest {
     public void testGetName() {
         System.out.println("getName");
         Manager instance = new Manager();
-        String expResult = "";
+        String expResult = "empty empty";
         String result = instance.getName();
         assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
 
     /**
@@ -121,12 +117,11 @@ public class ManagerTest {
     @Test
     public void testSetName() {
         System.out.println("setName");
-        String f = "";
-        String l = "";
+        String f = "not";
+        String l = "empty";
         Manager instance = new Manager();
         instance.setName(f, l);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        assertEquals(instance.getName().equals(f+" "+l),true);
     }
 
     /**
@@ -140,8 +135,8 @@ public class ManagerTest {
         boolean expResult = false;
         boolean result = instance.equals(obj);
         assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        Manager x = instance;
+        assertEquals(x.equals(instance),true);
     }
 
     /**
@@ -151,11 +146,9 @@ public class ManagerTest {
     public void testHashCode() {
         System.out.println("hashCode");
         Manager instance = new Manager();
-        int expResult = 0;
+        int expResult = instance.hashCode();
         int result = instance.hashCode();
         assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
     
 }

@@ -85,7 +85,7 @@ public class SubtaskTest {
         System.out.println("setParent");
         Task t = new Task();
         Subtask instance = new Subtask();
-        instance.setParent(t);
+        t.addSubtask(instance);           //addSubtask calls SetParent()
         assertEquals(t.getTask(0).getParent(),t);
     }
     

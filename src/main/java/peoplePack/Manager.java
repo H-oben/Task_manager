@@ -15,7 +15,7 @@ import java.util.Objects;
  * Can assign tasks/subtasks
  * Can create/delete tasks
  * Can be either a manager or team lead
- * Team lead: cannot delete tasks/subtasks asssigned to them 
+ * Team lead: cannot delete tasks/subtasks assigned to them 
  * but can delete subtasks lower in structure assigned to them
  * Manager: needs additional confirmation to delete tasks but not subtasks
  * </p>

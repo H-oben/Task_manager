@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package peoplePack;
+package GUI;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -15,8 +15,8 @@ import org.junit.runners.Suite;
  * @author h_obe
  */
 @RunWith(Suite.class)
-@Suite.SuiteClasses({peoplePack.MemberManagerExceptionTest.class, peoplePack.memberTest.class, peoplePack.ManagerTest.class, peoplePack.RoleTest.class})
-public class PeoplePackSuite {
+@Suite.SuiteClasses({GUI.addTeamMemberTest.class, GUI.mainFrameTest.class, GUI.loginCreationMenuTest.class, GUI.TaskCreationTest.class, GUI.SubtaskCreationTest.class})
+public class GUISuite {
 
     @BeforeClass
     public static void setUpClass() throws Exception {

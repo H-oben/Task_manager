@@ -1,38 +1,38 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package GUI;
 
-import GUI.*;
 import java.awt.event.WindowEvent;
-import javax.swing.*;
-import peoplePack.*;
-import taskPackage.*;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JPasswordField;
+import javax.swing.JTextField;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
+import org.junit.Test;
+import static org.junit.Assert.*;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import org.junit.jupiter.api.Disabled;
 
 /**
+ *
  * @author h_obe
  */
-
-public class Tester {
-    
+public class loginCreationMenuTest {
     private mainFrame m;
-    
-    public Tester() {
+    public loginCreationMenuTest() {
+        
     }
-
-    @BeforeAll
+    
+    @BeforeClass
     public static void setUpClass() {
-    }
-    
-    @AfterAll
-    public static void tearDownClass() {
-    }
-    
-    @BeforeEach
-    public void setUp() {
     }
     
     @AfterEach
@@ -40,8 +40,16 @@ public class Tester {
         m.dispatchEvent(new WindowEvent(m, WindowEvent.WINDOW_CLOSING));
     }
 
-    // TODO add test methods here.
-    // The methods must be annotated with annotation @Test.
+    /**
+     * Test of main method, of class loginCreationMenu.
+     */
+    @Disabled("not needed")
+    @Test
+    public void testMain() {
+        System.out.println("main");
+        String[] args = null;
+        loginCreationMenu.main(args);
+    }
     
     //<editor-fold desc="Login testing" defaultstate="collapsed">
     //tests login failure
@@ -171,6 +179,4 @@ public class Tester {
         
         assertFalse(loginFail.isVisible());
     }
-    //</editor-fold>
-    
 }

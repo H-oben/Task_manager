@@ -32,6 +32,7 @@ public class member implements Person{
         for(int y=0; y<x.length();y++){
             pass[y] = x.charAt(y);
         }
+        lead = null;
     }
     /**
      * @param F String first name of new member

@@ -33,11 +33,9 @@ public class RoleTest {
     @Test
     public void testValues() {
         System.out.println("values");
-        Role[] expResult = null;
+        Role[] expResult = {Role.MANAGER, Role.TEAMLEAD, Role.MEMBER};
         Role[] result = Role.values();
         assertArrayEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
 
     /**
@@ -46,12 +44,10 @@ public class RoleTest {
     @Test
     public void testValueOf() {
         System.out.println("valueOf");
-        String string = "";
-        Role expResult = null;
+        String string = "MANAGER";
+        Role expResult = Role.MANAGER;
         Role result = Role.valueOf(string);
         assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
     
 }
