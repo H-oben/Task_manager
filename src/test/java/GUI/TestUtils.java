@@ -2,7 +2,7 @@ package GUI;
 
 import java.awt.*;
 
-//testing class to retrieve objects on screen to manipulate
+//helper class to retrieve objects on screen to manipulate
 public class TestUtils {
     static int counter;
     
