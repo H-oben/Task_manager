@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package GUI;
 
 import java.awt.event.WindowEvent;
@@ -11,10 +6,9 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
-import org.junit.AfterClass;
+import java.awt.Component;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import static org.junit.Assert.*;
 import org.junit.jupiter.api.AfterEach;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -60,7 +54,7 @@ public class loginCreationMenuTest {
         m = new mainFrame();
         m.setVisible(true);
         
-        loginCreationMenu inp = (loginCreationMenu) TestUtils.getChildNamed(m,"loginMenu");
+        loginCreationMenu inp = (loginCreationMenu) TestUtils.getChildNamed(m,"LoginMenu");
         assertNotNull(inp);
         
         JTextField username = (JTextField)TestUtils.getChildNamed(inp, "NameInput");
@@ -179,4 +173,5 @@ public class loginCreationMenuTest {
         
         assertFalse(loginFail.isVisible());
     }
+    //</editor-fold>
 }

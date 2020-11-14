@@ -11,7 +11,7 @@ public class loginCreationMenu extends javax.swing.JDialog {
     private final String LoginErr = "Login Failed";
     private final String CreationErr = "User exists, please login";
     private final String EmptyErr = "Please fill out all areas";
-    private final mainFrame p = (mainFrame)this.getParent();
+    private mainFrame p;
     
     /**
      * Creates new form loginCreationMenu
@@ -20,6 +20,7 @@ public class loginCreationMenu extends javax.swing.JDialog {
      */
     public loginCreationMenu(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
+        p=(mainFrame)parent;
         initComponents();
         LoginFailedNoti.setVisible(false);
         //<editor-fold desc="naming for testing" defaultstate="collapsed">
@@ -30,6 +31,7 @@ public class loginCreationMenu extends javax.swing.JDialog {
         CreateButton.setName("CreateButton");
         ExitButton.setName("ExitButton");
         LoginButton.setName("LoginButton");
+        this.setName("LoginMenu");
         //</editor-fold>
     }
 

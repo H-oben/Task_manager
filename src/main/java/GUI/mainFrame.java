@@ -94,7 +94,6 @@ public class mainFrame extends javax.swing.JFrame{
         
         //login comes up before main menu
         l = new loginCreationMenu(this, true);
-        l.setName("login menu");
         l.setVisible(true);
         
         //set assignablePeople
