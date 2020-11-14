@@ -9,6 +9,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import org.junit.jupiter.api.Disabled;
+import peoplePack.Manager;
 import peoplePack.Person;
 import peoplePack.member;
 
@@ -101,10 +102,7 @@ public class TaskTest {
         LocalDate ld = LocalDate.of(2020,01,01);
         Task instance = new Task();
         instance.setDueDate(ld);
-        assertNotEquals(instance.getDueDate(),ld);
-        ld = LocalDate.of(2021,Month.JANUARY, 1);
-        instance.setDueDate(ld);
-        assertEquals(instance.getDueDate(),ld);
+        assertEquals(instance.getDueDate(),ld); // date correctness testing done in GUI
         
     }
 
@@ -228,9 +226,10 @@ public class TaskTest {
     public void testAssignment() {
         System.out.println("assignment");
         Task instance = new Task();
-        Person expResult = null;
-        Person result = instance.assignment();
-        assertEquals(expResult, result);
+        Manager x = new Manager();
+        assertNotEquals(instance.assignment(),x);
+        instance.reassign(x);
+        assertEquals(instance.assignment(),x);
     }
 
     /**
@@ -239,10 +238,10 @@ public class TaskTest {
     @Test
     public void testCreator() {
         System.out.println("creator");
-        Task instance = new Task();
-        Person expResult = null;
+        Manager x = new Manager();
+        Task instance = new Task("empty","empty",new Categories(), Color.BLACK, LocalDate.now(), new member(),x);
         Person result = instance.creator();
-        assertEquals(expResult, result);
+        assertEquals(x, result);
     }
 
     /**
@@ -346,7 +345,7 @@ public class TaskTest {
     public void testHashCode() {
         System.out.println("hashCode");
         Task instance = new Task();
-        int expResult = 0;
+        int expResult = instance.hashCode();
         int result = instance.hashCode();
         assertEquals(expResult, result);
     }
