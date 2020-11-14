@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package GUI;
 
 import org.junit.AfterClass;
@@ -11,7 +6,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
 /**
- *
+ * GUI testing currently not working, peoplePack & taskPackage testing work and are correct
  * @author h_obe
  */
 @RunWith(Suite.class)
