@@ -1,12 +1,8 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package taskPackage;
 
 import java.awt.Color;
 import java.time.LocalDate;
+import java.time.Month;
 import java.util.ArrayList;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -14,6 +10,7 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 import org.junit.jupiter.api.Disabled;
 import peoplePack.Person;
+import peoplePack.member;
 
 /**
  *
@@ -38,11 +35,11 @@ public class TaskTest {
     @Test
     public void testAddSubtask() {
         System.out.println("addSubtask");
-        Subtask s = null;
+        Subtask s = new Subtask();
         Task instance = new Task();
+        assertEquals(instance.getNumberOfSubTasks(),0);
         instance.addSubtask(s);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        assertEquals(instance.getNumberOfSubTasks(),1);
     }
 
     /**
@@ -51,11 +48,10 @@ public class TaskTest {
     @Test
     public void testSetName() {
         System.out.println("setName");
-        String n = "";
+        String n = "notEmpty";
         Task instance = new Task();
         instance.setName(n);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        assertEquals(instance.getName(), n);
     }
 
     /**
@@ -64,11 +60,10 @@ public class TaskTest {
     @Test
     public void testSetDescription() {
         System.out.println("setDescription");
-        String d = "";
+        String d = "new description";
         Task instance = new Task();
         instance.setDescription(d);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        assertEquals(instance.describe(), d);
     }
 
     /**
@@ -77,11 +72,11 @@ public class TaskTest {
     @Test
     public void testSetStatus() {
         System.out.println("setStatus");
-        Status s = null;
+        Status s = Status.IN_PROGRESS;
         Task instance = new Task();
+        assertEquals(instance.getStatus(), Status.NOT_STARTED);
         instance.setStatus(s);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        assertEquals(instance.getStatus(),s);
     }
 
     /**
@@ -90,11 +85,11 @@ public class TaskTest {
     @Test
     public void testSetCatagory() {
         System.out.println("setCatagory");
-        Categories c = null;
+        Categories c = new Categories("Admin");
         Task instance = new Task();
+        assertNotEquals(instance.getCategory(),c);
         instance.setCatagory(c);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        assertEquals(instance.getCategory(),c);
     }
 
     /**
@@ -103,11 +98,14 @@ public class TaskTest {
     @Test
     public void testSetDueDate() {
         System.out.println("setDueDate");
-        LocalDate ld = null;
+        LocalDate ld = LocalDate.of(2020,01,01);
         Task instance = new Task();
         instance.setDueDate(ld);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        assertNotEquals(instance.getDueDate(),ld);
+        ld = LocalDate.of(2021,Month.JANUARY, 1);
+        instance.setDueDate(ld);
+        assertEquals(instance.getDueDate(),ld);
+        
     }
 
     /**
@@ -116,11 +114,10 @@ public class TaskTest {
     @Test
     public void testReassign() {
         System.out.println("reassign");
-        Person a = null;
+        Person a = new member();
         Task instance = new Task();
         instance.reassign(a);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        assertEquals(instance.assignment(),a);
     }
 
     /**
@@ -129,11 +126,11 @@ public class TaskTest {
     @Test
     public void testSetColor() {
         System.out.println("setColor");
-        Color a = null;
+        Color a = Color.BLACK;
         Task instance = new Task();
+        assertNotEquals(instance.getColor(),a);
         instance.setColor(a);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        assertEquals(instance.getColor(),a);
     }
 
     /**
@@ -144,11 +141,10 @@ public class TaskTest {
         System.out.println("getTask");
         int index = 0;
         Task instance = new Task();
-        Subtask expResult = null;
+        Subtask expResult = new Subtask();
+        instance.addSubtask(expResult);
         Subtask result = instance.getTask(index);
         assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
 
     /**
@@ -161,8 +157,8 @@ public class TaskTest {
         int expResult = 0;
         int result = instance.getNumberOfSubTasks();
         assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        instance.addSubtask(new Subtask());
+        assertEquals(instance.getNumberOfSubTasks(),1);
     }
 
     /**
@@ -172,11 +168,9 @@ public class TaskTest {
     public void testGetName() {
         System.out.println("getName");
         Task instance = new Task();
-        String expResult = "";
+        String expResult = "empty";
         String result = instance.getName();
         assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
 
     /**
@@ -186,11 +180,9 @@ public class TaskTest {
     public void testDescribe() {
         System.out.println("describe");
         Task instance = new Task();
-        String expResult = "";
+        String expResult = "empty";
         String result = instance.describe();
         assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
 
     /**
@@ -200,11 +192,9 @@ public class TaskTest {
     public void testGetStatus() {
         System.out.println("getStatus");
         Task instance = new Task();
-        Status expResult = null;
+        Status expResult = Status.NOT_STARTED;
         Status result = instance.getStatus();
         assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
 
     /**
@@ -214,11 +204,9 @@ public class TaskTest {
     public void testGetDueDate() {
         System.out.println("getDueDate");
         Task instance = new Task();
-        LocalDate expResult = null;
+        LocalDate expResult = LocalDate.now();
         LocalDate result = instance.getDueDate();
         assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
 
     /**
@@ -228,11 +216,9 @@ public class TaskTest {
     public void testCreatedOn() {
         System.out.println("createdOn");
         Task instance = new Task();
-        LocalDate expResult = null;
+        LocalDate expResult = LocalDate.now();
         LocalDate result = instance.createdOn();
         assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
 
     /**
@@ -245,8 +231,6 @@ public class TaskTest {
         Person expResult = null;
         Person result = instance.assignment();
         assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
 
     /**
@@ -259,8 +243,6 @@ public class TaskTest {
         Person expResult = null;
         Person result = instance.creator();
         assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
 
     /**
@@ -270,11 +252,9 @@ public class TaskTest {
     public void testGetColor() {
         System.out.println("getColor");
         Task instance = new Task();
-        Color expResult = null;
+        Color expResult = Color.RED;
         Color result = instance.getColor();
         assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
 
     /**
@@ -284,11 +264,9 @@ public class TaskTest {
     public void testGetCategory() {
         System.out.println("getCategory");
         Task instance = new Task();
-        Categories expResult = null;
+        Categories expResult = new Categories();
         Categories result = instance.getCategory();
         assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
 
     /**
@@ -298,11 +276,8 @@ public class TaskTest {
     public void testGetSubtasks() {
         System.out.println("getSubtasks");
         Task instance = new Task();
-        ArrayList<Subtask> expResult = null;
         ArrayList<Subtask> result = instance.getSubtasks();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        assertEquals(0, result.size());
     }
 
     /**
@@ -316,8 +291,6 @@ public class TaskTest {
         boolean expResult = false;
         boolean result = instance.contains(s);
         assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
 
     /**
@@ -330,8 +303,6 @@ public class TaskTest {
         boolean expResult = false;
         boolean result = instance.hasDescendants();
         assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
 
     /**
@@ -340,12 +311,16 @@ public class TaskTest {
     @Test
     public void testToString() {
         System.out.println("toString");
-        Task instance = new Task();
-        String expResult = "";
-        String result = instance.toString();
+        Task t = new Task();
+        String expResult = "Task: " + t.getName() +"\nDescription: " +t.describe()+"\n"
+                + "Status: " + t.getStatus().toString() +"\nColor: "+t.getColor().toString()
+                +"\nCatagory: "+ t.getCategory().toString()
+                + "\nDue Date: " +t.getDueDate().toString() +
+                "\nCreated On: " +t.createdOn().toString()+
+                "\nAssigned To: "+ t.assignment().getName()+
+                "\nCreated By: "+t.creator().getName();
+        String result = t.toString();
         assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
 
     /**
@@ -359,8 +334,8 @@ public class TaskTest {
         boolean expResult = false;
         boolean result = instance.equals(o);
         assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        Task t = instance;
+        assertEquals(t.equals(t), true);
     }
 
     /**
@@ -374,8 +349,6 @@ public class TaskTest {
         int expResult = 0;
         int result = instance.hashCode();
         assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
     
 }

@@ -6,7 +6,7 @@ import java.awt.Color;
 import java.util.Objects;
 
 public class Subtask extends Task{
-    private final Task upper; //for easy traversal 
+    private Task upper; //for easy traversal 
     public Subtask(){
         super();
         upper = null;
@@ -33,6 +33,9 @@ public class Subtask extends Task{
      */
     public Task getParent(){
         return(upper);
+    }
+    public void setParent(Task t){
+        upper=t;
     }
  
     @Override

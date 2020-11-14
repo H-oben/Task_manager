@@ -76,5 +76,17 @@ public class SubtaskTest {
         int result = instance.hashCode();
         assertEquals(expResult, result);
     }
+
+    /**
+     * Test of setParent method, of class Subtask.
+     */
+    @Test
+    public void testSetParent() {
+        System.out.println("setParent");
+        Task t = new Task();
+        Subtask instance = new Subtask();
+        instance.setParent(t);
+        assertEquals(t.getTask(0).getParent(),t);
+    }
     
 }

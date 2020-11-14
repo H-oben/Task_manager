@@ -5,6 +5,8 @@ import peoplePack.Person;
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Objects;
+import peoplePack.Manager;
+import peoplePack.member;
 /**
  * @author Hunter Obendorfer
  */
@@ -39,8 +41,8 @@ public class Task {
         mainDueDate=LocalDate.now();
         createdOn=LocalDate.now();
         
-        assignedTo=null;
-        createdBy=null;
+        assignedTo=new member(); //avoids null reference in testing
+        createdBy=new Manager();
     }
     
     /**
@@ -75,6 +77,7 @@ public class Task {
     }
     public void addSubtask(Subtask s){
         subs.add(s);
+        s.setParent(this);
     }
     
     //setters
