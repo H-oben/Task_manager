@@ -7,10 +7,12 @@ import java.util.ArrayList;
 import java.util.Objects;
 import peoplePack.Manager;
 import peoplePack.member;
+
 /**
  * @author Hunter Obendorfer
  */
 public class Task {
+    //<editor-fold desc="variables" defaultstate="collapsed">
     protected String name;
     protected String descrip;
     protected Status stat;
@@ -27,6 +29,7 @@ public class Task {
     
     protected Person assignedTo;
     protected final Person createdBy; // not going to change so it's final
+    //</editor-fold>
     
     //default Constr.
     public Task(){

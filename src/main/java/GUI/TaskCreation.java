@@ -1,6 +1,5 @@
 package GUI;
 
-
 import java.awt.Color;
 import java.awt.event.WindowEvent;
 import java.time.LocalDate;
