@@ -456,6 +456,7 @@ public class mainFrame extends javax.swing.JFrame{
         CommitButton = new javax.swing.JButton();
         DescrLabel = new javax.swing.JLabel();
         InvalidDate = new javax.swing.JLabel();
+        RecurringButton = new javax.swing.JButton();
         ViewsPane = new javax.swing.JTabbedPane();
         TabularView = new javax.swing.JScrollPane();
         jPanel1 = new javax.swing.JPanel();
@@ -525,6 +526,14 @@ public class mainFrame extends javax.swing.JFrame{
         InvalidDate.setText("Invalid date format use YYYY-MM-DD");
         InvalidDate.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
+        RecurringButton.setText("Create Rucurring Task");
+        RecurringButton.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        RecurringButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                RecurringButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout SidePanelLayout = new javax.swing.GroupLayout(SidePanel);
         SidePanel.setLayout(SidePanelLayout);
         SidePanelLayout.setHorizontalGroup(
@@ -541,7 +550,8 @@ public class mainFrame extends javax.swing.JFrame{
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, SidePanelLayout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(DescrLabel))
-                    .addComponent(InvalidDate, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(InvalidDate, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(RecurringButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         SidePanelLayout.setVerticalGroup(
@@ -550,16 +560,18 @@ public class mainFrame extends javax.swing.JFrame{
                 .addContainerGap()
                 .addComponent(Create_Task_Button)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(RecurringButton)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(OpenTaskLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(TaskSelection, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(addTeamMember)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(CommitButton)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(addTeamMember)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(InvalidDate)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 302, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 276, Short.MAX_VALUE)
                 .addComponent(DescrLabel)
                 .addGap(56, 56, 56)
                 .addComponent(ExitButton)
@@ -805,6 +817,10 @@ public class mainFrame extends javax.swing.JFrame{
         setTableTop();
         InvalidDate.setVisible(false);
     }//GEN-LAST:event_CommitButtonActionPerformed
+
+    private void RecurringButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RecurringButtonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_RecurringButtonActionPerformed
     /**
      * @param args the command line arguments
      */
@@ -841,6 +857,7 @@ public class mainFrame extends javax.swing.JFrame{
     private javax.swing.JButton ExitButton;
     private javax.swing.JLabel InvalidDate;
     private javax.swing.JLabel OpenTaskLabel;
+    private javax.swing.JButton RecurringButton;
     private javax.swing.JPanel SidePanel;
     public javax.swing.JTable SubtaskTable;
     public javax.swing.JTable TableTop;
