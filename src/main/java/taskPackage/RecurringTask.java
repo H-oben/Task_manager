@@ -46,6 +46,7 @@ public class RecurringTask extends Task{
         }
         super.setStatus(Status.NOT_STARTED);//never really completed
     }
+    
     //"completes" subtasks
     private void completeSubs(RecurType r){
         ArrayList<Subtask> subs = this.getSubtasks();
