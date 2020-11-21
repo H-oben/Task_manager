@@ -32,6 +32,7 @@ public class TaskCreation extends javax.swing.JDialog{
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        typeGroup = new javax.swing.ButtonGroup();
         jPanel1 = new javax.swing.JPanel();
         cancelButton = new javax.swing.JButton();
         CreateButton = new javax.swing.JButton();
@@ -47,6 +48,11 @@ public class TaskCreation extends javax.swing.JDialog{
         UserAssign = new javax.swing.JComboBox<>();
         AssignLabel = new javax.swing.JLabel();
         ErrorLabel = new javax.swing.JLabel();
+        SingleButton = new javax.swing.JRadioButton();
+        DailyButton = new javax.swing.JRadioButton();
+        WeeklyButton = new javax.swing.JRadioButton();
+        YearlyButton = new javax.swing.JRadioButton();
+        TypeLabel = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setName("Task Creation Window"); // NOI18N
@@ -115,6 +121,25 @@ public class TaskCreation extends javax.swing.JDialog{
 
         ErrorLabel.setForeground(new java.awt.Color(0, 0, 0));
 
+        typeGroup.add(SingleButton);
+        SingleButton.setForeground(new java.awt.Color(0, 0, 0));
+        SingleButton.setText("One Time Task");
+
+        typeGroup.add(DailyButton);
+        DailyButton.setForeground(new java.awt.Color(0, 0, 0));
+        DailyButton.setText("Daily Task");
+
+        typeGroup.add(WeeklyButton);
+        WeeklyButton.setForeground(new java.awt.Color(0, 0, 0));
+        WeeklyButton.setText("Weekly Task");
+
+        typeGroup.add(YearlyButton);
+        YearlyButton.setForeground(new java.awt.Color(0, 0, 0));
+        YearlyButton.setText("Yearly Task");
+
+        TypeLabel.setForeground(new java.awt.Color(0, 0, 0));
+        TypeLabel.setText("Type:");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -135,17 +160,25 @@ public class TaskCreation extends javax.swing.JDialog{
                             .addComponent(NameEntry, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addGap(48, 48, 48)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(DateLabel)
+                            .addComponent(AssignLabel)
+                            .addComponent(TypeLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(UserAssign, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(DateLabel)
-                                    .addComponent(AssignLabel))
+                                    .addComponent(WeeklyButton, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(DateEntry, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(SingleButton))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(ErrorLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addComponent(DateEntry, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(0, 0, Short.MAX_VALUE))
-                                    .addComponent(UserAssign, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                            .addComponent(ErrorLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(DailyButton)
+                                            .addComponent(YearlyButton))
+                                        .addGap(0, 0, Short.MAX_VALUE))))))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(CreateButton, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -167,9 +200,19 @@ public class TaskCreation extends javax.swing.JDialog{
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(DescEntry, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(DescLabel)
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(UserAssign, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(AssignLabel)))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(UserAssign, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(AssignLabel))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(SingleButton)
+                            .addComponent(DailyButton)
+                            .addComponent(TypeLabel))
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(WeeklyButton)
+                            .addComponent(YearlyButton))))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(CataEntry, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -206,7 +249,7 @@ public class TaskCreation extends javax.swing.JDialog{
             p.setTableTop();
             this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
         }
-        
+
     }//GEN-LAST:event_CreateButtonActionPerformed
 
     private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
@@ -310,16 +353,22 @@ public class TaskCreation extends javax.swing.JDialog{
     private javax.swing.JLabel CataLabel;
     private javax.swing.JColorChooser ColorPick;
     private javax.swing.JButton CreateButton;
+    private javax.swing.JRadioButton DailyButton;
     private javax.swing.JTextField DateEntry;
     private javax.swing.JLabel DateLabel;
     private java.awt.TextField DescEntry;
     private javax.swing.JLabel DescLabel;
     private javax.swing.JLabel ErrorLabel;
     private java.awt.TextField NameEntry;
+    private javax.swing.JRadioButton SingleButton;
     private javax.swing.JLabel TaskNameLabel;
+    private javax.swing.JLabel TypeLabel;
     private javax.swing.JComboBox<String> UserAssign;
+    private javax.swing.JRadioButton WeeklyButton;
+    private javax.swing.JRadioButton YearlyButton;
     private javax.swing.JButton cancelButton;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.ButtonGroup typeGroup;
     // End of variables declaration//GEN-END:variables
     //</editor-fold>
 }
