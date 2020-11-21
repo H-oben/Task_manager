@@ -4,7 +4,9 @@ import java.awt.Color;
 import java.awt.event.WindowEvent;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Enumeration;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.JRadioButton;
 import peoplePack.Person;
 import taskPackage.*;
 
@@ -342,6 +344,7 @@ public class TaskCreation extends javax.swing.JDialog{
         }
         else{
             ErrorLabel.setVisible(false);
+            Enumeration<JRadioButton> l = typeGroup.getElements(); //loop through buttons
             return(new Task(n,d,cat,c,due,assigned,p.CurrentUser));
         }
     }
