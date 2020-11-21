@@ -46,6 +46,7 @@ public class RecurringTask extends Task{
         }
         super.setStatus(Status.NOT_STARTED);//never really completed
     }
+    //"completes" subtasks
     private void completeSubs(RecurType r){
         ArrayList<Subtask> subs = this.getSubtasks();
         switch(r){
@@ -75,7 +76,11 @@ public class RecurringTask extends Task{
                 break;
         }
     }
+    
     public void deleteTask(){ //finishes Task and "deletes"
         super.setStatus(Status.COMPLETE);
+        for(Subtask s: this.getSubtasks()){
+            s.setStatus(Status.COMPLETE);
+        }
     }
 }
