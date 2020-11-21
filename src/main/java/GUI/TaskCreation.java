@@ -5,6 +5,7 @@ import java.awt.event.WindowEvent;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Enumeration;
+import javax.swing.AbstractButton;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JRadioButton;
 import peoplePack.Person;
@@ -55,6 +56,7 @@ public class TaskCreation extends javax.swing.JDialog{
         WeeklyButton = new javax.swing.JRadioButton();
         YearlyButton = new javax.swing.JRadioButton();
         TypeLabel = new javax.swing.JLabel();
+        MonthlyButton = new javax.swing.JRadioButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setName("Task Creation Window"); // NOI18N
@@ -142,6 +144,10 @@ public class TaskCreation extends javax.swing.JDialog{
         TypeLabel.setForeground(new java.awt.Color(0, 0, 0));
         TypeLabel.setText("Type:");
 
+        typeGroup.add(MonthlyButton);
+        MonthlyButton.setForeground(new java.awt.Color(0, 0, 0));
+        MonthlyButton.setText("Monthly Task");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -165,21 +171,22 @@ public class TaskCreation extends javax.swing.JDialog{
                             .addComponent(DateLabel)
                             .addComponent(AssignLabel)
                             .addComponent(TypeLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGap(0, 0, 0)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(UserAssign, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(WeeklyButton, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(DateEntry, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(SingleButton))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(SingleButton)
+                                    .addComponent(YearlyButton))
+                                .addGap(0, 0, 0)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(ErrorLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addGroup(jPanel1Layout.createSequentialGroup()
                                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                             .addComponent(DailyButton)
-                                            .addComponent(YearlyButton))
+                                            .addComponent(MonthlyButton, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE))
                                         .addGap(0, 0, Short.MAX_VALUE))))))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
@@ -211,16 +218,19 @@ public class TaskCreation extends javax.swing.JDialog{
                             .addComponent(SingleButton)
                             .addComponent(DailyButton)
                             .addComponent(TypeLabel))
-                        .addGap(18, 18, 18)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(WeeklyButton)
-                            .addComponent(YearlyButton))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(CataEntry, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(CataLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(ErrorLabel))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(MonthlyButton)
+                            .addComponent(WeeklyButton))))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(CataEntry, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(CataLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(ErrorLabel))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(YearlyButton)))
+                .addGap(10, 10, 10)
                 .addComponent(ColorPick, javax.swing.GroupLayout.PREFERRED_SIZE, 323, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -344,8 +354,21 @@ public class TaskCreation extends javax.swing.JDialog{
         }
         else{
             ErrorLabel.setVisible(false);
-            Enumeration<JRadioButton> l = typeGroup.getElements(); //loop through buttons
-            return(new Task(n,d,cat,c,due,assigned,p.CurrentUser));
+            if(SingleButton.isSelected()){
+                return(new Task(n,d,cat,c,due,assigned,p.CurrentUser));
+            }
+            else if(DailyButton.isSelected()){
+                return(new RecurringTask(n,d,cat,c,due,assigned,p.CurrentUser,RecurType.DAILY));
+            }
+            else if(MonthlyButton.isSelected()){
+                return(new RecurringTask(n,d,cat,c,due,assigned,p.CurrentUser,RecurType.MONTHLY));
+            }
+            else if(WeeklyButton.isSelected()){
+                return(new RecurringTask(n,d,cat,c,due,assigned,p.CurrentUser,RecurType.WEEKLY));
+            }
+            else{
+                return(new RecurringTask(n,d,cat,c,due,assigned,p.CurrentUser,RecurType.YEARLY));
+            }
         }
     }
     
@@ -362,6 +385,7 @@ public class TaskCreation extends javax.swing.JDialog{
     private java.awt.TextField DescEntry;
     private javax.swing.JLabel DescLabel;
     private javax.swing.JLabel ErrorLabel;
+    private javax.swing.JRadioButton MonthlyButton;
     private java.awt.TextField NameEntry;
     private javax.swing.JRadioButton SingleButton;
     private javax.swing.JLabel TaskNameLabel;

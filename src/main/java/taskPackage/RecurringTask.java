@@ -27,7 +27,9 @@ public class RecurringTask extends Task{
             case DAILY:
                 super.mainDueDate=super.mainDueDate.plusDays(1); //if late, assume caught up until tomorrow
                 break;
-                
+            case WEEKLY:
+                super.mainDueDate=super.mainDueDate.plusWeeks(1);
+                break;
             case MONTHLY:
                 super.mainDueDate=super.mainDueDate.plusMonths(1); //handles unequal number of days in months
                 break;
