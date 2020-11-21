@@ -685,11 +685,16 @@ public class mainFrame extends javax.swing.JFrame{
     
     //<editor-fold desc="tableButton action listeners" defaultstate="collapsed">
     private void MarkCompleteActionPerformed(ActionEvent e){ 
-        for(int x = 0; x< TableTop.getRowCount(); x++){
-            if(((JButton)e.getSource()).equals(TableTop.getValueAt(x, 8))){
-                visibleTasks.get(TaskSelection.getSelectedIndex()).setStatus(Status.COMPLETE);
-            }
-        }        
+        if((visibleTasks.get(TaskSelection.getSelectedIndex())) instanceof RecurringTask){
+            ((RecurringTask)visibleTasks.get(TaskSelection.getSelectedIndex())).complete();
+        }
+        else{
+            for(int x = 0; x< TableTop.getRowCount(); x++){
+                if(((JButton)e.getSource()).equals(TableTop.getValueAt(x, 8))){
+                    visibleTasks.get(TaskSelection.getSelectedIndex()).setStatus(Status.COMPLETE);
+                }
+            }   
+        }
         setTableTop();
     }
     private void MarkStartedActionPerformed(ActionEvent e) {

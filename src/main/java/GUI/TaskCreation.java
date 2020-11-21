@@ -4,10 +4,7 @@ import java.awt.Color;
 import java.awt.event.WindowEvent;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.Enumeration;
-import javax.swing.AbstractButton;
 import javax.swing.DefaultComboBoxModel;
-import javax.swing.JRadioButton;
 import peoplePack.Person;
 import taskPackage.*;
 
