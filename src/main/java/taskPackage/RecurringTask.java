@@ -23,6 +23,7 @@ public class RecurringTask extends Task{
     public RecurType getType(){
         return(type);
     }
+    
     public void complete(){ //assuming all logic to determine complete implemented before calling
         switch(type){
             case DAILY:

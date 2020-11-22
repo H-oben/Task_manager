@@ -142,7 +142,7 @@ public class mainFrame extends javax.swing.JFrame{
                         visibleTasks.add(openTasks.get(x));
                 }
             }
-            else{
+            else{ //for members
                 for(int x = 0; x<openTasks.size(); x++){
                     if(openTasks.get(x).assignment().equals(CurrentUser)){
                         visibleTasks.add(openTasks.get(x));
