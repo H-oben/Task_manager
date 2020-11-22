@@ -9,7 +9,6 @@ import peoplePack.Person;
 import taskPackage.*;
 
 /**
- *
  * @author h_obe
  */
 public class TaskCreation extends javax.swing.JDialog{
@@ -26,6 +25,7 @@ public class TaskCreation extends javax.swing.JDialog{
         initComponents();
         ErrorLabel.setVisible(false);
         UserAssign.setModel(model);
+        SingleButton.setSelected(true); // default one time task, dont have to account for no button selected
     }
 
     @SuppressWarnings("unchecked")

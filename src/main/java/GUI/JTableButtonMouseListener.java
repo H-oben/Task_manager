@@ -18,7 +18,7 @@ public class JTableButtonMouseListener extends MouseAdapter{
         if(r<table.getRowHeight() && r>=0 && c<table.getColumnCount() && c>=0){
             Object v = table.getValueAt(r, c);
             if(v instanceof JButton){
-                ((JButton) v).doClick(); //TODO: make button clicks Function
+                ((JButton) v).doClick();
             }
         }
     }

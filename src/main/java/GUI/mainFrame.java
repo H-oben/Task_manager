@@ -131,6 +131,7 @@ public class mainFrame extends javax.swing.JFrame{
     }
     //updates open tasks drop down options
     public final ArrayList<Task> setTaskOptions(){
+        visibleTasks.clear(); //prevents duplicates
         if(CurrentUser!=null){
             if(CurrentUser.getRole()==Role.MANAGER){ //manager can see all tasks
                 visibleTasks=openTasks; //other functions will operate on visibletasks
