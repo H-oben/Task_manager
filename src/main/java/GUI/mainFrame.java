@@ -109,6 +109,7 @@ public class mainFrame extends javax.swing.JFrame{
         }
         
         //set the table
+        markDates();
         setTaskOptions();
         setTableTop();
         //visibility of team lead specific button
@@ -358,8 +359,18 @@ public class mainFrame extends javax.swing.JFrame{
         TableTop.getColumn("Mark Started").setCellRenderer(new JTableButtonRender());
         TableTop.getColumn("Mark Complete").setCellRenderer(new JTableButtonRender());
         
-        TableTop.setBackground(t.getColor());
-
+        if(t instanceof RecurringTask){
+            RecurringTask r = (RecurringTask) t;
+            if(r.hasSecondaryColor()){
+                TableTop.setBackground(r.getSecondayColor());
+            }
+            else{
+                TableTop.setBackground(r.getColor());
+            }
+        }
+        else{
+            TableTop.setBackground(t.getColor());
+        }
         
         //action/mouse listeners
         TableTop.addMouseListener(new JTableButtonMouseListener(TableTop));
@@ -814,6 +825,53 @@ public class mainFrame extends javax.swing.JFrame{
     /**
      * @param args the command line arguments
      */
+    
+    //sets Status and color
+    private void markDates(){
+        LocalDate x = getToday();
+        for(Task t : openTasks){
+            int y = t.getDueDate().compareTo(x);
+            if(!(t instanceof RecurringTask)){
+                if(y>=0 && y<=7){
+                    t.setStatus(Status.DUE_SOON);
+                    t.setColor(Color.YELLOW);
+                    markSubtasks(t,Color.RED,Status.OVERDUE);
+                }
+                else if(y<0){
+                    t.setStatus(Status.OVERDUE);
+                    t.setColor(Color.RED);
+                    markSubtasks(t,Color.RED,Status.OVERDUE);
+                }
+            }
+            else{
+                RecurringTask r = (RecurringTask) t;
+                if(y>=0 && y<=7 && r.getType()!=RecurType.DAILY){ //dont want to change color of daily tasks, you'll never see the actual color
+                    r.setSecondaryColor(Color.YELLOW);
+                    r.setStatus(Status.DUE_SOON);
+                    markSubtasks(r,null,Status.DUE_SOON);
+                }
+                else if(y<0){
+                    r.setStatus(Status.OVERDUE);
+                    r.setSecondaryColor(Color.RED);
+                    markSubtasks(r,null,Status.DUE_SOON);
+                }
+            }
+        }
+    }
+    private void markSubtasks(Task t, Color c, Status s){ //pass null to color if task is recurring
+        if(t.hasDescendants() && c!=null){
+            for(Subtask x : t.getSubtasks()){
+                x.setColor(c);
+                x.setStatus(s);
+            }
+        }
+        else if(t.hasDescendants()){ //dont want to lose color of subtasks
+            for(Subtask x : t.getSubtasks()){
+                x.setStatus(s);
+            }
+        }
+    }
+    
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold desc=" Look and feel setting code (optional) " defaultstate="collapsed">

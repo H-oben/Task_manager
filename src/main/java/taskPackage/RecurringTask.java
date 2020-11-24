@@ -8,16 +8,19 @@ import peoplePack.Person;
 public class RecurringTask extends Task{
     
     private final RecurType type;
+    private Color Secondary;
     
     public RecurringTask(){
         super();
         type=RecurType.DAILY;
+        Secondary=null;
     }
     
     public RecurringTask(String n, String d, Categories c,Color co, LocalDate ld,
             Person assigned, Person creator, RecurType r){
         super(n,d,c,co,ld,assigned,creator);
         type=r;
+        Secondary=null;
     }
     
     public RecurType getType(){
@@ -84,5 +87,16 @@ public class RecurringTask extends Task{
         for(Subtask s: this.getSubtasks()){
             s.setStatus(Status.COMPLETE);
         }
+    }
+    
+    //for setting color in markDates() in mainFrame without losing the color
+    public void setSecondaryColor(Color c){
+        Secondary=c;
+    }
+    public Color getSecondayColor(){
+        return(Secondary);
+    }
+    public boolean hasSecondaryColor(){
+        return(Secondary!=null);
     }
 }
