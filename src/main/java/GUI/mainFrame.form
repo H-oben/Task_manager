@@ -373,8 +373,21 @@
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="SelectionLabel" min="-2" max="-2" attributes="0"/>
                           <Component id="Selection" min="-2" pref="115" max="-2" attributes="0"/>
+                          <Group type="102" alignment="0" attributes="0">
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Component id="OnTime" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="COverdue" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="LOverdue" alignment="0" min="-2" max="-2" attributes="0"/>
+                              </Group>
+                              <EmptySpace min="-2" pref="117" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                                  <Component id="OnTimeActual" max="32767" attributes="0"/>
+                                  <Component id="COverDueActual" max="32767" attributes="0"/>
+                                  <Component id="LOverdueActual" alignment="0" min="-2" max="-2" attributes="0"/>
+                              </Group>
+                          </Group>
                       </Group>
-                      <EmptySpace pref="388" max="32767" attributes="0"/>
+                      <EmptySpace pref="175" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -385,7 +398,22 @@
                       <Component id="SelectionLabel" min="-2" max="-2" attributes="0"/>
                       <EmptySpace min="-2" pref="7" max="-2" attributes="0"/>
                       <Component id="Selection" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace pref="379" max="32767" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="OnTime" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="OnTimeActual" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="COverdue" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="COverDueActual" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="LOverdue" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="LOverdueActual" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace pref="313" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -413,6 +441,63 @@
                 </Property>
                 <Property name="text" type="java.lang.String" value="Selection"/>
                 <Property name="toolTipText" type="java.lang.String" value=""/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JLabel" name="OnTime">
+              <Properties>
+                <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                  <Color blue="0" green="0" red="0" type="rgb"/>
+                </Property>
+                <Property name="text" type="java.lang.String" value="On Time %:"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JLabel" name="OnTimeActual">
+              <Properties>
+                <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                  <Color blue="0" green="0" red="0" type="rgb"/>
+                </Property>
+                <Property name="labelFor" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
+                  <ComponentRef name="OnTimeActual"/>
+                </Property>
+                <Property name="text" type="java.lang.String" value="OnTimeActual"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JLabel" name="COverdue">
+              <Properties>
+                <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                  <Color blue="0" green="0" red="0" type="rgb"/>
+                </Property>
+                <Property name="labelFor" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
+                  <ComponentRef name="COverDueActual"/>
+                </Property>
+                <Property name="text" type="java.lang.String" value="Current Overdue Tasks:"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JLabel" name="LOverdue">
+              <Properties>
+                <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                  <Color blue="0" green="0" red="0" type="rgb"/>
+                </Property>
+                <Property name="labelFor" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
+                  <ComponentRef name="LOverdueActual"/>
+                </Property>
+                <Property name="text" type="java.lang.String" value="Lifetime Overdue Tasks:"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JLabel" name="COverDueActual">
+              <Properties>
+                <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                  <Color blue="0" green="0" red="0" type="rgb"/>
+                </Property>
+                <Property name="text" type="java.lang.String" value="COverdueActual"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JLabel" name="LOverdueActual">
+              <Properties>
+                <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                  <Color blue="0" green="0" red="0" type="rgb"/>
+                </Property>
+                <Property name="text" type="java.lang.String" value="LOverdueActual"/>
               </Properties>
             </Component>
           </SubComponents>

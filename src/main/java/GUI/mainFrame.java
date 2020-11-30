@@ -478,6 +478,12 @@ public class mainFrame extends javax.swing.JFrame{
         jPanel2 = new javax.swing.JPanel();
         Selection = new javax.swing.JComboBox<>();
         SelectionLabel = new javax.swing.JLabel();
+        OnTime = new javax.swing.JLabel();
+        OnTimeActual = new javax.swing.JLabel();
+        COverdue = new javax.swing.JLabel();
+        LOverdue = new javax.swing.JLabel();
+        COverDueActual = new javax.swing.JLabel();
+        LOverdueActual = new javax.swing.JLabel();
         DescrScroll = new javax.swing.JScrollPane();
         DescrArea = new javax.swing.JTextArea();
 
@@ -664,6 +670,27 @@ public class mainFrame extends javax.swing.JFrame{
         SelectionLabel.setText("Selection");
         SelectionLabel.setToolTipText("");
 
+        OnTime.setForeground(new java.awt.Color(0, 0, 0));
+        OnTime.setText("On Time %:");
+
+        OnTimeActual.setForeground(new java.awt.Color(0, 0, 0));
+        OnTimeActual.setLabelFor(OnTimeActual);
+        OnTimeActual.setText("OnTimeActual");
+
+        COverdue.setForeground(new java.awt.Color(0, 0, 0));
+        COverdue.setLabelFor(COverDueActual);
+        COverdue.setText("Current Overdue Tasks:");
+
+        LOverdue.setForeground(new java.awt.Color(0, 0, 0));
+        LOverdue.setLabelFor(LOverdueActual);
+        LOverdue.setText("Lifetime Overdue Tasks:");
+
+        COverDueActual.setForeground(new java.awt.Color(0, 0, 0));
+        COverDueActual.setText("COverdueActual");
+
+        LOverdueActual.setForeground(new java.awt.Color(0, 0, 0));
+        LOverdueActual.setText("LOverdueActual");
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -672,8 +699,18 @@ public class mainFrame extends javax.swing.JFrame{
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(SelectionLabel)
-                    .addComponent(Selection, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(388, Short.MAX_VALUE))
+                    .addComponent(Selection, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(OnTime)
+                            .addComponent(COverdue)
+                            .addComponent(LOverdue))
+                        .addGap(117, 117, 117)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(OnTimeActual, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(COverDueActual, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(LOverdueActual))))
+                .addContainerGap(175, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -682,7 +719,19 @@ public class mainFrame extends javax.swing.JFrame{
                 .addComponent(SelectionLabel)
                 .addGap(7, 7, 7)
                 .addComponent(Selection, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(379, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(OnTime)
+                    .addComponent(OnTimeActual))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(COverdue)
+                    .addComponent(COverDueActual))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(LOverdue)
+                    .addComponent(LOverdueActual))
+                .addContainerGap(313, Short.MAX_VALUE))
         );
 
         ViewsPane.addTab("Statistics", jPanel2);
@@ -932,6 +981,8 @@ public class mainFrame extends javax.swing.JFrame{
     }
     //<editor-fold desc="generated variables" defaultstate="collapsed">
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel COverDueActual;
+    private javax.swing.JLabel COverdue;
     private javax.swing.JButton CommitButton;
     private javax.swing.JButton Create_Task_Button;
     private javax.swing.JTextArea DescrArea;
@@ -939,6 +990,10 @@ public class mainFrame extends javax.swing.JFrame{
     private javax.swing.JScrollPane DescrScroll;
     private javax.swing.JButton ExitButton;
     private javax.swing.JLabel InvalidDate;
+    private javax.swing.JLabel LOverdue;
+    private javax.swing.JLabel LOverdueActual;
+    private javax.swing.JLabel OnTime;
+    private javax.swing.JLabel OnTimeActual;
     private javax.swing.JLabel OpenTaskLabel;
     private javax.swing.JComboBox<String> Selection;
     private javax.swing.JLabel SelectionLabel;
