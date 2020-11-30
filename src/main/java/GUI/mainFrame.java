@@ -484,6 +484,8 @@ public class mainFrame extends javax.swing.JFrame{
         LOverdue = new javax.swing.JLabel();
         COverDueActual = new javax.swing.JLabel();
         LOverdueActual = new javax.swing.JLabel();
+        Average = new javax.swing.JLabel();
+        AverageActual = new javax.swing.JLabel();
         DescrScroll = new javax.swing.JScrollPane();
         DescrArea = new javax.swing.JTextArea();
 
@@ -691,6 +693,12 @@ public class mainFrame extends javax.swing.JFrame{
         LOverdueActual.setForeground(new java.awt.Color(0, 0, 0));
         LOverdueActual.setText("LOverdueActual");
 
+        Average.setForeground(new java.awt.Color(0, 0, 0));
+        Average.setText("Average Time to Task Completion:");
+
+        AverageActual.setForeground(new java.awt.Color(0, 0, 0));
+        AverageActual.setText("AverageActual");
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -704,13 +712,15 @@ public class mainFrame extends javax.swing.JFrame{
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(OnTime)
                             .addComponent(COverdue)
-                            .addComponent(LOverdue))
-                        .addGap(117, 117, 117)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(OnTimeActual, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(COverDueActual, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(LOverdueActual))))
-                .addContainerGap(175, Short.MAX_VALUE))
+                            .addComponent(LOverdue)
+                            .addComponent(Average))
+                        .addGap(14, 14, 14)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(LOverdueActual)
+                            .addComponent(AverageActual)
+                            .addComponent(COverDueActual)
+                            .addComponent(OnTimeActual, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(221, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -731,7 +741,11 @@ public class mainFrame extends javax.swing.JFrame{
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(LOverdue)
                     .addComponent(LOverdueActual))
-                .addContainerGap(313, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(Average)
+                    .addComponent(AverageActual))
+                .addContainerGap(291, Short.MAX_VALUE))
         );
 
         ViewsPane.addTab("Statistics", jPanel2);
@@ -981,6 +995,8 @@ public class mainFrame extends javax.swing.JFrame{
     }
     //<editor-fold desc="generated variables" defaultstate="collapsed">
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel Average;
+    private javax.swing.JLabel AverageActual;
     private javax.swing.JLabel COverDueActual;
     private javax.swing.JLabel COverdue;
     private javax.swing.JButton CommitButton;

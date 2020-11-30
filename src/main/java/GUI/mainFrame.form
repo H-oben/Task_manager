@@ -378,16 +378,18 @@
                                   <Component id="OnTime" alignment="0" min="-2" max="-2" attributes="0"/>
                                   <Component id="COverdue" alignment="0" min="-2" max="-2" attributes="0"/>
                                   <Component id="LOverdue" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="Average" alignment="0" min="-2" max="-2" attributes="0"/>
                               </Group>
-                              <EmptySpace min="-2" pref="117" max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                  <Component id="OnTimeActual" max="32767" attributes="0"/>
-                                  <Component id="COverDueActual" max="32767" attributes="0"/>
-                                  <Component id="LOverdueActual" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="14" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Component id="LOverdueActual" min="-2" max="-2" attributes="0"/>
+                                  <Component id="AverageActual" min="-2" max="-2" attributes="0"/>
+                                  <Component id="COverDueActual" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="OnTimeActual" min="-2" pref="86" max="-2" attributes="0"/>
                               </Group>
                           </Group>
                       </Group>
-                      <EmptySpace pref="175" max="32767" attributes="0"/>
+                      <EmptySpace pref="221" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -413,7 +415,12 @@
                           <Component id="LOverdue" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="LOverdueActual" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace pref="313" max="32767" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="Average" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="AverageActual" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace pref="291" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -498,6 +505,22 @@
                   <Color blue="0" green="0" red="0" type="rgb"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="LOverdueActual"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JLabel" name="Average">
+              <Properties>
+                <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                  <Color blue="0" green="0" red="0" type="rgb"/>
+                </Property>
+                <Property name="text" type="java.lang.String" value="Average Time to Task Completion:"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JLabel" name="AverageActual">
+              <Properties>
+                <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                  <Color blue="0" green="0" red="0" type="rgb"/>
+                </Property>
+                <Property name="text" type="java.lang.String" value="AverageActual"/>
               </Properties>
             </Component>
           </SubComponents>
