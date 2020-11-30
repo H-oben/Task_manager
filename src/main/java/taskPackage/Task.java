@@ -18,6 +18,7 @@ public class Task {
     protected Status stat;
     protected Color color;
     protected Categories cat;
+    protected boolean onTime;
     
     /**
      * Structure of subtasks where every subtask can have a subset of subtasks
@@ -26,6 +27,7 @@ public class Task {
     
     protected LocalDate mainDueDate;
     protected final LocalDate createdOn; // not going to change so it's final
+    protected LocalDate completedOn;
     
     protected Person assignedTo;
     protected final Person createdBy; // not going to change so it's final
@@ -38,6 +40,7 @@ public class Task {
         cat=new Categories();
         stat=Status.NOT_STARTED;
         color = Color.RED; //default is due on same day
+        onTime=true;
         
         subs=new ArrayList<>();
         
@@ -68,6 +71,7 @@ public class Task {
             descrip = d;
         }
         stat=Status.NOT_STARTED;
+        onTime=true;
         
         subs=new ArrayList<>();
         
@@ -91,7 +95,13 @@ public class Task {
         descrip=d;
     }
     public void setStatus(Status s){
+        if(s==Status.COMPLETE){
+            completedOn=LocalDate.now();
+        }
         stat=s;
+    }
+    public void setOnTime(boolean b){
+        onTime=b;
     }
     public void setCatagory(Categories c){
         cat=c;
@@ -145,6 +155,9 @@ public class Task {
     public LocalDate createdOn(){
         return(createdOn);
     }
+    public LocalDate completedOn(){
+        return(completedOn);
+    }
     /**
      * @return returns the person class that this task was assigned to
      */
@@ -176,6 +189,9 @@ public class Task {
     }
     public boolean hasDescendants(){
         return(subs.size()>0);
+    }
+    public boolean isOnTime(){
+        return(onTime);
     }
     
     @Override

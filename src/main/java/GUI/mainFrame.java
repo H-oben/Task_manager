@@ -5,7 +5,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.WindowEvent;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.table.DefaultTableModel;
@@ -19,7 +21,6 @@ import taskPackage.*;
  * add color column to implement different colors in subtask table
  * have description change to subtask description when selected
  * use more efficient data structures
- * add logic for task dates and status
  * ***change table view from JTable to pseudo table layout, JTable is annoying to work with
  * If I have time:
  *  - fix subtasks so they can have subtasks as well
@@ -112,6 +113,7 @@ public class mainFrame extends javax.swing.JFrame{
         markDates();
         setTaskOptions();
         setTableTop();
+        setStatisticsSelection();
         //visibility of team lead specific button
         if(CurrentUser.getRole()!=Role.TEAMLEAD){
             addTeamMember.setVisible(false);
@@ -455,6 +457,136 @@ public class mainFrame extends javax.swing.JFrame{
         return(a);
     }
     
+    private void setStatisticsSelection(){
+        ArithErrorLabel.setVisible(false);
+        switch(CurrentUser.getRole()){
+            case MANAGER:
+                for(Person a: assignablePeople){
+                    PersonSelection.addItem(a.getName());
+                }
+                break;
+            case TEAMLEAD:
+                for(Person a : ((Manager)CurrentUser).getTeamMembers()){
+                    PersonSelection.addItem(a.getName());
+                }
+                break;
+            default: // if member, they can only see their own statistics
+                break;
+        }
+    }
+    
+    private void getStatistics(){
+        switch(CurrentUser.getRole()){
+            case MANAGER:
+                if(PersonSelection.getSelectedIndex()==0 ){
+                    doStatistics(null);
+                }
+                else{
+                    int x = PersonSelection.getSelectedIndex()-1;
+                    Person p=assignablePeople.get(x);
+                    doStatistics(p);
+                }
+                break;
+            case TEAMLEAD:
+                if(PersonSelection.getSelectedIndex()==0 ){
+                    doStatistics(null);
+                }
+                else{
+                    int x = PersonSelection.getSelectedIndex()-1;
+                    Person p=assignablePeople.get(x);
+                    doStatistics(p);
+                }
+                break;
+            default:
+                doStatistics(CurrentUser);
+                break;
+        }
+    }
+    
+    private void doStatistics(Person p){ //null means do the statistics for the set of assignable people
+        //<editor-fold desc="null condition" defaultstate="collapsed">
+        if(p==null){
+            //int numPeople = assignablePeople.size();
+            double timeTaken=0, percentOnTime=0;
+            int currentOverdue = 0, totalOverdue = 0, tasks = visibleTasks.size();
+            for(Task t:closedTasks){
+                if(assignablePeople.contains(t.assignment()) || t.assignment().equals(CurrentUser)){
+                    if(!t.isOnTime()){
+                        totalOverdue++;
+                    }
+                    timeTaken+= ChronoUnit.DAYS.between(t.createdOn(), t.completedOn());
+                }
+            }
+            try{
+                timeTaken/=tasks*100;
+                percentOnTime=(1-totalOverdue/tasks)*100; //only count finished tasks
+                ArithErrorLabel.setVisible(false);
+            }
+            catch(ArithmeticException e){
+                timeTaken=-1;
+                percentOnTime=-1;
+                ArithErrorLabel.setVisible(true);
+            }
+            for(Task t : visibleTasks){
+                if(t.getStatus()==Status.OVERDUE){
+                    currentOverdue++;
+                    totalOverdue++;
+                }
+            }
+            setStatisticLabels(timeTaken,percentOnTime,currentOverdue,totalOverdue);
+        }
+        //</editor-fold>
+        //<editor-fold desc="not null" defaultstate="collapsed">
+        else{
+            double timeTaken=0, POT=0;
+            int currentOverdue=0, totalOverDue = 0, tasks = 0;
+            for(Task t:closedTasks){
+                if(t.assignment().equals(p)){
+                    if (!t.isOnTime()) {
+                        totalOverDue++;
+                    }
+                    tasks++;
+                }
+                timeTaken+=ChronoUnit.DAYS.between(t.createdOn(), t.completedOn());
+            }
+            try{
+                timeTaken/=tasks*100;
+                POT = (1-totalOverDue/tasks)*100;
+                ArithErrorLabel.setVisible(false);
+            }
+            catch(ArithmeticException e){
+                timeTaken=-1;
+                POT=-1;
+                ArithErrorLabel.setVisible(true);
+            }
+            if(CurrentUser.getRole()==Role.MEMBER){
+                for(Task t:visibleTasks){
+                    if(t.getStatus()==Status.OVERDUE){
+                        currentOverdue++;
+                        totalOverDue++;
+                    }
+                }
+            }
+            else{
+                for(Task t:visibleTasks){
+                    if(t.assignment().equals(p) && t.getStatus()==Status.OVERDUE){
+                        currentOverdue++;
+                        totalOverDue++;
+                    }
+                }
+            }
+            setStatisticLabels(timeTaken,POT,currentOverdue,totalOverDue);
+        }
+        //</editor-fold>
+    }
+    
+    private void setStatisticLabels(double timeTaken, double POT, int CO, int TO){
+        OnTimeActual.setText(String.format("%,.3f",POT) + "%");
+        COverdueActual.setText(CO+"");
+        LOverdueActual.setText(TO+"");
+        AverageActual.setText(String.format("%.3f", timeTaken) + " Days");
+    }
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -476,16 +608,17 @@ public class mainFrame extends javax.swing.JFrame{
         jScrollPane1 = new javax.swing.JScrollPane();
         SubtaskTable = new javax.swing.JTable();
         jPanel2 = new javax.swing.JPanel();
-        Selection = new javax.swing.JComboBox<>();
-        SelectionLabel = new javax.swing.JLabel();
+        PersonSelection = new javax.swing.JComboBox<>();
+        PersonLabel = new javax.swing.JLabel();
         OnTime = new javax.swing.JLabel();
         OnTimeActual = new javax.swing.JLabel();
         COverdue = new javax.swing.JLabel();
         LOverdue = new javax.swing.JLabel();
-        COverDueActual = new javax.swing.JLabel();
+        COverdueActual = new javax.swing.JLabel();
         LOverdueActual = new javax.swing.JLabel();
         Average = new javax.swing.JLabel();
         AverageActual = new javax.swing.JLabel();
+        ArithErrorLabel = new javax.swing.JLabel();
         DescrScroll = new javax.swing.JScrollPane();
         DescrArea = new javax.swing.JTextArea();
 
@@ -665,12 +798,17 @@ public class mainFrame extends javax.swing.JFrame{
 
         jPanel2.setBackground(new java.awt.Color(150, 200, 200));
 
-        Selection.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Overall" }));
+        PersonSelection.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Overall" }));
+        PersonSelection.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                PersonSelectionActionPerformed(evt);
+            }
+        });
 
-        SelectionLabel.setForeground(new java.awt.Color(0, 0, 0));
-        SelectionLabel.setLabelFor(Selection);
-        SelectionLabel.setText("Selection");
-        SelectionLabel.setToolTipText("");
+        PersonLabel.setForeground(new java.awt.Color(0, 0, 0));
+        PersonLabel.setLabelFor(PersonSelection);
+        PersonLabel.setText("Person");
+        PersonLabel.setToolTipText("");
 
         OnTime.setForeground(new java.awt.Color(0, 0, 0));
         OnTime.setText("On Time %:");
@@ -680,15 +818,15 @@ public class mainFrame extends javax.swing.JFrame{
         OnTimeActual.setText("OnTimeActual");
 
         COverdue.setForeground(new java.awt.Color(0, 0, 0));
-        COverdue.setLabelFor(COverDueActual);
+        COverdue.setLabelFor(COverdueActual);
         COverdue.setText("Current Overdue Tasks:");
 
         LOverdue.setForeground(new java.awt.Color(0, 0, 0));
         LOverdue.setLabelFor(LOverdueActual);
         LOverdue.setText("Lifetime Overdue Tasks:");
 
-        COverDueActual.setForeground(new java.awt.Color(0, 0, 0));
-        COverDueActual.setText("COverdueActual");
+        COverdueActual.setForeground(new java.awt.Color(0, 0, 0));
+        COverdueActual.setText("COverdueActual");
 
         LOverdueActual.setForeground(new java.awt.Color(0, 0, 0));
         LOverdueActual.setText("LOverdueActual");
@@ -699,6 +837,9 @@ public class mainFrame extends javax.swing.JFrame{
         AverageActual.setForeground(new java.awt.Color(0, 0, 0));
         AverageActual.setText("AverageActual");
 
+        ArithErrorLabel.setForeground(new java.awt.Color(0, 0, 0));
+        ArithErrorLabel.setText("Negative numbers mean no tasks have been completed");
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -706,29 +847,32 @@ public class mainFrame extends javax.swing.JFrame{
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(SelectionLabel)
-                    .addComponent(Selection, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(PersonLabel)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(OnTime)
                             .addComponent(COverdue)
                             .addComponent(LOverdue)
-                            .addComponent(Average))
+                            .addComponent(Average)
+                            .addComponent(PersonSelection, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(14, 14, 14)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(LOverdueActual)
                             .addComponent(AverageActual)
-                            .addComponent(COverDueActual)
-                            .addComponent(OnTimeActual, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(221, Short.MAX_VALUE))
+                            .addComponent(COverdueActual)
+                            .addComponent(OnTimeActual, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(ArithErrorLabel))))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(SelectionLabel)
+                .addComponent(PersonLabel)
                 .addGap(7, 7, 7)
-                .addComponent(Selection, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(PersonSelection, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(ArithErrorLabel))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(OnTime)
@@ -736,7 +880,7 @@ public class mainFrame extends javax.swing.JFrame{
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(COverdue)
-                    .addComponent(COverDueActual))
+                    .addComponent(COverdueActual))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(LOverdue)
@@ -764,7 +908,7 @@ public class mainFrame extends javax.swing.JFrame{
                 .addComponent(SidePanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, 0)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(ViewsPane, javax.swing.GroupLayout.DEFAULT_SIZE, 509, Short.MAX_VALUE)
+                    .addComponent(ViewsPane, javax.swing.GroupLayout.DEFAULT_SIZE, 502, Short.MAX_VALUE)
                     .addComponent(DescrScroll)))
         );
         layout.setVerticalGroup(
@@ -920,6 +1064,10 @@ public class mainFrame extends javax.swing.JFrame{
         setTableTop();
         InvalidDate.setVisible(false);
     }//GEN-LAST:event_CommitButtonActionPerformed
+
+    private void PersonSelectionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_PersonSelectionActionPerformed
+        getStatistics();
+    }//GEN-LAST:event_PersonSelectionActionPerformed
     /**
      * @param args the command line arguments
      */
@@ -938,6 +1086,7 @@ public class mainFrame extends javax.swing.JFrame{
                 else if(y<0){
                     t.setStatus(Status.OVERDUE);
                     t.setColor(Color.RED);
+                    t.setOnTime(false);
                     markSubtasks(t,Color.RED,Status.OVERDUE);
                 }
             }
@@ -995,10 +1144,11 @@ public class mainFrame extends javax.swing.JFrame{
     }
     //<editor-fold desc="generated variables" defaultstate="collapsed">
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel ArithErrorLabel;
     private javax.swing.JLabel Average;
     private javax.swing.JLabel AverageActual;
-    private javax.swing.JLabel COverDueActual;
     private javax.swing.JLabel COverdue;
+    private javax.swing.JLabel COverdueActual;
     private javax.swing.JButton CommitButton;
     private javax.swing.JButton Create_Task_Button;
     private javax.swing.JTextArea DescrArea;
@@ -1011,8 +1161,8 @@ public class mainFrame extends javax.swing.JFrame{
     private javax.swing.JLabel OnTime;
     private javax.swing.JLabel OnTimeActual;
     private javax.swing.JLabel OpenTaskLabel;
-    private javax.swing.JComboBox<String> Selection;
-    private javax.swing.JLabel SelectionLabel;
+    private javax.swing.JLabel PersonLabel;
+    private javax.swing.JComboBox<String> PersonSelection;
     private javax.swing.JPanel SidePanel;
     public javax.swing.JTable SubtaskTable;
     public javax.swing.JTable TableTop;

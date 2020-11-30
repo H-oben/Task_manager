@@ -34,7 +34,7 @@
               <Component id="SidePanel" min="-2" max="-2" attributes="0"/>
               <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="ViewsPane" pref="509" max="32767" attributes="0"/>
+                  <Component id="ViewsPane" pref="502" max="32767" attributes="0"/>
                   <Component id="DescrScroll" max="32767" attributes="0"/>
               </Group>
           </Group>
@@ -371,25 +371,26 @@
                   <Group type="102" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="SelectionLabel" min="-2" max="-2" attributes="0"/>
-                          <Component id="Selection" min="-2" pref="115" max="-2" attributes="0"/>
+                          <Component id="PersonLabel" min="-2" max="-2" attributes="0"/>
                           <Group type="102" alignment="0" attributes="0">
                               <Group type="103" groupAlignment="0" attributes="0">
                                   <Component id="OnTime" alignment="0" min="-2" max="-2" attributes="0"/>
                                   <Component id="COverdue" alignment="0" min="-2" max="-2" attributes="0"/>
                                   <Component id="LOverdue" alignment="0" min="-2" max="-2" attributes="0"/>
                                   <Component id="Average" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="PersonSelection" alignment="0" min="-2" pref="115" max="-2" attributes="0"/>
                               </Group>
                               <EmptySpace min="-2" pref="14" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
                                   <Component id="LOverdueActual" min="-2" max="-2" attributes="0"/>
                                   <Component id="AverageActual" min="-2" max="-2" attributes="0"/>
-                                  <Component id="COverDueActual" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="COverdueActual" alignment="0" min="-2" max="-2" attributes="0"/>
                                   <Component id="OnTimeActual" min="-2" pref="86" max="-2" attributes="0"/>
+                                  <Component id="ArithErrorLabel" alignment="0" min="-2" max="-2" attributes="0"/>
                               </Group>
                           </Group>
                       </Group>
-                      <EmptySpace pref="221" max="32767" attributes="0"/>
+                      <EmptySpace max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -397,9 +398,12 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="SelectionLabel" min="-2" max="-2" attributes="0"/>
+                      <Component id="PersonLabel" min="-2" max="-2" attributes="0"/>
                       <EmptySpace min="-2" pref="7" max="-2" attributes="0"/>
-                      <Component id="Selection" min="-2" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="1" attributes="0">
+                          <Component id="PersonSelection" min="-2" max="-2" attributes="0"/>
+                          <Component id="ArithErrorLabel" min="-2" max="-2" attributes="0"/>
+                      </Group>
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="OnTime" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -408,7 +412,7 @@
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="COverdue" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="COverDueActual" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="COverdueActual" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
@@ -426,7 +430,7 @@
             </DimensionLayout>
           </Layout>
           <SubComponents>
-            <Component class="javax.swing.JComboBox" name="Selection">
+            <Component class="javax.swing.JComboBox" name="PersonSelection">
               <Properties>
                 <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
                   <StringArray count="1">
@@ -434,19 +438,22 @@
                   </StringArray>
                 </Property>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="PersonSelectionActionPerformed"/>
+              </Events>
               <AuxValues>
                 <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
               </AuxValues>
             </Component>
-            <Component class="javax.swing.JLabel" name="SelectionLabel">
+            <Component class="javax.swing.JLabel" name="PersonLabel">
               <Properties>
                 <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                   <Color blue="0" green="0" red="0" type="rgb"/>
                 </Property>
                 <Property name="labelFor" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
-                  <ComponentRef name="Selection"/>
+                  <ComponentRef name="PersonSelection"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="Selection"/>
+                <Property name="text" type="java.lang.String" value="Person"/>
                 <Property name="toolTipText" type="java.lang.String" value=""/>
               </Properties>
             </Component>
@@ -475,7 +482,7 @@
                   <Color blue="0" green="0" red="0" type="rgb"/>
                 </Property>
                 <Property name="labelFor" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
-                  <ComponentRef name="COverDueActual"/>
+                  <ComponentRef name="COverdueActual"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Current Overdue Tasks:"/>
               </Properties>
@@ -491,7 +498,7 @@
                 <Property name="text" type="java.lang.String" value="Lifetime Overdue Tasks:"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JLabel" name="COverDueActual">
+            <Component class="javax.swing.JLabel" name="COverdueActual">
               <Properties>
                 <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                   <Color blue="0" green="0" red="0" type="rgb"/>
@@ -521,6 +528,14 @@
                   <Color blue="0" green="0" red="0" type="rgb"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="AverageActual"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JLabel" name="ArithErrorLabel">
+              <Properties>
+                <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                  <Color blue="0" green="0" red="0" type="rgb"/>
+                </Property>
+                <Property name="text" type="java.lang.String" value="Negative numbers mean no tasks have been completed"/>
               </Properties>
             </Component>
           </SubComponents>
