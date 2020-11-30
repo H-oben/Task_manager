@@ -475,6 +475,9 @@ public class mainFrame extends javax.swing.JFrame{
         TableTop = new javax.swing.JTable();
         jScrollPane1 = new javax.swing.JScrollPane();
         SubtaskTable = new javax.swing.JTable();
+        jPanel2 = new javax.swing.JPanel();
+        Selection = new javax.swing.JComboBox<>();
+        SelectionLabel = new javax.swing.JLabel();
         DescrScroll = new javax.swing.JScrollPane();
         DescrArea = new javax.swing.JTextArea();
 
@@ -651,6 +654,38 @@ public class mainFrame extends javax.swing.JFrame{
         TabularView.setViewportView(jPanel1);
 
         ViewsPane.addTab("Tabular View", TabularView);
+
+        jPanel2.setBackground(new java.awt.Color(150, 200, 200));
+
+        Selection.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Overall" }));
+
+        SelectionLabel.setForeground(new java.awt.Color(0, 0, 0));
+        SelectionLabel.setLabelFor(Selection);
+        SelectionLabel.setText("Selection");
+        SelectionLabel.setToolTipText("");
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(SelectionLabel)
+                    .addComponent(Selection, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(388, Short.MAX_VALUE))
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(SelectionLabel)
+                .addGap(7, 7, 7)
+                .addComponent(Selection, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(379, Short.MAX_VALUE))
+        );
+
+        ViewsPane.addTab("Statistics", jPanel2);
 
         DescrArea.setBackground(new java.awt.Color(200, 200, 200));
         DescrArea.setColumns(20);
@@ -905,6 +940,8 @@ public class mainFrame extends javax.swing.JFrame{
     private javax.swing.JButton ExitButton;
     private javax.swing.JLabel InvalidDate;
     private javax.swing.JLabel OpenTaskLabel;
+    private javax.swing.JComboBox<String> Selection;
+    private javax.swing.JLabel SelectionLabel;
     private javax.swing.JPanel SidePanel;
     public javax.swing.JTable SubtaskTable;
     public javax.swing.JTable TableTop;
@@ -913,6 +950,7 @@ public class mainFrame extends javax.swing.JFrame{
     private javax.swing.JTabbedPane ViewsPane;
     public javax.swing.JButton addTeamMember;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     // End of variables declaration//GEN-END:variables
