@@ -7,7 +7,6 @@ password: Adm1n
 ```
 ### To Do:
 1. Fix non-fatal index out of bounds on CommitButtonActionPerformed in mainFrame.java
-2. Add Productivity measures
-4. Make data structures more efficient for scalability
-5. Make it so the description changes when a subtask is clicked
-6. Add Color Column for subtasks
+2. Make data structures more efficient for scalability
+3. Make it so the description changes when a subtask is clicked
+4. Add Color Column for subtasks
