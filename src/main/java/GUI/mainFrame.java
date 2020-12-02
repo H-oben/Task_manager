@@ -506,7 +506,6 @@ public class mainFrame extends javax.swing.JFrame{
     private void doStatistics(Person p){ //null means do the statistics for the set of assignable people
         //<editor-fold desc="null condition" defaultstate="collapsed">
         if(p==null){
-            //int numPeople = assignablePeople.size();
             double timeTaken=0, percentOnTime=0;
             int currentOverdue = 0, totalOverdue = 0, tasks = visibleTasks.size();
             for(Task t:closedTasks){
@@ -515,6 +514,7 @@ public class mainFrame extends javax.swing.JFrame{
                         totalOverdue++;
                     }
                     timeTaken+= ChronoUnit.DAYS.between(t.createdOn(), t.completedOn());
+                    tasks++;
                 }
             }
             try{

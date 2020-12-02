@@ -1,8 +1,8 @@
 -------------------------------------------------------------------------------
 Test set: GUI.addTeamMemberTest
 -------------------------------------------------------------------------------
-Tests run: 1, Failures: 1, Errors: 0, Skipped: 0, Time elapsed: 0.143 sec <<< FAILURE!
-testMain(GUI.addTeamMemberTest)  Time elapsed: 0.11 sec  <<< FAILURE!
+Tests run: 1, Failures: 1, Errors: 0, Skipped: 0, Time elapsed: 0.138 sec <<< FAILURE!
+testMain(GUI.addTeamMemberTest)  Time elapsed: 0.113 sec  <<< FAILURE!
 java.lang.AssertionError: The test case is a prototype.
 	at org.junit.Assert.fail(Assert.java:88)
 	at GUI.addTeamMemberTest.testMain(addTeamMemberTest.java:39)

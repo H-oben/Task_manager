@@ -1,0 +1,17 @@
+peoplePack\MemberManagerExceptionTest.class
+GUI\SubtaskCreationTest.class
+taskPackage\StatusTest.class
+taskPackage\TaskPackageSuite.class
+GUI\addTeamMemberTest.class
+taskPackage\CategoriesTest.class
+GUI\loginCreationMenuTest.class
+peoplePack\PeoplePackSuite.class
+GUI\GUISuite.class
+peoplePack\RoleTest.class
+taskPackage\TaskTest.class
+GUI\TaskCreationTest.class
+GUI\mainFrameTest.class
+GUI\TestUtils.class
+taskPackage\SubtaskTest.class
+peoplePack\ManagerTest.class
+peoplePack\memberTest.class
