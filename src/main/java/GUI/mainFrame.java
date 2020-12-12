@@ -171,7 +171,7 @@ public class mainFrame extends javax.swing.JFrame{
             
             //<editor-fold desc="resets table if no selection available" defaultstate="collapsed">
             String[] columnNames = {"Name","Status","Catagory","Due Date"
-                ,"Assigned To","Assigned By","Create Subtask","Mark Started","Mark Complete"};
+                ,"Assigned To","Assigned By","Create Subtask","Mark Started","Mark Complete", "Type"};
             Object[][] taskData = new Object[1][9];
             table = new DefaultTableModel(taskData,columnNames){
             @Override
@@ -273,8 +273,8 @@ public class mainFrame extends javax.swing.JFrame{
         Task t = visibleTasks.get(selected);
         //<editor-fold defaultstate="collasped" desc="Set First Table">
         String[] columnNames = {"Name","Status","Catagory","Due Date"
-                ,"Assigned To","Assigned By","Create Subtask","Mark Started","Mark Complete"};
-        Object[][] taskData = new Object[1][9];
+                ,"Assigned To","Assigned By","Create Subtask","Mark Started","Mark Complete", "Type"};
+        Object[][] taskData = new Object[1][10];
         //instantiate and design buttons/combBox
         JButton CreateSub = new JButton(columnNames[6]);
         JButton MarkStarted = new JButton(columnNames[7]);
@@ -307,6 +307,22 @@ public class mainFrame extends javax.swing.JFrame{
                 taskData[0][6] = CreateSub;
                 taskData[0][7] = MarkStarted;
                 taskData[0][8] = CompleteButton;
+                RecurType x = t.getType();
+                if(x==RecurType.NEVER){
+                    taskData[0][9] = "Non-Recurring";
+                }
+                else if(x==RecurType.DAILY){
+                    taskData[0][9] = "Daily Task";
+                }
+                else if(x==RecurType.WEEKLY){
+                    taskData[0][9] = "Weekly Task";
+                }
+                else if(x == RecurType.MONTHLY){
+                    taskData[0][9] = "Monthly Task";
+                }
+                else{
+                    taskData[0][9] = "Yearly Task";
+                }
                 DescrArea.setText("Description:\n" + t.describe());
             }
         }

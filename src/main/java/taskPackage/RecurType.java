@@ -4,5 +4,6 @@ public enum RecurType {
     DAILY,
     WEEKLY,
     MONTHLY,
-    YEARLY
+    YEARLY,
+    NEVER
 }

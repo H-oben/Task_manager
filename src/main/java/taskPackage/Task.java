@@ -31,6 +31,8 @@ public class Task {
     
     protected Person assignedTo;
     protected final Person createdBy; // not going to change so it's final
+    
+    private final RecurType type = RecurType.NEVER;
     //</editor-fold>
     
     //default Constr.
@@ -192,6 +194,9 @@ public class Task {
     }
     public boolean isOnTime(){
         return(onTime);
+    }
+    public RecurType getType(){
+        return (type);
     }
     
     @Override

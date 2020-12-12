@@ -23,6 +23,7 @@ public class RecurringTask extends Task{
         Secondary=null;
     }
     
+    @Override
     public RecurType getType(){
         return(type);
     }
