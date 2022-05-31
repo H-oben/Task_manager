@@ -6,7 +6,7 @@ name: Admin Admin
 password: Adm1n
 ```
 ### Use
-A manager is created with user set up. Then as users are added, tasks can be created and assigned.
+A manager is created with user set up. Then as users are added, tasks can be created and assigned. This can be used to help keep track of tasks in and Agile environment.
 
 ### To Do:
 1. Fix non-fatal index out of bounds on CommitButtonActionPerformed in mainFrame.java
