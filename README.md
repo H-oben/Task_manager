@@ -1,10 +1,13 @@
-# Task_manager
-## Final Project for COSC 4353 fall 2020
+# Task manager
+## Final Project for COSC 4353 (Software Development) fall 2020
 ```
 Default Admin login for testing:
 name: Admin Admin
 password: Adm1n
 ```
+### Use
+A manager is created with user set up. Then as users are added, tasks can be created and assigned.
+
 ### To Do:
 1. Fix non-fatal index out of bounds on CommitButtonActionPerformed in mainFrame.java
 2. Make data structures more efficient for scalability
